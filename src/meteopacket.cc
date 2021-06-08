@@ -17,6 +17,16 @@ namespace meteo {
 namespace packet {
 
 static void	usage() {
+printf(
+"usage:\n"
+"meteopacket [ -dh? ] [ -l logurl ] [ -P port ] [ -c config ] -S servername -s stationame\n"
+"options:\n"
+"  -d                  enable debugging\n"
+"  -h,-?               show this help message and exit\n"
+"  -c <config>         use the configfile <config>\n"
+"  -l <logurl>         send log messages to <logurl>\n"
+"  -P <port>           the port to send the packet to\n"
+"  -S <servername>     the name or IP address of the serer\n");
 }
 
 static struct option	options[] = {
@@ -80,7 +90,7 @@ static int	main(int argc, char *argv[]) {
 		case 'h':
 		case '?':
 			usage();
-			break;
+			return EXIT_SUCCESS;
 		case 'l':
 			logurl = std::string(optarg);
 			break;
