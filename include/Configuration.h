@@ -42,6 +42,7 @@ public:
 	// some convenience methods to retrieve database parameters more
 	// easily
 	std::string	getDBHostname(void) const;
+	int		getDBPort(void) const;
 	std::string	getDBName(void) const;
 	std::string	getDBUser(void) const;
 	std::string	getDBPassword(void) const;

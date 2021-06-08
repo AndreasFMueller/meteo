@@ -68,6 +68,7 @@ MYSQL	*QueryProcessor_internal::connect(void) {
 		= conf.getString("/meteo/database/hostname", "meteo");
 	std::string	dbname
 		= conf.getString("/meteo/database/dbname", "meteo");
+	int	port = conf.getInt("/meteo/database/port", 3306);
 	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "%p, read/write flag is %s", this,
 		(readwrite) ? "true" : "false");
 	std::string	user
@@ -82,7 +83,7 @@ MYSQL	*QueryProcessor_internal::connect(void) {
 	// connect to the database
 	if (NULL == mysql_real_connect(lmysql, host.c_str(),
 		user.c_str(), passwd.c_str(), dbname.c_str(),
-		0, NULL, 0)) {
+		port, NULL, 0)) {
 		mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "%p, cannot connect to "
 			"database: %s", this, mysql_error(lmysql));
 		std::string	err(mysql_error(lmysql));

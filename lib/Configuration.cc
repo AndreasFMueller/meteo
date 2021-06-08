@@ -401,6 +401,14 @@ std::string	Configuration::getDBHostname(void) const {
 	}
 	return s;
 }
+int	Configuration::getDBPort(void) const {
+	std::string	s = getString("/meteo/database/port", "unknown");
+	if (s == "unknown") {
+		throw MeteoException("config tag missing",
+			"/meteo/database/port");
+	}
+	return std::stoi(s);
+}
 std::string	Configuration::getDBName(void) const {
 	std::string	s = getString("/meteo/database/dbname", "unknown");
 	if (s == "unknown") {
