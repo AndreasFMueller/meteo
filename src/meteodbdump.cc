@@ -10,7 +10,6 @@
  *                   is hardly useful anybody but me.
  *
  * (c) 2003 Dr. Andreas Mueller, Beratung und Entwicklung
- * $Id: meteodbdump.cc,v 1.13 2008/09/07 15:18:52 afm Exp $
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,6 +26,9 @@
 #include <mdebug.h>
 #include <fstream>
 
+namespace meteo {
+namespace dbdump {
+
 static void	usage(const char *progname) {
 	printf("usage: %s [ options ] tables \n", progname);
 	printf("dump meteo database contents to a file. valid table names are avg and sdata\n");
@@ -41,8 +43,8 @@ static void	usage(const char *progname) {
 	printf("  -r               write data raw instead of SQL insert statements\n");
 }
 
-static void	meteodbdump(int argc, char *argv[]) {
-	meteo::stringlist	stations;
+static void	main(int argc, char *argv[]) {
+	stringlist	stations;
 	std::string	basename("./");
 	std::string	logurl("file:///-");
 	std::string	conffile(METEOCONFFILE);
@@ -87,10 +89,10 @@ static void	meteodbdump(int argc, char *argv[]) {
 		logurl.c_str());
 
 	// open configuration
-	meteo::Configuration	conf(conffile);
+	Configuration	conf(conffile);
 
 	// create a chunkdumper for basename and chunksize
-	meteo::ChunkDumper	cd(basename, chunksize);
+	ChunkDumper	cd(basename, chunksize);
 
 	// set some parameters for this station
 	if (raw)
@@ -113,9 +115,12 @@ static void	meteodbdump(int argc, char *argv[]) {
 	cd.dumpStations(stations);
 }
 
+} // namespace dbdump
+} // namespace meteo
+
 int	main(int argc, char *argv[]) {
 	try {
-		meteodbdump(argc, argv);
+		meteo::dbdump::main(argc, argv);
 	} catch (meteo::MeteoException& me) {
 		fprintf(stderr, "MeteoException in meteodbdump: %s/%s\n",
 			me.getReason().c_str(), me.getAddinfo().c_str());

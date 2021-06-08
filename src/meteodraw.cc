@@ -2,7 +2,6 @@
  * meteodraw.cc -- create meteo drawings
  *
  * (c) 2003 Dr. Andreas Mueller, Beratung und Entwicklung
- * $Id: meteodraw.cc,v 1.21 2004/03/20 01:15:55 afm Exp $
  */
 #include <stdio.h>
 #include <string.h>
@@ -26,9 +25,11 @@
 #include <Lock.h>
 #include <MeteoException.h>
 
+namespace meteo {
+namespace draw {
 
 // some type definitions that will be handy
-typedef	std::list<meteo::Timelabel>	timelabellist_t;
+typedef	std::list<Timelabel>	timelabellist_t;
 typedef std::set<std::string>	stringset_t;
 typedef	std::vector<int>	intvector_t;
 
@@ -142,7 +143,7 @@ static void	usage(void) {
 }
 
 // draw a graph based on a timelabel
-void	drawlabeled(const std::string& currentgraph, const meteo::Timelabel& ti) {
+void	drawlabeled(const std::string& currentgraph, const Timelabel& ti) {
 	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "working on graph %s",
 		currentgraph.c_str());
 	// write the graph to a file
@@ -161,7 +162,7 @@ void	drawlabeled(const std::string& currentgraph, const meteo::Timelabel& ti) {
 	// a call graph generation
 	try {
 		// compute the graph
-		meteo::Graphics	graph(ti.getInterval(), ti.getTime(), true,
+		Graphics	graph(ti.getInterval(), ti.getTime(), true,
 			currentgraph, (images || imgold));
 		mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "graph %s constructed",
 			currentgraph.c_str());
@@ -184,7 +185,7 @@ void	drawlabeled(const std::string& currentgraph, const meteo::Timelabel& ti) {
 			mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "IMG tag written");
 		}
 	}
-	catch (meteo::MeteoException& ex) {
+	catch (MeteoException& ex) {
 		// report the problem
 		mdebug(LOG_CRIT, MDEBUG_LOG, 0, "MeteoException caught: %s, %s",
 			ex.getReason().c_str(), ex.getAddinfo().c_str());
@@ -200,7 +201,7 @@ std::string	getsuffix(const int interval) {
 		case 7200:	return std::string("-month"); break;
 		case 86400:	return std::string("-year"); break;
 	}
-	throw meteo::MeteoException("illegal interval found", "");
+	throw MeteoException("illegal interval found", "");
 }
 
 // draw a graph based on the interval
@@ -227,13 +228,13 @@ static void	drawinterval(const std::string& currentgraph, int interval) {
 	// again, catch all errors during graph generation
 	try {
 		// compute the graph
-		meteo::Graphics	graph(interval, end, false, currentgraph,
+		Graphics	graph(interval, end, false, currentgraph,
 			(images || imgold));
 
 		if (images || imgold)
 			graph.toFile(outfilename);
 	}
-	catch (meteo::MeteoException& ex) {
+	catch (MeteoException& ex) {
 		// report the problem
 		mdebug(LOG_CRIT, MDEBUG_LOG, 0, "MeteoException caught: %s, %s",
 			ex.getReason().c_str(), ex.getAddinfo().c_str());
@@ -246,14 +247,14 @@ static void	drawinterval(const std::string& currentgraph, int interval) {
 // - set up logging
 // - open the Configuration
 // - check which intervals should be drawn
-static int	meteodraw(int argc, char *argv[]) {
+static int	main(int argc, char *argv[]) {
 	int		c;
 	std::string	conffilename(METEOCONFFILE);
 	std::string	logurl("file:///-");
 	stringset_t	requested;
 	intvector_t	intervals;
 	timelabellist_t	labeled;
-	meteo::Timelabel	tl;
+	Timelabel	tl;
 	bool		exclusive = false;
 
 	// remember current time
@@ -281,7 +282,7 @@ static int	meteodraw(int argc, char *argv[]) {
 			debug++;
 			break;
 		case 'e':
-			end = meteo::Timestamp(optarg).getTime();
+			end = Timestamp(optarg).getTime();
 			if (debug)
 				mdebug(LOG_DEBUG, MDEBUG_LOG, 0,
 					"end timestamp: %d", end);
@@ -312,7 +313,7 @@ static int	meteodraw(int argc, char *argv[]) {
 			imagemap = true;
 			break;
 		case 'L':
-			tl = meteo::Timelabel(optarg);
+			tl = Timelabel(optarg);
 			labeled.push_back(tl);
 			break;
 		case 'p':
@@ -343,17 +344,17 @@ static int	meteodraw(int argc, char *argv[]) {
 
 	// make sure we have a configuration file, and initialize the config
 	// reader
-	meteo::Configuration	conf(conffilename);
+	Configuration	conf(conffilename);
 	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "read configuration %s",
 		conffilename.c_str());
 
 	// create lock, so the system cannot be flooded by requests
-	meteo::Lock	lock(conf);
+	Lock	lock(conf);
 	if (exclusive)
 		// wait until we can fetch the lock
 		if (!lock.enter(true)) {
 			mdebug(LOG_ERR, MDEBUG_LOG, 0, "lock failed");
-			throw meteo::MeteoException("lock failed", "");
+			throw MeteoException("lock failed", "");
 		}
 
 	// read the intervals from the command line
@@ -403,9 +404,12 @@ static int	meteodraw(int argc, char *argv[]) {
 	exit(EXIT_SUCCESS);
 }
 
+} // namespace draw
+} // namespace meteo
+
 int	main(int argc, char *argv[]) {
 	try {
-		meteodraw(argc, argv);
+		meteo::draw::main(argc, argv);
 	} catch (meteo::MeteoException& me) {
 		fprintf(stderr, "MeteoException in meteodraw: %s/%s\n",
 			me.getReason().c_str(), me.getAddinfo().c_str());

@@ -3,7 +3,6 @@
 //                     station
 //
 // (c) 2004 Dr. Andreas Mueller, Beratung und Entwicklung
-// $Id: meteosunriset.cc,v 1.3 2006/05/07 19:47:22 afm Exp $
 //
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -18,8 +17,11 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+namespace meteo {
+namespace sunriset {
+
 // main function for sunriset program
-void	meteosunriset(int argc, char *argv[]) {
+void	main(int argc, char *argv[]) {
 	std::string	station;
 	std::string	conffilename(METEOCONFFILE);
 	std::string	formatstring("%H:%M");
@@ -49,26 +51,26 @@ void	meteosunriset(int argc, char *argv[]) {
 
 	// make sure the station was specified
 	if (station.empty()) {
-		throw meteo::MeteoException("must specify station", "");
+		throw MeteoException("must specify station", "");
 	}
 
 	// open the configuration file
-	meteo::Configuration	conf(conffilename);
+	Configuration	conf(conffilename);
 
 	// get the latitude and longitude from the database
-	meteo::StationInfo	si(station);
+	StationInfo	si(station);
 	double	longitude = si.getLongitude();
 	double	latitude = si.getLatitude();
 
 	// create a Sun object
-	meteo::Sun	thesun(longitude, latitude, elevation);
+	Sun	thesun(longitude, latitude, elevation);
 
 	// the remaining arguments are a list of datestamps
 	for (int i = optind; i < argc; i++) {
 		char	buffer[1024];
 		// get the time
 		printf("%-10.10s ", argv[i]);
-		meteo::Timelabel	tl(argv[i]);
+		Timelabel	tl(argv[i]);
 
 		// compute sunrise and sunset times
 		time_t	sunrise	= thesun.sunrise(tl.getTime());
@@ -84,9 +86,12 @@ void	meteosunriset(int argc, char *argv[]) {
 	}
 }
 
+} // namespace sunriset 
+} // namespace meteo
+
 int	main(int argc, char *argv[]) {
 	try {
-		meteosunriset(argc, argv);
+		meteo::sunriset::main(argc, argv);
 	} catch (meteo::MeteoException& me) {
 		fprintf(stderr, "MeteoException in meteosunriset: %s/%s\n",
 			me.getReason().c_str(), me.getAddinfo().c_str());

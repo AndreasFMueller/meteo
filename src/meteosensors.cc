@@ -2,17 +2,18 @@
  * meteosensors.cc -- report the names of the sensors a station knows about
  *
  * (c) 2003 Dr. Andreas Mueller, Beratung und Entwicklung
- *
- * $Id: meteosensors.cc,v 1.3 2004/02/25 23:41:13 afm Exp $
  */
 #include <stdio.h>
 #include <stdlib.h>
 #include <StationFactory.h>
 #include <MeteoException.h>
 
-void	knowntypes(FILE *out) {
-	meteo::stringlist	nt = meteo::ReaderInfo::knownTypes();
-	for (meteo::stringlist::iterator i = nt.begin(); i != nt.end(); i++) {
+namespace meteo {
+namespace sensors {
+
+static void	knowntypes(FILE *out) {
+	stringlist	nt = ReaderInfo::knownTypes();
+	for (stringlist::iterator i = nt.begin(); i != nt.end(); i++) {
 		if (i != nt.begin())
 			fprintf(out, ", ");
 		fprintf(out, "%s", i->c_str());
@@ -20,7 +21,7 @@ void	knowntypes(FILE *out) {
 	fprintf(out, "\n");
 }
 
-void	usage(char *name) {
+static void	usage(char *name) {
 	fprintf(stderr, "usage: %s stationtype\n", name);
 	fprintf(stderr, "\tdisplays the sensor names known to a station of this type\n");
 	fprintf(stderr, "\tknown station types:\n\t");
@@ -28,14 +29,14 @@ void	usage(char *name) {
 	exit(EXIT_FAILURE);
 }
 
-static int	meteosensors(int argc, char *argv[]) {
+static int	main(int argc, char *argv[]) {
 	// this thing has only one argument, so if it is missing, we display
 	// a usage message
 	if (argc != 2)
 		usage(argv[0]);
 	
 	// get the readers
-	meteo::stationreaders_t	*srp = meteo::ReaderInfo::getReaders(argv[1]);
+	stationreaders_t	*srp = ReaderInfo::getReaders(argv[1]);
 	if (NULL == srp) {
 		fprintf(stderr, "station type %s unknown, known types are:\n",
 			argv[1]);
@@ -51,9 +52,12 @@ static int	meteosensors(int argc, char *argv[]) {
 	exit(EXIT_SUCCESS);
 }
 
+} // namespace sensors
+} // namespace meteo
+
 int	main(int argc, char *argv[]) {
 	try {
-		meteosensors(argc, argv);
+		meteo::sensors::main(argc, argv);
 	} catch (meteo::MeteoException& me) {
 		fprintf(stderr, "MeteoException in meteosensors: %s/%s\n",
 			me.getReason().c_str(), me.getAddinfo().c_str());

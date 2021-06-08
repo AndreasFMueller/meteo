@@ -3,8 +3,6 @@
  *                the database
  *
  * (c) 2001 Dr. Andreas Mueller, Beratung und Entwicklung
- *
- * $Id: meteoavg.cc,v 1.15 2006/05/07 21:15:25 afm Exp $
  */
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -28,15 +26,16 @@
 #include <string>
 #include <mdebug.h>
 #include <MeteoException.h>
+#include <getopt.h>
 
-extern int	optind;
-extern char	*optarg;
+namespace meteo {
+namespace average {
 
 // the daemon usually waits for the next time stamp that leaves 30 when
 // divided by 300, and computes adds all the averages that are required
 // for that timestamp
 static void	avg_daemon(const std::string& station) {
-	meteo::Averager	avg(station);
+	Averager	avg(station);
 	int	offset = avg.getOffset();
 	time_t	now, next;
 
@@ -106,7 +105,7 @@ printf(
 );
 }
 
-static int	meteoavg(int argc, char *argv[]) {
+static int	main(int argc, char *argv[]) {
 	std::string	conffilename(METEOCONFFILE);
 	std::string	station;
 	int		c, naverages = -1, interval = 0;
@@ -182,7 +181,7 @@ static int	meteoavg(int argc, char *argv[]) {
 		mdebug(LOG_CRIT, MDEBUG_LOG, 0, "no station specified, use -s");
 		exit(EXIT_FAILURE);
 	}
-	meteo::StationInfo	si(station);
+	StationInfo	si(station);
 
 	// there should be zero to two more arguments: timestamps for	
 	// the range for which we should compute averages		
@@ -202,14 +201,14 @@ static int	meteoavg(int argc, char *argv[]) {
 		}
 		mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "start timestamp: %s",
 			argv[optind]);
-		fromt = meteo::Timestamp(argv[optind]).getTime();
+		fromt = Timestamp(argv[optind]).getTime();
 		tot = fromt + interval * naverages;
 		break;
 	case 2:
 		mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "interval %s - %s",
 			argv[optind], argv[optind + 1]);
-		fromt = meteo::Timestamp(argv[optind]).getTime();
-		tot = meteo::Timestamp(argv[optind + 1]).getTime();
+		fromt = Timestamp(argv[optind]).getTime();
+		tot = Timestamp(argv[optind + 1]).getTime();
 		break;
 	default:
 		mdebug(LOG_CRIT, MDEBUG_LOG, 0, "wrong number of arguments");
@@ -217,7 +216,7 @@ static int	meteoavg(int argc, char *argv[]) {
 	}
 
 	// read the configuration file					
-	meteo::Configuration	conf(conffilename);
+	Configuration	conf(conffilename);
 
 	// consistency checks						
 	// interval must be set						
@@ -229,7 +228,7 @@ static int	meteoavg(int argc, char *argv[]) {
 	// connect to the database					
 	if (daemonmode) {
 		// become a daemon					
-		meteo::Daemon	daemon(pidfileprefix, station, foreground);
+		Daemon	daemon(pidfileprefix, station, foreground);
 
 		// start daemon mode for averages			
 		avg_daemon(station);
@@ -257,7 +256,7 @@ static int	meteoavg(int argc, char *argv[]) {
 			(int)t, interval, station.c_str());
 
 		// create an Averager object
-		meteo::Averager	avg(station);
+		Averager	avg(station);
 		avg.setFake(average_fake);
 
 		// create necessary averages
@@ -272,13 +271,16 @@ static int	meteoavg(int argc, char *argv[]) {
 	exit(EXIT_SUCCESS);
 }
 
+} // namespace average
+} // namespace meteo
+
 // main(argc, argv)	wrapper to catch MeteoExceptions thrown inside the
 //			real main function. We need the other main function
 //			as scope for the Daemon class, since the scope
 //			determines how long the PID file will be around
 int	main(int argc, char *argv[]) {
 	try {
-		meteoavg(argc, argv);
+		meteo::average::main(argc, argv);
 	} catch (meteo::MeteoException& me) {
 		fprintf(stderr, "MeteoException in meteoavg: %s/%s\n",
 			me.getReason().c_str(), me.getAddinfo().c_str());

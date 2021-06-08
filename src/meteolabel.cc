@@ -3,8 +3,6 @@
  *                  and navigating up and down
  *
  * (c) 2003 Dr. Andreas Mueller, Beratung und Entwicklung
- *
- * $Id: meteolabel.cc,v 1.6 2004/02/25 23:41:13 afm Exp $
  */
 #include <Timelabel.h>
 #include <MeteoException.h>
@@ -13,7 +11,10 @@
 #include <stdio.h>
 #include <string.h>
 
-static int	meteolabel(int argc, char *argv[]) {
+namespace meteo {
+namespace label {
+
+static int	main(int argc, char *argv[]) {
 	int	c;
 	bool	outtime = false, outctime = false, outlabel = true,
 		outtitle = false;
@@ -41,14 +42,14 @@ static int	meteolabel(int argc, char *argv[]) {
 
 	// there must be at least one more arguments
 	if (optind >= argc) {
-		throw meteo::MeteoException("must specify label argument", "");
+		throw MeteoException("must specify label argument", "");
 	}
 
 	// next argument is a label
 	std::string		label = argv[optind++];
-	meteo::Timelabel	tl;
+	Timelabel	tl;
 	try {
-		tl = meteo::Timelabel(label);
+		tl = Timelabel(label);
 	} catch (...) {
 		std::cerr << "cannot convert label '" << label << "'"
 			<< std::endl;
@@ -96,10 +97,12 @@ static int	meteolabel(int argc, char *argv[]) {
 	exit(EXIT_SUCCESS);
 }
 
+} // namespace label
+} // namespace meteo
 
 int	main(int argc, char *argv[]) {
 	try {
-		meteolabel(argc, argv);
+		meteo::label::main(argc, argv);
 	} catch (meteo::MeteoException& me) {
 		fprintf(stderr, "MeteoException in meteolabel: %s/%s\n",
 			me.getReason().c_str(), me.getAddinfo().c_str());

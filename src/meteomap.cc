@@ -2,7 +2,6 @@
 // meteomap.cc
 //
 // (c) 2004 Dr. Andreas Mueller, Beratung und Entwicklung
-// $Id: meteomap.cc,v 1.1 2007/08/29 21:00:23 afm Exp $
 //
 #include <stdlib.h>
 #include <stdio.h>

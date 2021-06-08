@@ -4,8 +4,6 @@
  *                 nonmetric units
  *
  * (c) 2003 Dr. Andreas Mueller, Beratung und Entwicklung
- *
- * $Id: meteopoll.cc,v 1.29 2008/09/07 15:18:52 afm Exp $
  */
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -56,7 +54,7 @@ pid_t	clpid;
 bool	allowfork = true;;
 
 // signal handler to kill child when parent is sent a signal
-void	kill_child(int cause) {
+static void	kill_child(int cause) {
 	switch (cause) {
 	case SIGTERM:
 	case SIGINT:
@@ -75,8 +73,12 @@ void	kill_child(int cause) {
 	return;
 }
 
+namespace meteo {
+namespace poll {
+
 static void	loop(const std::string& station,
-	const std::string& mapfilename, const meteo::stringlist& xmloutlets) {
+			const std::string& mapfilename,
+			const stringlist& xmloutlets) {
 	// limit memory to 16MB so this process cannot monopolize the system
 #define	memmax	0x1 << 25
 	struct rlimit	l;
@@ -94,31 +96,31 @@ static void	loop(const std::string& station,
 	// connected)
 	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "starting new station '%s'",
 		station.c_str());
-	meteo::Station	*s = meteo::StationFactory().newStation(station);
+	Station	*s = StationFactory().newStation(station);
 	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "station %s ready", station.c_str());
 
 	// add the mapfile if mapfilename is set
 	if (!mapfilename.empty()) {
-		meteo::Mapfile	*mapfile = new meteo::Mapfile(mapfilename, true);
+		Mapfile	*mapfile = new Mapfile(mapfilename, true);
 		mapfile->setStationname(station);
 		s->addMapfile(mapfile);	// takes ownership
 	}
 
 	// if we have an XML file, create a XmlOutlet with a delegate
-	for (meteo::stringlist::const_iterator i = xmloutlets.begin(); i != xmloutlets.end(); i++) {
+	for (stringlist::const_iterator i = xmloutlets.begin(); i != xmloutlets.end(); i++) {
 		if (!i->empty()) {
 			mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "preparing XML outlet to %s",
 				i->c_str());
-			meteo::XmlOutlet *xmloutlet = meteo::XmlOutletFactory::get(station, *i);
+			XmlOutlet *xmloutlet = XmlOutletFactory::get(station, *i);
 			s->addOutlet(xmloutlet); // takes ownership
 		}
 	}
 
 	// create a data sink (new implementation uses QueryOutlet class)
-	s->addOutlet(new meteo::QueryOutlet(station));
+	s->addOutlet(new QueryOutlet(station));
 
 	// loop:
-	meteo::Timeval	looptime; looptime.now();
+	Timeval	looptime; looptime.now();
 	int	minute = looptime.getMinute();
 	while (true) {
 		// start the loop, expecting 10 data packets
@@ -175,12 +177,12 @@ static void	usage(void) {
 "   -x xmlfile        send output to XML file as well\n");
 }
 
-static int	meteopoll(int argc, char *argv[]) {
+static int	main(int argc, char *argv[]) {
 	std::string	conffile(METEOCONFFILE);
 	std::string	logurl("file:///-");	// logging to stderr
 	std::string	station, mapfilename;
-	meteo::stringlist	xmloutlets;
-	meteo::stringlist	preferences;
+	stringlist	xmloutlets;
+	stringlist	preferences;
 	std::string	pidfileprefix;
 
 	// parse command line
@@ -245,10 +247,10 @@ static int	meteopoll(int argc, char *argv[]) {
 		pidfileprefix = "/var/run/meteopoll-";
 
 	// fork if necessary
-	meteo::Daemon	d(pidfileprefix, station, !allowfork);
+	Daemon	d(pidfileprefix, station, !allowfork);
 
 	// open the configuration object
-	meteo::Configuration	conf(conffile);
+	Configuration	conf(conffile);
 	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "read configuration %s",
 		conffile.c_str());
 
@@ -256,7 +258,7 @@ static int	meteopoll(int argc, char *argv[]) {
 	if (0 == preferences.size()) {
 		preferences.push_back("debug");
 	}
-	meteo::DatasinkFactory	dsf(preferences);
+	DatasinkFactory	dsf(preferences);
 
 	// install signal handlers
 	signal(SIGTERM, kill_child);
@@ -301,7 +303,7 @@ static int	meteopoll(int argc, char *argv[]) {
 				loop(station, mapfilename, xmloutlets);
 				mdebug(LOG_DEBUG, MDEBUG_LOG, 0,
 					"return from loop");
-			} catch (meteo::MeteoException& e) {
+			} catch (MeteoException& e) {
 				mdebug(LOG_ERR, MDEBUG_LOG, 0,
 					"MeteoException(%s, %s)", 
 					e.getReason().c_str(),
@@ -361,6 +363,9 @@ static int	meteopoll(int argc, char *argv[]) {
 	exit(EXIT_SUCCESS);
 }
 
+} // namespace poll
+} // namespace meteo
+
 // main(argc, argv)	the main function is only needed as a wrapper to
 //			catch an Exception and print a nice error message
 //			on standard error (nothing is logged in this case
@@ -368,7 +373,7 @@ static int	meteopoll(int argc, char *argv[]) {
 //			already
 int	main(int argc, char *argv[]) {
 	try {
-		meteopoll(argc, argv);
+		meteo::poll::main(argc, argv);
 	} catch (meteo::MeteoException& me) {
 		fprintf(stderr, "MeteoException in meteopoll: %s/%s\n",
 			me.getReason().c_str(), me.getAddinfo().c_str());

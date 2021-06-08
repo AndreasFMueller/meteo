@@ -3,8 +3,6 @@
  *                    them to the database
  *
  * (c) 2001 Dr. Andreas Mueller, Beratung und Entwicklung
- *
- * $Id: meteodequeue.cc,v 1.7 2003/11/11 08:13:54 afm Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -27,6 +25,9 @@
 #include <MsgDequeuer.h>
 #include <MeteoException.h>
 
+namespace meteo {
+namespace dequeue {
+
 static void	usage(void) {
 printf(
 "usage: meteodequeue [ -dFVh? ] [ -l logurl ] [ -p pidfile ] [ -f conffile ]\n"
@@ -40,7 +41,7 @@ printf(
 );
 }
 
-static int	meteodequeue(int argc, char *argv[]) {
+static int	main(int argc, char *argv[]) {
 	int		c, foreground = 0;
 	std::string	conffilename(METEOCONFFILE);
 	std::string	pidfilename("/var/run/meteodequeue.pid");
@@ -80,10 +81,10 @@ static int	meteodequeue(int argc, char *argv[]) {
 	// read the configuration file					
 	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "config file is %s",
 		conffilename.c_str());
-	meteo::Configuration	conf(conffilename);
+	Configuration	conf(conffilename);
 
 	// daemonize							
-	meteo::Daemon	d(pidfilename, "", foreground);
+	Daemon	d(pidfilename, "", foreground);
 
 	// make sure we have a suitable message queue			
 	std::string	queuename;
@@ -95,10 +96,10 @@ static int	meteodequeue(int argc, char *argv[]) {
 	if (debug)
 		mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "opening msgqueue '%s'",
 			queuename.c_str());
-	meteo::MsgDequeuer	mq(queuename);
+	MsgDequeuer	mq(queuename);
 
 	// open the database						
-	meteo::QueryProcessor	qp(true);
+	QueryProcessor	qp(true);
 
 	// start the main loop						
 	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "starting main loop");
@@ -107,7 +108,7 @@ static int	meteodequeue(int argc, char *argv[]) {
 			"waiting for data on msgqueue");
 		try {
 			qp.perform(mq());
-		} catch (meteo::MeteoException& me) {
+		} catch (MeteoException& me) {
 			mdebug(LOG_ERR, MDEBUG_LOG, 0, "exception: %s, %s",
 				me.getReason().c_str(),
 				me.getAddinfo().c_str());
@@ -119,10 +120,13 @@ static int	meteodequeue(int argc, char *argv[]) {
 	exit(EXIT_SUCCESS);
 }
 
+} // namespace dequeue
+} // namespace main
+
 // main(argc, argv)	Exception catching wrapper for the main function
 int	main(int argc, char *argv[]) {
 	try {
-		meteodequeue(argc, argv);
+		meteo::dequeue::main(argc, argv);
 	} catch(meteo::MeteoException& me) {
 		fprintf(stderr, "MeteoException in meteodequeue: %s/%s\n",
 			me.getReason().c_str(), me.getAddinfo().c_str());

@@ -3,8 +3,6 @@
  *                  in an XML based format
  * 
  * (c) 2002 Dr. Andreas Mueller, Beratung und Entwicklung
- *
- * $Id: meteolast.cc,v 1.14 2004/02/27 16:03:50 afm Exp $
  */
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -27,10 +25,13 @@
 #include <Timestamp.h>
 #include <iostream>
 
-void	usage(const char *progname) {
+namespace meteo {
+namespace last {
+
+static void	usage(const char *progname) {
 }
 
-static int	meteolast(int argc, char *argv[]) {
+static int	main(int argc, char *argv[]) {
 	std::string	conffilename(METEOCONFFILE);
 	std::string	stationname("undefined");
 	std::string	logurl("file:///-");
@@ -76,7 +77,7 @@ static int	meteolast(int argc, char *argv[]) {
 		case 'T':
 			do { // creates a block, keeps compiler from complaining
 			     // about skipping ts initialization
-				meteo::Timestamp	ts(optarg);
+				Timestamp	ts(optarg);
 				timekey = ts.getTime();
 			} while (0);
 			break;
@@ -104,7 +105,7 @@ static int	meteolast(int argc, char *argv[]) {
 		stationlist.push_back(std::string(argv[i]));
 
 	// create a configuration object from the config filename
-	meteo::Configuration	conf(conffilename);
+	Configuration	conf(conffilename);
 
 	// iterate through the station names
 	for (std::list<std::string>::const_iterator i = stationlist.begin();
@@ -113,10 +114,10 @@ static int	meteolast(int argc, char *argv[]) {
 			i->c_str());
 
 		// create a QueryProcessor
-		meteo::QueryProcessor	qp(false);
+		QueryProcessor	qp(false);
 
 		// retrieve a record for this station
-		meteo::Datarecord	r;
+		Datarecord	r;
 		if (searchbackwards)
 			r = qp.lastRecord(timekey, *i, window);
 		else
@@ -138,9 +139,12 @@ static int	meteolast(int argc, char *argv[]) {
 	exit(EXIT_SUCCESS);
 }
 
+} // namespace last
+} // namespace meteo
+
 int	main(int argc, char *argv[]) {
 	try {
-		meteolast(argc, argv);
+		meteo::last::main(argc, argv);
 	} catch (meteo::MeteoException &me) {
 		fprintf(stderr, "MeteoException in meteolast: %s/%s\n",
 			me.getReason().c_str(), me.getAddinfo().c_str());
