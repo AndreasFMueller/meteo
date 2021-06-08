@@ -31,12 +31,13 @@ static struct option	options[] = {
 };
 
 static std::string	stationname;
-static std::string	sensorname("outside");
 static int	stationid;
-static int	sensorid;
 
-static void	send(Outlet *outlet, const std::string& fieldname,
+static void	send(Outlet *outlet,
+	const std::string& sensorname,
+	const std::string& fieldname,
 	double value, const std::string& unit) {
+
 	// build the name
 	std::string	fqfieldname = stationname;
 	fqfieldname.append(".");
@@ -49,6 +50,10 @@ static void	send(Outlet *outlet, const std::string& fieldname,
 	// lookup 
 	FQField		fqfield;
 	int	fieldid = fqfield.getFieldid(fqfieldname).mfieldid;
+
+	// create the sensor station info
+	SensorStationInfo	ssi(stationname, sensorname);
+	int	sensorid = ssi.getId();
 
 	// update the outlet with the information
 	outlet->send(sensorid, fieldid, value, unit);
@@ -116,19 +121,19 @@ static int	main(int argc, char *argv[]) {
 	StationInfo	si(stationname);
 	stationid = si.getId();
 
-	// create the sensor station info
-	SensorStationInfo	ssi(stationname, sensorname);
-	sensorid = ssi.getId();
-
 	// create the UDP outlet
 	UdpOutlet	*outlet = new UdpOutlet(stationname, servername, port);
 
 	// add data to the packet
-	send(outlet, "temperature", 22.5, "C");
-	send(outlet, "humidity", 82.5, "%");
-	send(outlet, "wind", 15., "m/s");
-	send(outlet, "windgust", 25., "m/s");
-	send(outlet, "rainrate", 3., "mm/h");
+	send(outlet, "inside", "temperature", 22.5, "C");
+	send(outlet, "inside", "humidity", 62.5, "%");
+	send(outlet, "inside", "barometer", 1020, "hPa");
+	send(outlet, "outside", "temperature", 2.5, "C");
+	send(outlet, "outside", "humidity", 82.5, "%");
+	send(outlet, "outside", "wind", 15., "m/s");
+	send(outlet, "outside", "winddir", 47, "deg");
+	send(outlet, "outside", "windgust", 25., "m/s");
+	send(outlet, "outside", "rainrate", 3., "mm/h");
 
 	// send a packet
 	outlet->flush(0);

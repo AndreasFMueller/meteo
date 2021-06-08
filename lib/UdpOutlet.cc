@@ -19,6 +19,16 @@
 
 namespace meteo {
 
+std::string	UdpOutlet::fqname(const std::string& sensorname,
+	const std::string& fieldname) const {
+	std::string	result = _stationname;
+	result.append(".");
+	result.append(sensorname);
+	result.append(".");
+	result.append(fieldname);
+	return result;
+}
+
 /**
  * \brief Construct a UDP outlet class instance
  *
@@ -29,16 +39,32 @@ UdpOutlet::UdpOutlet(const std::string& stationname,
 	const std::string& hostname, unsigned short port)
 	: _stationname(stationname), _hostname(hostname), _port(port) {
 	setup();
-	_names.insert(std::make_pair(
-		std::string("temperature"), std::string("rtOutsideTemp")));
-	_names.insert(std::make_pair(
-		std::string("humidity"), std::string("rtOutsideHum")));
-	_names.insert(std::make_pair(
-		std::string("wind"), std::string("rtWindAvgSpeed")));
-	_names.insert(std::make_pair(
-		std::string("windgust"), std::string("rtWindSpeed")));
-	_names.insert(std::make_pair(
-		std::string("rainrate"), std::string("rtRainRate")));
+
+	// inside sensor
+	_names.insert(std::make_pair(fqname("inside", "temperature"),
+		std::string("rtInsideTemp")));
+	_names.insert(std::make_pair(fqname("inside", "humidity"),
+		std::string("rtInsideHum")));
+	_names.insert(std::make_pair(fqname("inside", "barometer"),
+		std::string("rtBaroCurr")));
+
+	// outside sensor
+	_names.insert(std::make_pair(fqname("outside", "temperature"),
+		std::string("rtOutsideTemp")));
+	_names.insert(std::make_pair(fqname("outside", "humidity"),
+		std::string("rtOutsideHum")));
+
+	// wind
+	_names.insert(std::make_pair(fqname("outside", "wind"),
+		std::string("rtWindAvgSpeed")));
+	_names.insert(std::make_pair(fqname("outside", "windgust"),
+		std::string("rtWindSpeed")));
+	_names.insert(std::make_pair(fqname("outside", "winddir"),
+		std::string("rtWindDir")));
+
+	// rain
+	_names.insert(std::make_pair(fqname("outside", "rainrate"),
+		std::string("rtRainRate")));
 }
 
 /**
@@ -101,10 +127,13 @@ void	UdpOutlet::flush(const time_t timekey) {
 	// we need a way to resolve the names
 	StationInfo	si(stationname());
 	int	stationid = si.getId();
-	SensorStationInfo	ssi(stationname(), "outside");
-	int	sensorid = ssi.getId();
-	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "station=%d, sensor=%d", stationid,
-		sensorid);
+	SensorStationInfo	ossi(stationname(), "outside");
+	int	outsidesensorid = ossi.getId();
+	SensorStationInfo	issi(stationname(), "inside");
+	int	insidesensorid = issi.getId();
+	mdebug(LOG_DEBUG, MDEBUG_LOG, 0,
+		"station=%d, outside sensor=%d, inside sensor = %d", stationid,
+		outsidesensorid, insidesensorid);
 
 	// build a set of sensor ids
 	std::set<int>	sensorids;
@@ -122,10 +151,23 @@ void	UdpOutlet::flush(const time_t timekey) {
 		for (i = batch.begin(); i != batch.end(); i++) {
 			if (i->sensorid == *j) {
 				std::string	name = f.getName(i->fieldid);
-				out << separator;
-				separator = ",";
-				std::map<std::string,std::string>::const_iterator n = _names.find(name);
+				std::string	key = stationname();
+				key.append(".");
+				if (i->sensorid == outsidesensorid) {
+					key.append("outside");
+				}
+				if (i->sensorid == insidesensorid) {
+					key.append("inside");
+				}
+				key.append(".");
+				key.append(name);
+				mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "field name: '%s', key: '%s'", name.c_str(), key.c_str());
+
+
+				std::map<std::string,std::string>::const_iterator n = _names.find(key);
 				if (n != _names.end()) {
+					out << separator;
+					separator = ",";
 					out << n->second << "=" << i->value;
 				}
 			}

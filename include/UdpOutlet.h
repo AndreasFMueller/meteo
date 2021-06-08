@@ -12,12 +12,20 @@ namespace meteo {
 
 /**
  * \brief A outlet class to send meteo data to RTS2
+ *
+ * This class is based on davis_daemon/dvisudp.cpp. The UDP packet contains
+ * a simple string encoded version of the sensor data. The DavisUdp::receive
+ * method shows a sample string for the contents of the packet, it is
+ * essentially a comma separated list of pairs of names and values, separated
+ * by equal signs.
  */
 class UdpOutlet : public Outlet {
 	std::string	_stationname;
 	std::string	_hostname;
 	unsigned short	_port;
 	std::map<std::string,std::string>	_names;
+	std::string	fqname(const std::string& sensorname,
+		const std::string& fieldname) const;
 public:
 	const std::string&	stationname() const { return _stationname; }
 	const std::string&	hostname() const { return _hostname; }
