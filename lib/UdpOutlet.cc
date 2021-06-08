@@ -161,7 +161,9 @@ void	UdpOutlet::flush(const time_t timekey) {
 				}
 				key.append(".");
 				key.append(name);
-				mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "field name: '%s', key: '%s'", name.c_str(), key.c_str());
+				mdebug(LOG_DEBUG, MDEBUG_LOG, 0,
+					"field name: '%s', key: '%s'",
+					name.c_str(), key.c_str());
 
 
 				std::map<std::string,std::string>::const_iterator n = _names.find(key);
