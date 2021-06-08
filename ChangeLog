@@ -1,5 +1,8 @@
 Release 0.9.20:
 	* migrate everything to github
+	* add UdpOutlet class
+	* fix linking with openssl under brew
+	* fix warnings in meteodbmigrate.cc, Averager.cc, XmlOutlet.cc
 
 Release 0.9.17:
 	* add outlet concept

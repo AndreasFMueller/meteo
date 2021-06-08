@@ -34,7 +34,6 @@ XmlOutlet::~XmlOutlet() {
 
 void	XmlOutlet::flush(const time_t timekey) {
 	std::list<outlet_t>::iterator	i;
-	char	val[1024];
 	std::string	result;
 	result.append(stringprintf("<?xml version=\"1.0\"?>\n"));
 	result.append(stringprintf(

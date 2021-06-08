@@ -67,7 +67,6 @@ class groupinfo {
 	time_t	timekey;
 	time_t	from;	// time value
 	time_t	to;	// time value
-	int	group;
 	int	interval;
 	int	offset;
 public:

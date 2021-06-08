@@ -1,0 +1,44 @@
+#! /bin/sh
+#
+# meteo start/stop script -- use this script as a starting point for your
+#                            own start/stop script
+#
+# (c) 2001 Dr. Andreas Mueller, Beratung und Entwicklung
+#
+# $Id: rc.meteo,v 1.5 2003/06/08 13:54:16 afm Exp $
+#
+station=Altendorf
+
+case .$1 in
+	.start)
+		# start the meteopoll process
+		/usr/local/bin/meteopoll -l syslog:local0 -s ${station} \
+			-b msgqueue >/dev/null 2>&1
+
+		# start the averaging process
+		/usr/local/bin/meteoavg -l syslog:local0 -s ${station} \
+			>/dev/null 2>&1
+
+		# start the dequeuer
+		/usr/local/bin/meteodequeue -l syslog:local0 >/dev/null 2>&1
+		;;
+	.stop)
+		# stop the dequeuer
+		if [ -r /var/run/meteodequeue.pid ]
+		then
+			kill `cat /var/run/meteodequeue.pid`
+		fi
+		# stop the averager
+		if [ -r /var/run/meteoavg-${station}.pid ]
+		then
+			kill `cat /var/run/meteoavg-${station}.pid`
+		fi
+		# stop the poll process
+		if [ -r /var/run/meteopoll-${station}.pid ]
+		then
+			kill `cat /var/run/meteopoll-${station}.pid`
+		fi
+		;;
+esac
+
+exit 0

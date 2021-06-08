@@ -1,8 +1,7 @@
 /*
- * XmlOutlet.cc -- implement sending stuff to an XML file
+ * XmlOutlet.h -- implement sending stuff to an XML file
  *
  * (c) 2008 Prof Dr Andreas Mueller
- * $Id: XmlOutlet.h,v 1.1 2008/09/07 15:18:52 afm Exp $
  */
 #include <Outlet.h>
 #include <XmlOutletDelegate.h>

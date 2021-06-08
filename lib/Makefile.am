@@ -136,6 +136,7 @@ libmeteo_la_SOURCES =							\
 	TransmitterConverter.cc						\
 	TransmitterRecorder.cc						\
 	TransmitterStatus.cc						\
+	UdpOutlet.cc							\
 	UVConverter.cc							\
 	UVReader.cc							\
 	UVRecorder.cc							\

@@ -1,13 +1,13 @@
-AC_PREREQ(2.57)dnl
+AC_PREREQ([2.71])dnl
 AC_REVISION([1.0])dnl
 
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT([meteo], [0.9.19], [andreas.mueller@othello.ch])
+AC_INIT([meteo],[0.9.19],[andreas.mueller@othello.ch])
 m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
 LT_INIT
 AC_CONFIG_SRCDIR([include/crc.h])
 AM_INIT_AUTOMAKE([-Wall])
-AM_CONFIG_HEADER(include/config.h)
+AC_CONFIG_HEADERS(include/config.h)
 
 dnl add support for libtool
 AC_SUBST(LIBTOOL_DEPS)
@@ -74,27 +74,23 @@ dnl Checks for header files.
 AC_FUNC_ALLOCA
 AC_HEADER_DIRENT
 AC_HEADER_SYS_WAIT
-AC_HEADER_STDC
+
 AC_CHECK_HEADERS([argz.h arpa/inet.h fcntl.h malloc.h memory.h netdb.h \
 netinet/in.h stdio.h stdlib.h string.h strings.h sys/socket.h sys/time.h \
 syslog.h signal.h termios.h unistd.h sys/msg.h sys/ipc.h sys/sem.h \
-alloca.h errno.h math.h])
+alloca.h errno.h math.h getopt.h])
 AC_CHECK_TYPES([semun])
 if test "$ac_cv_type_semun" = "no"; then
   AC_MSG_CHECKING(if sem.h defines semun)
-  AC_TRY_COMPILE([#include <sys/types.h>
+  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/types.h>
       #include <sys/ipc.h>
-      #include <sys/sem.h>],
-  [union semun s;],
-  [ac_cv_type_semun=yes; AC_DEFINE(HAVE_SEMUN) AC_MSG_RESULT(yes)],
-  [AC_MSG_RESULT(no)])
+      #include <sys/sem.h>]], [[union semun s;]])],[ac_cv_type_semun=yes; AC_DEFINE(HAVE_SEMUN) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 fi
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 AC_TYPE_PID_T
 AC_TYPE_SIZE_T
-AC_HEADER_TIME
 AC_STRUCT_TM
 
 dnl Checks for library functions.
@@ -102,7 +98,6 @@ AC_FUNC_CLOSEDIR_VOID
 AC_FUNC_FORK
 AC_FUNC_MKTIME
 AC_FUNC_SELECT_ARGTYPES
-AC_TYPE_SIGNAL
 AC_FUNC_STAT
 AC_FUNC_STRFTIME
 AC_CHECK_FUNCS([alarm gethostbyname gettimeofday memmove memset putenv select \

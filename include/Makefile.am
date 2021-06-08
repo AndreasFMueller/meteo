@@ -129,6 +129,7 @@ noinst_HEADERS =							\
 	TransmitterConverter.h						\
 	TransmitterRecorder.h						\
 	TransmitterStatus.h						\
+	UdpOutlet.h							\
 	UVConverter.h							\
 	UVReader.h							\
 	UVRecorder.h							\
