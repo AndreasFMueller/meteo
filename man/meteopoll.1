@@ -15,6 +15,10 @@ meteopoll [
 ] [
 .BI \-f conffile
 ] [
+.BI \-S servername
+] [
+.BI \-P port
+] [
 .BI \-m mapfile
 ] [
 .BI \-x xmloutlet
@@ -116,8 +120,17 @@ When running in daemon mode, write the process id of the
 process to this file. Defaults to
 .IR /var/run/meteopoll-<station>.pid .
 .TP
+.BI \-P port
+Send RTS2 UDP packets containing station data to this port.
+.TP
 .BI \-s stationname
 Name of the station from which to read data. This argument is mandatory.
+.TP
+.BI \-S servername
+Send RTS2 UDP packet to this server.
+The port can be specified using the 
+.B \-P
+option.
 .TP
 .B \-V
 print version information and exit.

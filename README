@@ -13,12 +13,6 @@ no longer functional.
 The home of the meteo tools is at http://meteo.othello.ch, where 
 you will always find the current release. For sample installations
 see http://www.othello.ch/meteo and http://grossalp.othello.ch/meteo.
-There is also a mailing list, you subscribe to it by sending a message
-containing nothing but the line
-
-	subscribe meteo
-
-to majordomo@lists.othello.ch.
 
 Please also read other documentation available with the package:
 

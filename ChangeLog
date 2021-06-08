@@ -1,4 +1,6 @@
 Release 0.9.20:
+	* the mailing list no longer exists
+	* make port for database configurable
 	* migrate everything to github
 	* add UdpOutlet class
 	* fix linking with openssl under brew

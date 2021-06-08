@@ -12,6 +12,10 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/socket.h>
+#include <StationInfo.h>
+#include <SensorStationInfo.h>
+#include <Field.h>
+#include <set>
 
 namespace meteo {
 
@@ -25,6 +29,16 @@ UdpOutlet::UdpOutlet(const std::string& stationname,
 	const std::string& hostname, unsigned short port)
 	: _stationname(stationname), _hostname(hostname), _port(port) {
 	setup();
+	_names.insert(std::make_pair(
+		std::string("temperature"), std::string("rtOutsideTemp")));
+	_names.insert(std::make_pair(
+		std::string("humidity"), std::string("rtOutsideHum")));
+	_names.insert(std::make_pair(
+		std::string("wind"), std::string("rtWindAvgSpeed")));
+	_names.insert(std::make_pair(
+		std::string("windgust"), std::string("rtWindSpeed")));
+	_names.insert(std::make_pair(
+		std::string("rainrate"), std::string("rtRainRate")));
 }
 
 /**
@@ -59,6 +73,10 @@ void	UdpOutlet::setup() {
 	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "destination address: %s",
 		inet_ntoa(_destination.sin_addr));
 
+	// set the port number
+	_destination.sin_port = htons(_port);
+	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "port: %u", _port);
+
 	// create a socket
 	_socket = socket(AF_INET, SOCK_DGRAM, 0);
 	if (_socket < 0) {
@@ -67,15 +85,7 @@ void	UdpOutlet::setup() {
 		mdebug(LOG_ERR, MDEBUG_LOG, 0, "%s", msg.c_str());
 		throw MeteoException(msg, "");
 	}
-
-	// connect to the destination address
-	if (connect(_socket, (struct sockaddr *)&_destination,
-		sizeof(_destination)) < 0) {
-		std::string	msg = stringprintf("cannot connect: %s",
-			strerror(errno));
-		mdebug(LOG_ERR, MDEBUG_LOG, 0, "%s", msg.c_str());
-		throw MeteoException(msg, "");
-	}
+	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "udp socket %d", _socket);
 }
 
 /**
@@ -88,18 +98,45 @@ void	UdpOutlet::flush(const time_t timekey) {
 	// use ostringstream to collect the data
 	std::ostringstream	out;
 
-	// XXX collect the data into a UPD packet structure
-	out << "rtOutsideTemp=21.2,";
-	out << "rtOutsideHum=79,";
-	out << "rtWindSpeed=13,";
-	out << "rtWindAvgSpeed=5,";
-	out << "rtRainRate=3";
+	// we need a way to resolve the names
+	StationInfo	si(stationname());
+	int	stationid = si.getId();
+	SensorStationInfo	ssi(stationname(), "outside");
+	int	sensorid = ssi.getId();
+	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "station=%d, sensor=%d", stationid,
+		sensorid);
 
-	//
+	// build a set of sensor ids
+	std::set<int>	sensorids;
+	std::list<outlet_t>::iterator	i;
+	for (i = batch.begin(); i != batch.end(); i++) {
+		sensorids.insert(i->sensorid);
+	}
+
+	// collect the data into a UPD packet structure
+	std::set<int>::iterator	j;
+	std::string	separator;
+	for (j = sensorids.begin(); j != sensorids.end(); j++) {
+		SensorStationInfo	sensor(*j);
+		Field	f;
+		for (i = batch.begin(); i != batch.end(); i++) {
+			if (i->sensorid == *j) {
+				std::string	name = f.getName(i->fieldid);
+				out << separator;
+				separator = ",";
+				std::map<std::string,std::string>::const_iterator n = _names.find(name);
+				if (n != _names.end()) {
+					out << n->second << "=" << i->value;
+				}
+			}
+		}
+	}
 
 	// inspect the packet
 	std::string	packet = out.str();
 	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "packet length: %d", packet.size());
+	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "packet content: '%s'",
+		packet.c_str());
 
 	// send the packet
 	if (sendto(_socket, packet.data(), packet.size(), 0,
@@ -107,8 +144,9 @@ void	UdpOutlet::flush(const time_t timekey) {
 		sizeof(_destination)) != packet.size()) {
 		std::string	msg = stringprintf("cannot send: %s",
 			strerror(errno));
-		throw MeteoException(msg, "");
+//		throw MeteoException(msg, "");
 	}
+	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "packet sent");
 }
 
 } // namespace meteo

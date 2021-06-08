@@ -30,6 +30,7 @@
 #include <Mapfile.h>
 #include <XmlOutletFactory.h>
 #include <QueryOutlet.h>
+#include <UdpOutlet.h>
 #include <Datasink.h>
 #include <Daemon.h>
 #include <mdebug.h>
@@ -78,7 +79,8 @@ namespace poll {
 
 static void	loop(const std::string& station,
 			const std::string& mapfilename,
-			const stringlist& xmloutlets) {
+			const stringlist& xmloutlets,
+			const std::string& servername, int port) {
 	// limit memory to 16MB so this process cannot monopolize the system
 #define	memmax	0x1 << 25
 	struct rlimit	l;
@@ -118,6 +120,11 @@ static void	loop(const std::string& station,
 
 	// create a data sink (new implementation uses QueryOutlet class)
 	s->addOutlet(new QueryOutlet(station));
+
+	// add udp outlet
+	if (!servername.empty()) {
+		s->addOutlet(new UdpOutlet(station, servername, port));
+	}
 
 	// loop:
 	Timeval	looptime; looptime.now();
@@ -170,9 +177,11 @@ static void	usage(void) {
 "   -h, -?            print this help screen and exit\n"
 "   -f conffile       use conffile, see meteo.xml(5)\n"
 "   -s stationname    let this process connect to station named stationname\n"
+"   -S servername     send RTS2 UDP data packets to this host\n"
 "   -b prefs          add backend preference prefs (one of msgqueue, mysql\n"
 "                     file, debug)\n"
 "   -p pidfile        write the process pid to this file\n"
+"   -P port           use this port for RTS2 udp data packets\n"
 "   -m mapfile        keep current sensor information in mapfile\n"
 "   -x xmlfile        send output to XML file as well\n");
 }
@@ -184,10 +193,12 @@ static int	main(int argc, char *argv[]) {
 	stringlist	xmloutlets;
 	stringlist	preferences;
 	std::string	pidfileprefix;
+	std::string	server;
+	int		port = 5002;
 
 	// parse command line
 	int	c;
-	while (EOF != (c = getopt(argc, argv, "dl:f:m:s:b:p:VFh?x:")))
+	while (EOF != (c = getopt(argc, argv, "dl:f:m:s:b:p:VFh?x:S:P:")))
 		switch (c) {
 		case 'd':
 			debug++;
@@ -201,11 +212,17 @@ static int	main(int argc, char *argv[]) {
 		case 's':
 			station = std::string(optarg);
 			break;
+		case 'S':
+			server = std::string(optarg);
+			break;
 		case 'b':
 			preferences.push_back(std::string(optarg));
 			break;
 		case 'p':
 			pidfileprefix = std::string(optarg);
+			break;
+		case 'P':
+			port = std::stoi(optarg);
 			break;
 		case 'V':
 			fprintver(stdout);
@@ -300,7 +317,8 @@ static int	main(int argc, char *argv[]) {
 			try {
 				mdebug(LOG_DEBUG, MDEBUG_LOG, 0,
 					"starting loop(%s)", station.c_str());
-				loop(station, mapfilename, xmloutlets);
+				loop(station, mapfilename, xmloutlets,
+					server, port);
 				mdebug(LOG_DEBUG, MDEBUG_LOG, 0,
 					"return from loop");
 			} catch (MeteoException& e) {

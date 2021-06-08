@@ -6,6 +6,7 @@
 #include <Outlet.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <map>
 
 namespace meteo {
 
@@ -16,6 +17,7 @@ class UdpOutlet : public Outlet {
 	std::string	_stationname;
 	std::string	_hostname;
 	unsigned short	_port;
+	std::map<std::string,std::string>	_names;
 public:
 	const std::string&	stationname() const { return _stationname; }
 	const std::string&	hostname() const { return _hostname; }

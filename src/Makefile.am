@@ -8,9 +8,18 @@ AM_CPPFLAGS = -DMETEOCONFFILE=$(METEOCONFFILE) @LIBXML_CFLAGS@
 
 LDADD = ../lib/libmeteo.la
 
-bin_PROGRAMS = meteopoll meteoavg meteolast				\
-	meteodequeue meteodraw meteolabel meteodbdump meteosensors	\
-	meteosunriset meteomap
+bin_PROGRAMS =								\
+	meteopoll							\
+	meteoavg							\
+	meteolast							\
+	meteodequeue							\
+	meteodraw							\
+	meteolabel							\
+	meteodbdump							\
+	meteosensors							\
+	meteosunriset							\
+	meteomap							\
+	meteopacket
  
 meteoavg_SOURCES = meteoavg.cc
 meteodequeue_SOURCES = meteodequeue.cc
@@ -22,6 +31,7 @@ meteodbdump_SOURCES = meteodbdump.cc
 meteosensors_SOURCES = meteosensors.cc
 meteosunriset_SOURCES = meteosunriset.cc
 meteomap_SOURCES = meteomap.cc
+meteopacket_SOURCES = meteopacket.cc
 
 test:	meteopoll
 	cp /dev/null /var/tmp/meteopoll.log
@@ -101,3 +111,10 @@ testdump:	meteodbdump
 		-l file:///var/tmp/meteodump.log -d -b testdump- \
 		-f `pwd`/../conf/meteo.xml avg sdata
 	
+
+#
+# test the packet program
+#
+testpacket:	meteopacket
+	DYLD_BIND_AT_LAUNCH=1 ./meteopacket --debug --station=altendorf \
+		--server=miranda --config=meteo-test.xml
