@@ -1,0 +1,67 @@
+#! /bin/sh
+#
+# sample configure call
+#
+# $Id: configureit,v 1.22 2009/01/10 21:06:40 afm Exp $
+#
+
+CFLAGS="-g -Wall -Wshadow  -Wpointer-arith -Wcast-align -Winline -Wmissing-prototypes -Wmissing-declarations -Wnested-externs"
+CXXFLAGS="-g -Wall -Wshadow  -Wpointer-arith -Wcast-align -Winline"
+
+export CXXFLAGS CFLAGS
+
+if [ webserver = `uname -n` ]
+then
+        CFLAGS="-g -Wall -pedantic -Wshadow  -Wpointer-arith -Wcast-align -Winline -Wmissing-prototypes -Wmissing-declarations -Wnested-externs"
+        CXXFLAGS="-g -Wall -Wshadow  -Wpointer-arith -Wcast-align -Winline"
+        export CFLAGS CXXFLAGS
+        basedir=/srv/www/vhosts/meteo.othello.ch/htdocs
+        ./configure --with-browser-dir=${basedir}/browser/ \
+                -with-html-dir=${basedir}/
+        exit
+fi
+
+if [ timon = `uname -n` ]
+then
+        PATH=/usr/local/mysql/bin:$PATH
+        export PATH
+        CFLAGS="-g -Wall -pedantic -Wshadow  -Wpointer-arith -Wcast-align -Winline -Wmissing-prototypes -Wmissing-declarations -Wnested-externs"
+        CXXFLAGS="-g -Wall -Wshadow  -Wpointer-arith -Wcast-align -Winline"
+        export CFLAGS CXXFLAGS
+        basedir=/usr/local/apache/htdocs/meteo.othello.ch
+        ./configure --with-browser-dir=${basedir}/meteo/ \
+                -with-html-dir=${basedir}/
+        exit
+fi
+
+case `uname` in
+	Linux)
+		# defaults I use on SuSE 8.2
+		./configure						\
+			--with-html-dir=/srv/www/htdocs/meteo		\
+			--with-browser-dir=/srv/www/htdocs/browser
+		;;
+	SunOS)
+		# make sure mysql_config is on the PATH
+		PATH=/usr/local/bin:/usr/local/mysql/bin:$PATH
+		export PATH
+		./configure						\
+			--with-html-dir=/usr/local/apache2/htdocs/meteo	\
+			--with-browser-dir=/usr/local/apache2/htdocs/browser
+		;;
+	Darwin)
+		# make sure mysql_config is on the PATH
+		PATH=/usr/local/bin:/usr/local/mysql/bin:$PATH
+		export PATH
+		./configure						\
+			--with-html-dir=/Library/WebServer/Documents/meteo \
+			--with-browser-dir=/Library/WebServer/Documents/browser
+		;;
+	BSD/OS)
+		# defaults proposed by Walter Poxon for BSD/OS 4.2
+		limit datasize unlimited
+		./configure						\
+			--with-browser-dir=/usr/local/apache/cgi-bin
+		;;
+esac
+

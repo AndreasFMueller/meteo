@@ -1,0 +1,218 @@
+.TH METEO.SQL "5" "October 2003" "Meteo station tools" Othello
+.SH NAME
+meteo database structure introduction
+meteo.xml \- description of configuration file format
+.SH DESCRIPTION
+The meteo station tools are described in 
+.BR meteo (1),
+this manual page goes into more detail about the database schema.
+
+The meteo database is usually set up using the script meteo.sql
+provided in the distribution. That script also contains a description of
+the most important fields.
+
+.SH "SENSOR NAMESPACE"
+Each weather station comes with a set of sensors it supports. A sensor
+is identified by its fully qualified name to the meteo software, which
+consists of the station name, the name of the sensor station (a collection
+of sensors that belong together logically), and the individial sensor
+name. The station in Lajeado e.g. has among others the following sensors:
+
+.nf
+.in +8
+Lajeado.console.temperature
+Lajeado.console.humidity
+Lajeado.console.barometer
+...
+Lajeado.iss.temperature
+Lajeado.iss.humidity
+Lajeado.iss.rain
+Lajeado.iss.wind
+...
+Lajeado.soil1.temperature
+Lajeado.soil1.moisture
+.in -8
+.fi
+
+To store data from these sensors in the database, the meteo software
+must map these names to triples (stationid, sensorid, mfieldid), each
+of which is a key into the station, sensor and mfield table respectively.
+Strictly speaking the stationid is not required, since sensorid and
+mfieldid together with time already form a key for sdata.
+
+The Lajeado station above needs one entry in the station table, which
+links the station name to the station id. The SQL command
+
+.nf
+.in +3
+insert into station(name, id, timezone, offset, longitude, latitude, altitude)
+   values ('Lajeado', 0, 'GMT-3', -10800, -29.46693, -51.96138, 166);
+.in -3
+.fi
+
+generates a suitable entry. Three entries, one for each sensors station,
+are required in the sensor table:
+
+.nf
+.in +3
+insert into sensor (name, id, stationid) values ('console', 0, 0);
+insert into sensor (name, id, stationid) values ('iss', 1, 0);
+insert into sensor (name, id, stationid) values ('soil1', 2, 0);
+.in -3
+.fi
+
+Note that since the id is a key, different stations must use different
+ids. 
+
+.SH UNITS
+
+A never ending topic are units. meteo adresses the issue as follows.
+
+.in +3
+.ti -3
+1.\ The Station objects that implement the station protocol know about
+the units that stations are using, so they internally generate Value objects
+with that particular unit.
+.ti -3
+2.\ For accumulation, meteo uses the units that the user wants in the 
+database. Since only Value objects understand
+conversion, not Recorder objects, the Value returned by the Reader
+(in the Station) is first converted to the dababase unit before being
+added to the Recorder.
+The mfield table in the database contains a unit column
+which specifies what unit the field is supposed to use.
+All temperature fields thus use the same unit.
+.ti -3
+3.\ Text output uses the database units, and does not offer conversion.
+.ti -3
+4.\ Graphical output using meteodraw does not really care about units,
+it just uses the data in the avg table as is. To draw graphs with units
+different from the database units, the arithmetic capabilities built
+into the XML-syntax that specifies the graphs should be used.
+.in -3
+
+For homegrown applications, the expressions within the SELECT
+clause of the SQL statement retrieving the data can be used to
+convert to the appropriate units on the fly.
+
+.SH OFFSET
+The
+.B avg
+table contains averages over longer intervals of time, namely
+5 minutes, 30 minutes, 2 hours and a day. Originally, these averages
+were computed
+by aggregating those values for which the unixtime divided by the
+length of the interval in seconds gives the same integer value.
+Since the integer division causes bad performance, these quotients,
+also called group numbers were precomputed in some table. Present
+versions of meteo no longer use these fields or tables, as they don't rely
+on the group numbers for average computation.
+
+The timekey field in the 
+.B avg
+table indicates the start of the interval. Furthermore, this
+value is always such that it is divisible by the length of the interval
+in seconds. This works well for UTC.
+
+To correct for local time, the offset variable was added to the station
+table (it previously was configured in the XML configuration, but other
+applications without access to the meteo.xml file may need the data too).
+The timekey
+field in the avg table however retains its mathematical properties,
+i.e. it should be divisible by the aggregation interval. But we would
+of course want the aggregation interval of length 86400 to cover a
+day from midnight to midnight. So a given timekey must be corrected
+by the local time offset to give the first data item of an aggregation
+interval. If the offset is
+.I o (negative on the western hemisphere), and
+the aggregation interval length is
+.iR i,
+then
+the timekey
+.I tk
+aggregates time values
+.I tk - o
+to
+.I tk - o + interval
+(not including this last value). When graphing these averages, the
+aggregated data for timekey
+.I tk
+should be plotted at time
+.IR "tk - o" .
+
+As an example, consider the station Lajeado, Brazil. It is 3 hours
+behind GMT, i.e. the timekey 106567600, which corresponds to
+to 00:00 GMT on october 9, 2003, corresponds to 21:00 on october 8, 2003
+in Lajeado. The averages computed for this timekey would thus include the
+values from 21:00 on october 8, 2003 to 20:59 on october 9, 2003.
+While this does not matter for most values, there will be large
+discrepancies for rain with other stations that accumulate
+rain from 00:00 on october 9, 2003 to 23:59 on the same day.
+
+Here as an ASCII timeline as illustration, first for a negative
+offset of 3 hours:
+
+.nf
+Local:       0                                               0
+       +-----+-----------------------------------------+-----+
+Unix:  0     |                                         0
+       | -3h |
+.fi
+
+To make sure rain (and all the other values)
+are accumulated from midnight to midnight local time, an offset
+can be configured in the configuration file.
+
+Lajeado would use -10800 as the offset (as for time zone differences,
+longitudes west of Grenwich get negativ offsets). This number is
+added to the Unix time, before the group numbers are computed.
+Daily averages are now computed over values for which
+(timekey + offset)/86400 gives the same result. An averaging
+period now starts when (timekey + offset) is divisible by 86400,
+i.e. in the case of Lajeado three hours later than before. Thus
+with this offset applied, timekey 106567600 points to the
+averages of values between 00:00 on october 9, 2003 and 23:59 on the
+same day. However, that Unix time points to 21:00 local time on 
+october 8, 2003.
+
+Put the other way round, if one converts the timekey used in the 
+avg table to a time string relative to UTC, it shows the same time
+as the corresponding unix time would when converted to a string
+relative to the local time zone.
+
+.SH "SUNRISE AND SUNSET"
+
+The sunrise and sunset values stored in sdata are unix timestamps.
+A more useful form for display is hours and minutes, and this can be
+computed as follows directly in SQL. First a query that computes
+seconds after midnight:
+
+.nf
+.in +4
+select (value - (timekey - timekey % 86400) + 3600) % 86400
+from sdata
+where fieldid = 100
+.in -4
+.fi
+
+To retrieve a timestamp directly, use the from_unixtime function
+of MySQL:
+
+.nf
+.in +4
+select from_unixtime(value)
+from sdata
+where fieldid = 100
+.in -4
+.fi
+
+.SH "SEE ALSO"
+.BR meteo (1),
+.BR meteopoll (1),
+.BR meteoavg (1),
+.BR meteodraw (1),
+.BR meteodequeue (1),
+.BR meteojob (1)
+
+.SH AUTHOR
+Dr. Andreas Mueller <afm@othello.ch>

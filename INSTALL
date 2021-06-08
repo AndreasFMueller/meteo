@@ -1,0 +1,391 @@
+Basic Installation
+==================
+
+   The first part of this file contains are generic installation
+instructions.  For plattform specific guidance and other specialties
+see the end of the file. Please also consult the SETUP file for a
+quick guide to the documentation of the package. In particular, you
+should check the README for the prerequisite packages to install.
+
+   The `configure' shell script attempts to guess correct values for
+various system-dependent variables used during compilation.  It uses
+those values to create a `Makefile' in each directory of the package.
+It may also create one or more `.h' files containing system-dependent
+definitions.  Finally, it creates a shell script `config.status' that
+you can run in the future to recreate the current configuration, a file
+`config.cache' that saves the results of its tests to speed up
+reconfiguring, and a file `config.log' containing compiler output
+(useful mainly for debugging `configure').
+
+   If you need to do unusual things to compile the package, please try
+to figure out how `configure' could check whether to do them, and mail
+diffs or instructions to the address given in the `README' so they can
+be considered for the next release.  If at some point `config.cache'
+contains results you don't want to keep, you may remove or edit it.
+
+   The file `configure.in' is used to create `configure' by a program
+called `autoconf'.  You only need `configure.in' if you want to change
+it or regenerate `configure' using a newer version of `autoconf'.
+
+The simplest way to compile this package is:
+
+  1. `cd' to the directory containing the package's source code and type
+     `./configure' to configure the package for your system.  If you're
+     using `csh' on an old version of System V, you might need to type
+     `sh ./configure' instead to prevent `csh' from trying to execute
+     `configure' itself.
+
+     Running `configure' takes awhile.  While running, it prints some
+     messages telling which features it is checking for.
+
+  2. Type `make' to compile the package.
+
+  3. Optionally, type `make check' to run any self-tests that come with
+     the package.
+
+  4. Type `make install' to install the programs and any data files and
+     documentation.
+
+  5. You can remove the program binaries and object files from the
+     source code directory by typing `make clean'.  To also remove the
+     files that `configure' created (so you can compile the package for
+     a different kind of computer), type `make distclean'.  There is
+     also a `make maintainer-clean' target, but that is intended mainly
+     for the package's developers.  If you use it, you may have to get
+     all sorts of other programs in order to regenerate files that came
+     with the distribution.
+
+Compilers and Options
+=====================
+
+   Some systems require unusual options for compilation or linking that
+the `configure' script does not know about.  You can give `configure'
+initial values for variables by setting them in the environment.  Using
+a Bourne-compatible shell, you can do that on the command line like
+this:
+     CC=c89 CFLAGS=-O2 LIBS=-lposix ./configure
+
+Or on systems that have the `env' program, you can do it like this:
+     env CPPFLAGS=-I/usr/local/include LDFLAGS=-s ./configure
+
+Compiling For Multiple Architectures
+====================================
+
+   You can compile the package for more than one kind of computer at the
+same time, by placing the object files for each architecture in their
+own directory.  To do this, you must use a version of `make' that
+supports the `VPATH' variable, such as GNU `make'.  `cd' to the
+directory where you want the object files and executables to go and run
+the `configure' script.  `configure' automatically checks for the
+source code in the directory that `configure' is in and in `..'.
+
+   If you have to use a `make' that does not supports the `VPATH'
+variable, you have to compile the package for one architecture at a time
+in the source code directory.  After you have installed the package for
+one architecture, use `make distclean' before reconfiguring for another
+architecture.
+
+Installation Names
+==================
+
+   By default, `make install' will install the package's files in
+`/usr/local/bin', `/usr/local/man', etc.  You can specify an
+installation prefix other than `/usr/local' by giving `configure' the
+option `--prefix=PATH'.
+
+   You can specify separate installation prefixes for
+architecture-specific files and architecture-independent files.  If you
+give `configure' the option `--exec-prefix=PATH', the package will use
+PATH as the prefix for installing programs and libraries.
+Documentation and other data files will still use the regular prefix.
+
+   In addition, if you use an unusual directory layout you can give
+options like `--bindir=PATH' to specify different values for particular
+kinds of files.  Run `configure --help' for a list of the directories
+you can set and what kinds of files go in them.
+
+   If the package supports it, you can cause programs to be installed
+with an extra prefix or suffix on their names by giving `configure' the
+option `--program-prefix=PREFIX' or `--program-suffix=SUFFIX'.
+
+Optional Features
+=================
+
+   Some packages pay attention to `--enable-FEATURE' options to
+`configure', where FEATURE indicates an optional part of the package.
+They may also pay attention to `--with-PACKAGE' options, where PACKAGE
+is something like `gnu-as' or `x' (for the X Window System).  The
+`README' should mention any `--enable-' and `--with-' options that the
+package recognizes.
+
+   For packages that use the X Window System, `configure' can usually
+find the X include and library files automatically, but if it doesn't,
+you can use the `configure' options `--x-includes=DIR' and
+`--x-libraries=DIR' to specify their locations.
+
+Specifying the System Type
+==========================
+
+   There may be some features `configure' can not figure out
+automatically, but needs to determine by the type of host the package
+will run on.  Usually `configure' can figure that out, but if it prints
+a message saying it can not guess the host type, give it the
+`--host=TYPE' option.  TYPE can either be a short name for the system
+type, such as `sun4', or a canonical name with three fields:
+     CPU-COMPANY-SYSTEM
+
+See the file `config.sub' for the possible values of each field.  If
+`config.sub' isn't included in this package, then this package doesn't
+need to know the host type.
+
+   If you are building compiler tools for cross-compiling, you can also
+use the `--target=TYPE' option to select the type of system they will
+produce code for and the `--build=TYPE' option to select the type of
+system on which you are compiling the package.
+
+Sharing Defaults
+================
+
+   If you want to set default values for `configure' scripts to share,
+you can create a site shell script called `config.site' that gives
+default values for variables like `CC', `cache_file', and `prefix'.
+`configure' looks for `PREFIX/share/config.site' if it exists, then
+`PREFIX/etc/config.site' if it exists.  Or, you can set the
+`CONFIG_SITE' environment variable to the location of the site script.
+A warning: not all `configure' scripts look for a site script.
+
+Operation Controls
+==================
+
+   `configure' recognizes the following options to control how it
+operates.
+
+`--cache-file=FILE'
+     Use and save the results of the tests in FILE instead of
+     `./config.cache'.  Set FILE to `/dev/null' to disable caching, for
+     debugging `configure'.
+
+`--help'
+     Print a summary of the options to `configure', and exit.
+
+`--quiet'
+`--silent'
+`-q'
+     Do not print messages saying which checks are being made.  To
+     suppress all normal output, redirect it to `/dev/null' (any error
+     messages will still be shown).
+
+`--srcdir=DIR'
+     Look for the package's source code in directory DIR.  Usually
+     `configure' can determine that directory automatically.
+
+`--version'
+     Print the version of Autoconf used to generate the `configure'
+     script, and exit.
+
+`configure' also accepts some other, not widely useful, options.
+
+Configuration options specific to the meteo package
+===================================================
+
+   The configure script supports the following options specific to
+the meteo package:
+
+	--with-browser-dir=DIR
+		set the directory where the meteobrowser php script
+		should be installed. If this option is not specified,
+		the script is not installed.
+
+	--with-html-dir=DIR
+		set the directory where the HTML files should be installed,
+		this is primarily useful on the site http://meteo.othello.ch,
+		where it is used to keep the web site up to date.
+
+   The XML library libxml2 is required, but there does not exist a
+configure option to specify the library. You should make sure that the
+xml2-config script is found on the PATH. The configure script will
+use that program's output to correctly set compiler and linker flags
+to include and link libxml2.
+
+   Likewise for the MySQL library, make sure the program mysql_config is
+found on the path. The GD2 library uses the program gdlib-config, which
+is usually in /usr/local/bin, make sure the program is found during the
+configure step.
+
+   As a consequence, zlib and libpng are no longer detected by the
+configure script, the script just assumes that they exist where the
+config scripts for mysql and gdlib think they are.
+
+
+Special issues
+==============
+
+   There will be lots of warnings about deprecated headers when compiling
+with gcc 3. The source code uses the old header file names to make sure
+compiling with gcc 2.95.3 will work.
+
+   The binary programs of this package are all installed in bindir,
+and the manual pages in mandir. The sample configuration file
+meteo.conf.5 and the HTML pages are not installed anywhere, and must
+be moved by hand to where you prefer. I usually place the configuration
+file in /usr/local/etc, and the HTML pages in DocumentRoot/meteo for
+the virtual server through which the graphs should be accessed.
+
+   If you want to use the meteobrowser.php script, you should name
+your configuration files meteo-<stationname>.conf, as this is what
+the script assumes (the directory containing the script is configurable).
+The installation of the meteo browser (the PHP script meteobrowser.php)
+has not been automated, it must be copied manually to suitable place
+inside the webserver hierarchy.
+
+   A sample start/stop script to place in /etc/init.d (or wherever your
+system likes to keep those) is also supplied as rc.meteo.
+
+   There is an sql script in the db directory that helps to set up the
+database tables, please read db/README for more information.
+
+
+Plattform specfic guidance
+==========================
+
+Solaris:
+	On Solaris, gcc 3 must be configured to use the GNU linker and
+    assembler. If configured with the Sun linker/assembler, the resulting
+    meteopoll binary will crash as soon as an invalid humidity value is
+    read from the station. Note that the gcc from sunfreeware.com uses
+    the Sun tools, so you will have to build a new compiler configured
+    with --with-gnu-ld and --with-gnu-as.
+
+	The Solaris Bourne shell is limited in that it is unable to
+    correctly execute the config.guess script (needed for libtool). Set
+    the CONFIG_SHELL environment variable to something more reasonable
+    like the Korn shell (/usr/bin/ksh) or, even better, the Bash
+    /usr/local/bin/bash (or wherever you have installed it). This may
+    no longer be a problem with Solaris 8 and/or the current version of
+    autoconf and the configure script created by it, but I haven't tried.
+
+	There may be lots of warnings during the compile about alignment
+    of data types, these can be ignored. They are not caused by any
+    meteo code, but come from the string class implementation that comes
+    with gcc.
+
+	The problem encountered with Mac OS X (SED not set correctly)
+    described below has also been reported to occur with some versions
+    of Solaris 2.6.
+
+	Sometimes the message queue size on Solaris is not large enough
+    (there are only about 3 to for messages that fit into the available
+    space), so you may want to increase that size. Unfortunately, these
+    are not dynamically tunable parameters even in Solaris 9, so you must
+    add the following lines to /etc/system
+
+	set msgsys:msginfo_msgmnb=524288
+	set msgsys:msginfo_msgtql=500
+
+    This allows 500 messages in the system takeing up a total of 512kB.
+
+Linux:
+	Some Linux distributions have the gd library compiled with freetype
+    support. Consequently, the meteo programs must be linked against the
+    freetype library, which means that the development packages for freetype
+    must be installed as well. Note that gd2 is not very old yet, and only
+    recent Linux distributions already include it. Installing it in addition
+    to gd, e.g. under /usr/local, usually does not do any harm and simplifies
+    gd based development.
+
+	In Linux, the message queue size is dynamically adjustable, just
+    write the desired size to /proc/sys/kernel/msg{max,mnb,mni}.
+
+Mac OS X:
+	There seems to be a problem with libtool on this platform, somehow
+    it does not find a working sed, resulting in very strange error
+    messages about -e not being found. Set the environment variable SED
+    to /usr/bin/sed:
+
+	$ export SED=/usr/bin/sed	(if using sh/bash)
+	% setenv SED /usr/bin/sh	(if using csh/tcsh)
+
+    You also have to make sure everything needed by configure is on your
+    PATH. I usually forget to do
+
+	export PATH=/usr/local/bin:/usr/local/sbin:${PATH}
+
+    If you have xml2-config, mysql_config and gdlib-config in other strange
+    locations, make sure they are on your PATH.
+
+        Due to a bug in the dynamic linker, late binding sometimes does
+    not work when the STL is used in C++ programs. This affects the
+    meteodraw program, which just hangs in the construtor that creates
+    the Graphics object.  One workaround is to include -bind_at_load
+    in the linker command line.  This is not done automatically by the
+    configure script. Alternatively, on can invoke the program with the
+    environment variable DYLD_BIND_AT_LAUNCH set to 1.
+
+	When using the meteobrowser on Mac OS X, you will have to modify
+    the meteobrowser.php script to set the DYLD_BIND_AT_LAUNCH environment
+    variable to 1.
+
+        In some cases, meteo seems not to link at all. After some experiments,
+    I blame the build tools (automake/autoconf/libtool) for this, apparently
+    a tarball generated with the versions on my SuSE Linux 8.2 development
+    machine does not link, while the tarball generated on the Mac OS X
+    Jaguar does. For this reason, a separate distribution tarball is provided
+    for Mac OS X.
+    
+
+Frequently asked questions
+==========================
+
+0. How do you configure meteo?
+
+   Starting with 0.7.0, the package includes a script configureit, which
+   I use to configure the package. It sets all the compiler options I
+   like, and calls configure with the right paths for my installation.
+   Use this as a start for your own experiments. I usually create such
+   a file in every package I install, it nicely documents the options
+   I was using when building the package.
+
+1. I've MySQL installed on my system, but the configure script does not
+   find it.
+
+   Starting with 0.7.3, the configure script uses mysql_config to find
+   the right compiler and linker flags. For this to work you must make
+   sure mysql_config ist found on your PATH.
+
+   Detecting GD2 now works the same way, using gdlib-config, which is
+   often in /usr/local/bin.
+
+2. I've tried various settings of CPPFLAGS and LDFLAGS, but configure
+   still does not find the headers or libraries.
+
+   Some Linux distributions separate libraries and headers into different
+   RPMs, e.g. SuSE Linux has a mysql-shared package (containing the
+   shared mysqlclient library) and a package mysql-devel, which contains
+   all the headers. You may be using MySQL on your system even without
+   mysql-devel being installed, but to compile a program that uses
+   MySQL, you must install mysql-devel first.
+
+3. The dequeuer does not start
+
+   The most common problem with the dequeuer is that it expects the
+   message queue file to exist. The message queue id is derived from
+   a file name in the file system, which you must create manually.
+   Sometimes IPC resources don't get cleaned up properly, so they must
+   be removed manually (this is a known deficiency of System V IPC,
+   for details read section 14.6 of `Advanced Programming in the Unix
+   Environment' by W. Richard Stevens). See ipcrm(8).
+
+4. How about current values from the station
+
+   meteo 0.9.15 includes an new interface which allows to read the current
+   data from the station. For this, meteopoll writes a map file in XML.
+   Other processes can read this file and convert it to a more user friendly
+   format.
+    - by default, no map file is created. Add the -m option to meteopoll
+      to tell it to create a map file
+    - install current.cgi and current.xsl from the browser directory
+      according to the directions in current.cgi
+
+
+--
+$Id: INSTALL,v 1.26 2006/05/16 11:19:53 afm Exp $

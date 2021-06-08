@@ -1,0 +1,706 @@
+Release 0.9.20:
+	* migrate everything to github
+
+Release 0.9.17:
+	* add outlet concept
+	* fix some missing includes
+	* fix XML syntax error in map file
+
+Release 0.9.16:
+	* add timestamp to meteomap
+	* add Format file and stringprintf functions
+	* add current.cgi and current.xsl, along with some instructions
+	  how to use them
+	* fix some links on the gallery page (to altendorf station)
+
+Release 0.9.15:
+	* extended the default channel timeout from 5 to 6 seconds, as
+	  Clay Jackson discovered
+	* moved from HTTP_GET_VARS to _GET as HTTP_GET_VARS are no longer
+	  available by default in PHP 5
+	* fixed an instance in meteobrowser.php where meteolabel was called
+	  not using the meteolabel variable
+	* bumpted version number
+	* fixed two typos in meteojob
+	* add option -m mapfile to meteopoll
+	* extend the station classes to maintain a map file containing
+	  current data as sent by the weather station
+	* add meteomap programm to read the map file
+	* add manual page for meteomap
+	* add stdlib.h and unistd.h to meteosunriset.cc so that it compiles
+	  on more platforms
+	* point out that we mean meters in the altitude in meteo.sql
+	* fixed meteobrowser.php to escapeshellcmd all arguments of shell_exec
+
+Release 0.9.14:
+	* add meteo.guenthers.net.xml, and many other stations to the gallery
+	* add sunriset.c by Paul Schlyter
+	* modified database to include longitude, latitude and altitude
+	  (may be useful for barometric reductions)
+	* add Sun.cc class
+	* added meteosunriset program and manual page
+	* added sunrise/sunset capability
+
+Release 0.9.13:
+	* create map from the first graph, not by standard from the
+	  temperature graph, which may not exist in all installations
+	  (problem noted by Carsten Guenther)
+	* add the gallery stuff
+
+Release 0.9.12:
+	* fixed a bug in meteo.sql pointed out by Mark Trittin
+	* fixed winddir in the sample meteo.xml
+	* fixed transmitter in the sample meteo.xml
+	* fixed an arbitrary code execution problem in meteobrowser.php
+	  pointed out by Kirk Meyer
+
+Release 0.9.11:
+	* fixed some bugs in the NibblePacketReader class
+	* fixed a wrong class bug in RecorderFactory.cc pointed out by
+	  Eric Varsanyi
+	* some CSS and HTML changes by Aaron Spike
+
+Release 0.9.10:
+	* added CRC0 hack to be able to support type E weather links
+	* added info about USB serial interfaces on Linux
+
+Release 0.9.9:
+	* introduce locking for processes, to protect from crazy robots
+	  that may overload the system with meteodraw processes
+	* version number on web page was not automatically updated.
+
+Release 0.9.8:
+	* fixed documentation
+	* added the UPGRADE file
+	* found an integer overflow bug in the computation of the new time
+	  label for the MAP tags of the meteobrowser. This caused the maps
+	  to drop to some time 1936 (which corresponds to negative time_t).
+	* reverse the order of upper and lower point in the MapArea class,
+	  as it seems that the generated AREA tag is invalid, at least for
+	  some browsers.
+	* no entry for winddir in averages configuration necessary, as this
+	  is done by the wind operator.
+
+Release 0.9.7:
+	* checked that 60-seconds interval graphs work, at least partially,
+	  this needs some review
+	* added new channel of type sun, which indicates the time during which
+	  the sun is above the horizon, at least for VantagePro stations that
+	  are capable of reporting the sunrise and sunset
+	* added description of how to use meteo to graph additional data
+	* fixed the image map coordinate system problem (vertical axis in GD
+	  has opposite orientation from web)
+	* modified the Averager so that what it does is now described in
+	  the configuration file.
+	* add TimeValue, TimeConverter and TimeRecorder classes so that we
+	  can now read the sunrise and sunset values
+	* solar radiation seems to be a signed value (important to detect
+	  illegal values), it was configured as unsigned in ReaderInfo.cc
+	* the meteoavg.cc had the offset computation incorrect when running
+	  in daemon mode, resulting in the averages being computed with a
+	  delay.
+	* transmitter status could not be displayed because the class name
+	  in ReaderInfo.cc was incorrect
+	* added Id tags to all files
+	* fixed several bugs in the reorganised ChunkDumper, so meteodbdump
+	  works again.
+	* completed missing image in the installation of the web pages
+	* eliminated the offset configuration variable and moved all the
+	  offset stuff into the database, where it is needed by applications
+	  that bypass the meteo programs and access the database directly.
+	  There still is an offset in the graphing code, because graphs are
+	  not strictly tied to stations. Actually we would need an offset
+	  for each channel, as only the channels are tied to a station. But
+	  this is probably a task for a real data analysis tool.
+	* improved the Install/Configure chapters on the web site to the point
+	  that they may actually be useful.
+
+Release 0.9.6:
+	* Eric Varsanyi pointed out and fixed a bug in the computation of
+	  time from the timestamp.
+	* Eric Varsanyi pointed out some bugs where offsets have not been
+	  carried into the graphs, so no data was drawn in these cases.
+	* I've removed the header table. The group numbers were originally
+	  used to compute averages for graphs in a single query, which did
+	  not perform if the group numbers had to be computed by hand. So
+	  the group numbers were included in the stationdata table originally.
+	  With the modified data model, the headers were moved to a separate
+	  table, which was more economic as two stations could use the same
+	  header information. However, the offset stuff really confused the
+	  whole header story, and since graphing without the avg table was
+	  dropped long ago, there really was no longer a need for the header
+	  table. The only place where headers were used was the Averager
+	  class, and all it's queries work perfectly without the header
+	  table. So the table was dropped.
+	* found a bug in the Vector.cc class constructor which caused
+	  construction of a vector from radius and azimut to interpret the
+	  azimut as an argument angle.
+	* we've redone the web pages, they now work without frames and use
+	  XML/XSL and CSS.
+
+Release 0.9.5:
+	* fixed another bug in the calibration number reading code for
+	  Vantage Pro, the offsets were still wrong. This has now been changed
+	  to use symbolic names, the code became much more readable.
+	  (bug pointed out by Martin Hofbauer)
+	* the BasicValueFactory was unable to create WindSpeed objects,
+	  causing problems in meteolast (bug pointed out by Martin Hofbauer)
+	* fixed a bug in QueryProcessor.cc pointed out by Stephen Huberty
+	* fixed some manual page problems
+
+Release 0.9.4:
+	* fixed the offset for calibration numbers for temperature. It was
+	  given as 0x50, but this should rather be a decimal value, or
+	  to be consistent: 0x32.
+	* fixed a type error in the ExtraTemperatureReader: we were reading
+	  signed bytes instead of unsigned bytes, which cause very strange
+	  temperatures indeed.
+
+Release 0.9.3:
+	* fix a missing header in meteolabel.cc
+	* fix a missing ; in the FileDatasink class
+	* fix a serious bug in the VantagePro calibration number code
+
+Release 0.9.2:
+	* iss.rainrate had the wrong type reader associated with it, problem
+	  noted by Carsten Guenther
+	* add an index to sdata so that retrievals based on sensorid and
+	  time interval are faster (this should also be helpful in the
+	  averager)
+	* pressure_cal had wrong sign in WMII.cc, and in all the other
+	  old davis stations
+	* wrap main functions inside a try/catch block
+	* fix a bug in extra humidity sensors naming discovered by Carsten
+	  Guenther
+
+Release 0.9.1:
+	* pid extension was missing a period
+	* fix a cast in OldWindReader.cc
+	* info about Solaris bug
+	* meteodbdump truncated station names, which is no longer necessary
+	* added ability to write raw files to meteo, a binary ability would
+	  also be nice (find a format that is machine independent...)
+	* migrated the ChunkDumper class to the library
+
+Release 0.9.0:
+	This is the `Lajeado'-release of meteo. The university Univates
+	(http://www.univates.br) has sponsored the drastic changes described
+	below. I would in particular like to mention Cesar Brod (who drove
+	the `Lajeado'-project), Tiago Giovanaz da Silva (who takes care of
+	meteo installation and operating at Univates) and Vilson Gartner
+	(who helped design the new database and object model).
+	In addition, Jeff Wabik (not related to Univates) has contributed
+	many new ideas to this release (for details see below).
+	* new meteo web site design by Carmen Mueller
+	* Some memory observations: On 32bit Solaris 9, the meteo processes
+	  have the following memory requirements (as reported by top):
+		program		size
+		meteopoll	6052k	
+		meteoavg	6008k
+		meteodequeue	6000k
+	  resident size is usually about one third to one half of this.
+	* Some storage space observations: data from 4.25years (2.5years
+	  from a Weather Monitor II and 1.75 years from a VantagePro use
+	  space as follows:
+		table		  MYD	  MYI	 total
+		stationdata	303MB	 50MB	 353MB
+		averages	 73MB	 12MB	  85MB
+		0.8.6 total			 538MB
+		sdata		333MB	348MB	 681MB
+		avg		240MB	484MB	 724MB
+		header		 43MB	 24MB	  67MB
+		0.9.0 total			1472MB
+	  Thus the size of the data increased by a factor 2.6. For a single
+	  VantagePro Plus station over 141 days (200k samples), the following
+	  storage requirements have been observed:
+		table		   MYD	   MYI	  total
+		stationdata	29.2MB	 3.3MB	 32.5MB
+		averages	 7.0MB	 1.1MB	  8.1MB
+		0.8.6 total			 40.6MB
+		sdata		35.6MB	43.0MB	 78.6MB
+		avg		16.9MB	36.6MB	 53.5MB
+		0.9.0 total			132.1MB
+	  i.e. a factor of 3.3, which is not surprising considering that
+	  the VantagePro has many more sensors.
+	* Some preliminary performance observations: on my SPARCstation 20
+	  with two 60MHz processors, the constant load on the system 
+	  has risen from about 22% to 30%. The constantly running processes
+	  use CPU time per day as follows:
+		meteopoll	10 min/day	0.7%
+		meteoavg	10 sec/day	0.01%
+		meteodequeue	20 sec/day	0.02%
+	  Consequently, most of the load comes from the database.
+	* Fix the Averager to use an error-ignoring QueryProcessor, so
+	  a failed insert in the database das not abort the averaging
+	  process
+	* added ignoreerrors flag to QueryProcessor class, catches
+	  MeteoExceptions caused by failed updates to be caught inside
+	  the QueryProcessor
+	* fix bugs in VantagePro implementation, now works for standard
+	  sensors
+	* remove dummygettext.inc kludge
+	* add index avgx1 to the avg table to improve speed of meteodraw
+	  especially for year and month graphs
+	* wind averageing was seriously wrong and incompatible with the
+	  previous release: windx and windy are wind run components (unit [m])
+	  not wind speed components (unit [m/s])
+	* fix naming of graphs in meteodraw (interval graphs had not been
+	  converted to the new stuff yet, the man page was also inconsistent
+	* simplified Query and QueryResult, and improved the descriptions
+	  in the source code
+	* found a memory leak in the XML code in Configuraiton, while
+	  tracking it down, introduced some caches into Configuration, so
+	  is no probably faster.
+	* modified the QueryProcessor class so that it opens at most two
+	  connections, one for read/write access, one for read-only. This
+	  should improve resource consumption and speed
+	* introduced caching in SensorStationInfo
+	* Separated the logic of Field into Field (unqualified) and FQField
+	  fully qualified
+	* updated DTD for new configuration file format
+	* streamlined the logic after the waitpid call in meteopoll.cc
+	* fixed some bugs in the Pidfile class
+	* added a utility program to display the sensors a station knows
+	  about: meteosensors
+	* converted station construction to a more table based approach:
+	  the ReaderInfo class delivers the sensor names that are available
+	  for a station, and the Station class creates all the necessary
+	  readers. This also means that the station class only has to
+	  implement what is special about the class, e.g. the calibration
+	  numbers
+	* fix offsets in meteodraw and in the graph configuration files
+	* fix a segmentation fault caused be insufficient initializiation
+	  (the channel member of Station was not correctly initialized, and
+	  when the constructor threw an exception, the channel destructor
+	  was called on a junk pointer)
+	* adapted the meteobrowser to the new stuff, tested for Lajeado
+	* adapted meteooverview to the new naming conventions
+	o fix a bug that caused image maps to have areas that were not properly
+	  aligned with the graphs (work in progress)
+	* updated meteo.xml.5 and meteo.sql.5 to reflect the current status
+	  of the project (they still talked about 0.8.*)
+	* added sketch of classes in the library
+	* meteolast working in the 3-tier architectur
+	* completed the transition to the 3-tier architectur:
+	  Station-Sensor-Mfield
+	* introduced new naming convention for fields and sensors, and a
+	  concept of fully qualified field name.
+	* introduced the SensorStation class between Station and Field, since
+	  conceptionally all stations are a controlling instance (the console)
+	  and several sets of sensors: one set in the console, but others
+	  external to it, like the ISS on the Vantage Pro, but also the
+	  soil or leaf stations, or the extra temperature/humidity stations.
+	* fix some more bugs in the Wind and Rain classes: now WMII works again,
+	  however, there seems to be a memory leak
+	* fixed a few resource management bugs in the Value and Recorder
+	  classes
+	* all manual pages seem to assume that the conf file is mandatory,
+	  but this is incorrect for quite some time now
+	* fix recursion problem: (Reader)::value may not call operator(),
+	  because as a virtual method it will call the value again.
+	* limit the amount of RAM meteopoll can use, thus protecting from
+	  memory leaks
+	* complete calibration number implementation for GroWeather, Health
+	  and Energy station
+	* add UVmed units to the UV converter
+	* included rain rate as a supported sensor for all stations that
+	  have rain rate in the LOOP packet (feature request by Jeff Wabik)
+	* added windchill as suggested by Jeff Wabik
+	* adding to a map via m[key] = value crashed the programm, so we
+	  converted such occurences to m.insert(make_pair(key, value)),
+	  which does not have this problem.
+	* built an OO wrapper around the msg queue stuff
+	* updated meteodbdump to work with the new database structure
+	* added GroWeather, Energy and Health stations. Since I don't have
+	  such a station, I just copy documentation, so maybe nothing works.
+	  Could please someone with a GroWeather/Energy/Health try it out
+	  or even debug?
+	* updated documentation to reflect changes, probably missed still
+	  quite a few points
+	* added support/meteodbmigrate tool to convert from an old to a
+	  new database
+	* Abstracted the capability to read data from a weather station packet
+	  into a new familiy PacketReader classes. A weather station is now
+	  essentially a map that maps sensor names to PacketReaders and a
+	  DataRecorder. With every data packet read from the station, for each
+	  Recorer in the DataRecorder the matching PacketReader is applied to
+	  the packet, which retrieves a Value. The Value can in turn be used
+	  to update Recorder. Thus a new station is essentially a definition
+	  of PacketReaders for each sensor the station provides.
+	* Separated the logic in Datarecord similar to the Value and Recorder
+	  classes. A Datarecord is now just a map that maps sensor names to
+	  Values. A DataRecorder is a map that maps sensor names to Recorders.
+	* separated the logic of accumulating the minute values from the 
+	  Value logic: Value classes represent just data, Recorders accumulate
+	  Values over intervals. Value classes can be converted to other units,
+	  Recorders have a fixed unit.
+	* new classes MoistureValue, LeafwetnessValue, LevelValue which are
+	  necessary for soil moisture sensors, leaf wetness sensors, and
+	  water level sensors
+	* BasicValue class added as a parent class for all value types
+	* database structure redesigned to use narrow but long tables. This
+	  will allow to accomodate new types of sensors.
+
+Release 0.8.6:
+	* added a DTD for meteo configuration files
+	* moved the unit configuration tags out of the station configuration
+	  into a units tag at the same level as the database tags
+	* add manual page for meteolast
+	* write the meteolast programm after the suggestions in Jeff
+	  Wabik's very nice version for 0.5 (which unfortunately cannot
+	  be used any longer as units are now handled rather differently)
+	* change semantics of setUnit methods: in all derived classes
+	  and in Wind and Rain classes, setUnit converts the value to
+	  the new unit if a value is already present.
+	* fix ticks calculation: make sure ticks are always spaced at least
+	  the step  width (or 1, if no step attribute is present)
+	* make sure that the range for dynamic scales is always at least
+	  the step with. This solves a problem where the range was extremely
+	  small, causing the data line to be plotted below the graph.
+	* make sure exceptions during graph generation are trapped so that
+	  we certainly get an error message related to the original problem
+	* alloca.h: must include the header on Solaris 9 with gcc-3.3
+	* This release is no longer tested with gcc-2.95.3, since all my systems
+	  now run with gcc-3.{2,3}
+
+Release 0.8.5:
+	* incorrect pressure calibration reading (pointed out by Josep Sort)
+
+Release 0.8.4: Fixes contributed by Mark Trettin
+	* pressure calibration number was not used on Weather Monitor station
+	* meaning of wind direction letters was not clear, clarified through
+	  comments in sample xml file and manual page of meteo.xml
+	* DESTDIR not recognized in support/Makefile.am
+	
+Release 0.8.3:
+	* fixed a portability problem with BSD (pointed out by Walter Poxon)
+	* removed the gmtime2time function which is no longer necessary
+
+Release 0.8.2:
+	* implemented an idea suggested by Jeff Wabik: accumulation function
+	* implemented transparency (to make graphs visible behind nodata gray,
+	  also somewhat suggested by Jeff Wabik)
+	* implemented connected graphs, optionally graphs can be continued
+	  accross gaps
+	* fix an important bug in the code that dynamically determines the
+	  tick step size from the maxtickcount value
+	* fix meteojob an prevent it from overwriting an active meteojob
+	  script
+
+Release 0.8.1:
+	* fix missing border="0" statements in meteobrowser.php
+	* fix missing includes in meteolabel.cc and meteodbdump.cc, so that
+	  it compiles on SuSE Linux 7.3
+	* add a manual page for meteodbdump
+
+Release 0.8.0:
+	* improve info about prerequisite packages and how to make the package
+	  work with gd1.
+	* added pt_BR.po contributed by Tiago Giovanaz da Silva, translated
+	  by Cesar Brod
+	* created a new meteodraw.cc program that can create just about
+	  any drawing based on an XML specification. The only things still
+	  fixed are: allowed steps (300/1800/7200/86400), fact that grid and
+	  labels are drawn in foreground color.
+	* fixed the rain data bug for WMII introduced by reading the raincal.
+	  Fix contributed by Josep Sort.
+	* add the ability to draw 1 minute interval graphs
+	* add ability to suppress data that is below a certain limit, most
+	  useful for wind, where the azimut does not make sense whenever
+	  the wind speed is very small)
+	* add the ability to draw wind direction letters on the wind background,
+	  making the graph more readable
+	* made a (probably failed) attempt to adapt the portuguese translation
+	  to the new strings
+	* provided possibility to use different configuration files for
+	  different weather stations in meteobrowser.php
+
+Release 0.7.4:
+	* fix a fatal bug in dewpoint.c: if no temperature unit was set
+	  in meteo.xml, meteograph crashed during the dewpoint computation
+	  due to dereferencing a NULL pointer
+	* fix a bug in the Vantage code, that caused incorrect decoding of
+	  rain values
+	* fix a bug in the WMII code, that cause incorrect decoding of rain
+	  values
+	* added signal handling to meteopoll so that SIGHUP to the parent
+	  kills the child and restarts a new child, and SIGTERM or SIGINT
+	  to the parent kills parent and child (and updated man page)
+	* improved config.h checking somewhat
+
+Release 0.7.3:
+	* use gdlib-config to find the right flags for compiler and linker
+	  unfortunately, this implies version 2 of the library
+	* same for the mysql libraries (mysql_config)
+	* no longer check for libpng and zlib individually. failure to
+	  link libgd will indicate that they are missing
+	* some more header fixes, and a fix for msgfmt syntax on Solaris
+
+Release 0.7.2
+	* off-by-one error in meteobrowser.php cause the first week in a
+	  graph not to be accessible
+	* more documentation fixes
+	* getAzi did not return anything in some cases
+	* Header problem with alloca on Mac OS X
+
+Release 0.7.1
+	* some minor bug fixes
+	* documentation cleanup
+
+Release 0.7.0:
+	* added wunderground contribution by Walter Poxon
+	* fixed many documentation bugs related to obsolete programs and
+	  versions
+	* using a new drain algorithm: we now read data from the station
+	  until it stays quiet for 5 seconds before we start sending new
+	  commands. These seems to be much more robust than the old algorithm
+	  where we waited 5 seconds and then threw away everything that
+	  wa had received. However, there still seems to be a problem
+	  with the Vantage Pro that it does not always wake up quickly
+	  enough.
+	* switching between english and metric units is now possible without
+	  hacking the code, although it is not very elegant yet, at least
+	  as far as the graphing code is concerned (no problem with the
+	  station interface code, which already uses the C++ implementation)
+	* added CRC checking, the crc computation code was there, but it was
+	  never used
+	* checked that it still compiles on Solaris 2.6
+	* checked that it works on Mac OS X
+
+Release 0.6.1:
+	* added uds10 description file
+	* started rewriting meteoloop, now called meteopoll in C++
+
+Release 0.6.0:
+	* compiles on Mac OS X, and is partially tested
+	* added Unix domain socket code so that platforms that don't have
+	  message queues can still somewhat decouple the station from
+	  the database. note that msg queues are used if they are present,
+	  they allow for messages to be stored even if the server has gone
+	  away or is not ready yet, and it is trivial to have several
+	  listeners (dequeuers) on the queue that can process messages
+	  in parallel.
+
+Release 0.5.1:
+	* first release also built with gcc 3
+	* add a new target to send the updates to: an ordinary file (we'll
+	  use this to build a highly available solution. This is also
+	  the reason why only meteoloop has that feature, and not
+	  meteoaverage: It is intended for situations where no database
+	  is available).
+	* add a valid flag to all data types, so that we can always decide
+	  whether the data we have is OK (we probably should rewrite part
+	  of meteo in C++ with intelligent datatypes that can have value
+	  `NIL' and built in formatting for SQL).
+	* make sure the graphs retrieve only valid data from the database
+
+Release 0.5.0:
+	* convert configuration file format to XML, and try to make the
+	  documentation about the configuration file more precise
+	* fix ambiguity between <max> and <scale>
+	* converted default colors to colors from the web palette (6x6x6
+	  color cube) to prevent dithering on low color resolution displays.
+
+Release 0.4.0:
+	* add migration utility meteofixtimestamps and describe how migration
+	  should be done in How_to_migrate in the support directory
+	* add some help about the use of CPPFLAGS and LDFLAGS in INSTALL
+	* convert to unix timestamps in database (MySQL lacks functions to
+	  specify the time zone of a timestamp, it expects us to know the
+	  servers time zone, and to provide timestamps in the right time
+	  zone for the server).
+	* try to make sure configure blows up if one of the required libraries
+	  mysql, gd or png cannot be linked
+	* Type in meteoavg.c option parsing
+	* add -a flag to support/meteojob, because otherwise the database
+	  will get slow
+	* fix some missing includes
+
+Release 0.3.4:
+	* added individual graphs for humidity and humidity_inside
+	* updated autoconf/automake to newer releases (2.52/1.5)
+	* added support for the new Vantage Pro releases: Davis has changed
+	  the data returned from the LOOP command to include barometric trend,
+	  breaking compatibility
+	* changed the meteobrowser.php script to use HTTP_GET_VARS throughout,
+	  so that it does work with the defaults of PHP 4.2 (though you should
+	  use even newer releases of PHP because of security issues)
+	* improve error messages to simplify debugging
+
+Release 0.3.3:
+	* fixed a sprintf format bug in meteodata.c:221
+	* added db/README explaining how to set up the database
+
+Release 0.3.2:
+	* make sure the dewpoint function never returns a nan, as this may
+	  stall drawing a temperature graph
+	* added background colors to the wind graph so that the general
+	  direction of the wind is more easily discernible.
+	* added clipping to the graph.c functions
+	* gave the meteograph programm the capability to display scales
+	  depending on the interval not only for rain, but also for all
+	  other channels.
+	* add functions to retrieve configuration variables based on the
+	  four components of the property
+	* PHP 4.1.1 emits a warning when stat'ing a file that does not exist
+	  (I really disagree with the PHP developers: in Unix one really
+	  uses stat to find out whether a file exists...
+	* fixed a bug in metebrowser.php that prevented the language variable
+	  to be correctly set to the default if it wasn't set previously.
+
+Release 0.3.1:
+	* fixed signal handling to protect the master from being kill by signals
+	  sent to the child's process group (i.e. for terminal signals which
+	  we don't want to be blocked from the child)
+	* added signal handling to master/slave frame work in meteoloop so
+	  that SIGTERM and SIGINT on the master also terminate the child,
+	  as required for well working start/stop scripts
+	* completed work on localization of the meteobrowser, including date
+	  localization
+	* added a master/slave configuration to meteoloop, so that the
+	  master can always fork a new child if the the previous child dies
+	* switched logging to the new mdebug functions so that the log
+	  can be written to syslog
+	* added po directory for localizations of the meteo browser
+	* added the explanations to the browser window
+	* added functions to send parser debug log to common log system
+	* added a drain function to com.c, so that it is now possible to
+	  for some time read spurious characters from the station and
+	  throw them away
+
+Release 0.3.0:
+	* fix minor off-by-one bug in meteograph that hid the last data point
+	  behind the nodatat color although the data did exist
+	* completely reorganized the source code, as the number of files
+	  in the top level directory has grown quite large by now.
+
+Release 0.2.2:
+	* made sure navigation is not possible into the future and before
+	  the first data point (to prevent robots from creating havoc)
+	* added --with-browser-dir configuration for automated installation
+	  of the meteo browser
+	* converted HTML comments in meteobrowser.php to PHP comments so that
+	  the resulting page is smaller and thus (hopefully) faster
+	* removed the stationlist.inc, and replaced it by a meteobrowser.inc
+	  containing all the configuration data
+	* improve the time information in the title of the meteobrowser
+	* created really meaningful ALT tags for the graphs (there were
+	  month names and weekday names in 0.2.1 in the week and year
+	  graphs, but now a uniq tag including date or date range is
+	  supplied in all graphs (except day, of course).
+
+Release 0.2.1:
+	* fix meteobrowser.php to rebuild only as few graphs as possible,
+	  but all the necessary ones.
+	* improve the visual appearance of the browser, by adding cute
+	  icons produced by GIMP, and a style sheet.
+	* fix meteograph to shadow noexisting data also at the end of
+	  the graph
+	* add ALT tags to image maps and to navigation bar.
+
+Release 0.2.0:
+	* added the meteobrowser.php script, which allows to graphically
+	  browse the complete database, this is currently only a first
+	  approximation.
+	* add option -t to meteograph to include timestamps in file names
+	  generated
+
+Release 0.1.9:
+	* optionally color the background in graphs if no data available
+
+Release 0.1.8:
+	* fixed meteooverview to produce better results
+	* fix a bug in msgque.c that could cause a segmentation fault in
+	  the dequeue process sometimes
+	* Davis station LOOP code did not wait for LOOP ack, causing dead
+	  lock
+	* the daemonize function was not complete yet, it did not yet start
+	  a new session
+	* make ${sysconfdir}/meteo.conf a default configuration file, so
+	  that the -f flag is no longer strictly necessary, and updated
+	  the documentation accordingly
+	* simplify the start/stop script, as well as the meteojob script
+
+Release 0.1.7:
+	* fixed a bug in meteoavg.c, which did not daemonize by default,
+	  and did not honor the -p option
+	* some nasty Bourne shell bug on Solaris overly complicates
+	  configuration on that platform
+	* mailinglist has been set up
+	* added watchdog functionality, but not tested thouroughly
+	* fixed a bug in get_acknowledge that resulted in incorrect
+	  behavior if the station did not reply
+
+Release 0.1.6:
+	* added documentation: meteo.html and meteodata.html
+	* added the capability to become a daemon to the meteoavg, meteoloop
+	  and meteodequeue programs
+	* added a -a option to meteograph that forces the use of the average
+	  table. Use the meteoavg program to fill the averages table
+	* added an option to meteograph that allows to select the graphs to
+	  be produced
+	* message queues are now fully implemented to decouple data collection
+	  from the wheather station and updates of the database. So if the
+	  database blocks (e.g. because of a long running query), no data
+	  from the station is lost.
+	* fixed quite a serious bug in the computation of the total wind
+	  speed. It worked for the Monitor, where the updates follow
+	  roughly every second, but it failed for the vantage, where the
+	  updates take 5 seconds.
+	* fixed quite a serious unit conversion bug in the davis_loop
+	  function
+	* added wake up code: Vantage station needs a wake up signal before
+	  the first command is sent
+	* added speed directive to configuration file: serial speed is
+	  now configurable
+	* portability fixes for Linux
+	* added generic functions to compute averages
+	* added a program to compute averages after the fact
+	* added a new table to the database to hold averages, so that the
+	  computation of the averages doesn't take that much time any longer
+	  (we should be able to do it from a CGI program)
+	* unified configuration file reading with a single new function in
+	  mconf.c
+
+Release 0.1.5:
+	* modify meteoloop so that it reads a configuration file
+	* meteograph did not close the configuration file after being done
+	  with it
+	* allow to configure writer as well as the read only user from the
+	  configuration file
+
+Release 0.1.4:
+	* fix a bug in labeling code, weekly labels were no longer displayed
+	  after change to daylight saving time
+	* implemented a configuration file scanner/parser to be
+	  able to configure ranges and colors of the graphs without modifying
+	  the source code
+	* database connection parameters configurable through the configuration
+	  file
+
+Release 0.1.3:
+	* fix bug in year labeling code, labels now appear
+	* adapt precipitation display ranges to something more reasonable
+	* fix dotted line for transparency
+
+Release 0.1.2:
+	* fix a bug in temperature max/min display (they were simply wrong)
+	* added some support for message queues, not finished
+
+Release 0.1.1:
+	* improve the graphs with better scales for wind
+	* improve the graph API by decoupling grid and ticks
+	* added a sync function to the davis interface code (based on
+	  the timed read)
+	* added a time read function to the meteocom structure
+	* add memory debugging to all source files
+	* fix missing include for string.h in tcpcom.c
+
+Release 0.1.0:
+	* meteotest now retrieves a full data set and displays it in HTML
+	* added conversion functions for temperature, wind speed and
+	  barometric pressure
+	* liboolized/automakeized/autoconfized/shtoolized the package
+
+--
+$Id: ChangeLog,v 1.136 2009/01/10 19:00:23 afm Exp $

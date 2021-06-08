@@ -1,0 +1,149 @@
+.TH METEODBDUMP "1" "October 2003" "Meteo station tools" Othello
+.SH NAME
+meteodbdump \- dump contents of meteo database
+.SH SYNOPSIS
+meteodbdump [
+.BI \-b basename
+] [
+.BI \-c chunksize
+] [
+.B \-d
+] [
+.B \-r
+] [
+.BI \-f conffile
+] [
+.BI \-l logurl
+]
+.BI \-s station
+.I table ...
+.SH DESCRIPTION
+The 
+.BR meteodbdump (1)
+programm dumps the contents of the meteo database (see
+.BR meteo.sql (5))
+to text files.
+In contrast to ordinary
+.BR mysqldump (1),
+it usually reads the records of
+a day at a time, i.e. less than 2000 rows,
+so that the table does not stay locked for extended
+time intervals.
+Also the meteo tables tend to be so large that
+.BR mysqldump (1)
+will run out of memory before anything is dumped.
+Furthermore, a dump into SQL statements is just too space consuming,
+so there is an option to request a more compact load file format.
+
+.BR meteodbdump (1)
+connects to the database using the read only connection specified in
+the either the default configuration file or the one specified with
+the 
+.B -f
+option.
+It then starts reading data for the station
+.I station
+and writes SQL insert statements to the files
+.IB basename sdata
+and
+.IB basename avg.
+Data is read in chunks of time length at most
+.I chunksize
+seconds. 
+
+The SQL insert statements do not rely on a certain order of the fields
+in the table definition. However, the contents of the
+.B station
+table and the
+.B mfield
+table are not dumped. Since stations and fields are completely described
+only with this information, tools like
+.BR mysql_dump (1)
+should be used to backup those tables.
+
+Without any additional arguments,
+.BR meteodbdump (1)
+dumps all data tables, i.e. avg and sdata.
+The names of the tables to be dumped can be specified as additional
+arguments, in which case only the specified tables are dumped.
+
+.SH OPTIONS
+.TP
+.BI \-b basename
+The
+.I basename
+string is prepended to the strings
+.I sdata 
+and
+.IR avg ,
+which are then used as filenames for the output files. The 
+.I basename
+may contain slashes (/), but 
+.BR meteodbdump (1)
+will not create directories, so they should be created manually
+before
+.BR meteodump (1)
+is run. Example: a
+.I basename
+of 
+.I /var/tmp/Lajeado-
+will let 
+.BR meteodbdump (1)
+dump the data to the files
+.I /var/tmp/Lajeado-sdata
+and
+.IR /var/tmp/Lajeado-avg .
+
+.TP
+.BI \-c chunksize
+read at most records for a time interval of length
+.I chunksize 
+seconds from the database at one time. By default, a days worth of records
+is read in every iteration, minimizing
+.BR metedbdump (1)'s
+impact on concurrency. Larger values for the chunksize cause the dump to
+use more memory, and usually hurt concurrency noticably.
+.TP
+.B \-d
+increase the debug level by one. Debug messages are written to standard
+error.
+
+.TP
+.B \-r
+request raw format, i.e. tabulater separated fields, one line per row.
+This reduces the output size by about a factor 3.
+
+.TP
+.BI \-f conffile
+use
+.I conffile
+as the meteo configuration file. See 
+.BR meteo.xml (5)
+for the configuration file syntax.
+
+.TP
+.BI \-l logurl
+send log messages to the destination described by the
+.IR logurl . See
+.BR meteo (1)
+for a description of the possible formats for log URLs.
+
+.TP
+.BI \-s station
+name of the station to dump. This option can be given several times,
+.BR meteodbdump (1)
+will dump the data for each of the stations in turn. Data for all stations
+will be written to the same files.
+
+.SH BUGS
+.BR meteodbdump (1)
+terminates if a single query fails. This makes it impossible to dump
+corrupted databases.
+
+.SH "SEE ALSO"
+.BR meteo (1),
+.BR meteo.sql (5),
+.BR meteo.xml (5)
+
+.SH AUTHOR
+Dr. Andreas Mueller <afm@othello.ch>

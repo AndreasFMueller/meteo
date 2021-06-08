@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<!--
+	gallery.xml	gallery of weather stations
+
+	(c) 2004 Dr. Andreas Mueller, Beratung und Entwicklung
+	$Id: gallery.xml.in,v 1.5 2009/01/10 20:19:04 afm Exp $
+-->
+<page name="gallery">
+<h1>Gallery of meteo installations</h1>
+<p>
+The two stations in Altendorf and Bosco/Gurin started the meteo project.
+Unfortunately, the Bosco/Gurin station is no longer operational, the
+location was no longer available (it was coupled with a web cam, our
+successor operating the webcam decided not to continue the weather
+station).
+</p>
+
+
+<table border="1" cellspacing="0">
+<tr>
+  <td>Location</td>
+  <td>Link to current data</td>
+  <td>Link to browser</td>
+</tr>
+<tr>
+  <td valign="top">Altendorf, Schwyz, Switzerland</td>
+  <td><a href="http://meteo.othello.ch/altendorf/"><img border="0"
+    width="250" height="72"
+    src="http://meteo.othello.ch/altendorf/Altendorf.temperature-week.png" /></a>
+  </td>
+  <td><a href="http://meteo.othello.ch/meteo/meteobrowser.php"><img border="0"
+    src="http://meteo.othello.ch/altendorf/Altendorf.temperature-year.png"
+    width="250" height="72" /></a>
+  </td>
+</tr>
+<!--
+<tr>
+  <td valign="top">Rossboda, Bosco/Gurin, Ticino, Switzerland
+    (<a href="http://grossalp.othello.ch">Web Cam and general info</a>)
+  </td>
+  <td valign="top"><a href="http://grossalp.othello.ch/meteo/"><img border="0"
+    src="http://grossalp.othello.ch/meteo/Gurin.temperature-week.png"
+    width="250" height="72" /></a>
+  </td>
+  <td valign="top"><a
+    href="http://meteo.othello.ch/meteo/meteobrowser.php?station=Gurin"><img
+    src="http://grossalp.othello.ch/meteo/Gurin.temperature-year.png"
+    width="250" height="72" border="0" /></a></td>
+</tr>
+-->
+<!--
+<tr>
+  <td valign="top">Frauenfeld, Thurgau, Switzerland</td>
+  <td><a href="http://it.sia-abrasives.ch/meteo/"><img border="0"
+    src="http://it.sia-abrasives.ch/meteo/Frauenfeld.temperature-week.png"
+    width="250" height="72" /></a>
+  </td>
+  <td><a href="http://it.sia-abrasives.ch/browser/"><img border="0"
+    src="http://it.sia-abrasives.ch/meteo/Frauenfeld.temeprature-year.png"
+    width="250" height="72" /></a>
+  </td>
+</tr>
+-->
+</table>
+<p>
+If your station is public, and you want the world (of meteo users at least)
+to know about your station, send a message to
+<a href="mailto:afm@othello.ch">Andreas M&#xFC;ller</a> containing the
+URL to your installation and the geographic location, so that it can be
+included in the list below. You can simplify my taks if you fill in the
+<a href="gallery_template.xml">gallery_template.xml</a> file and send
+it to <a href="mailto:afm@othello.ch">Andreas M&#xFC;ller</a>.
+</p>
+
+GALLERY
+
+</page>

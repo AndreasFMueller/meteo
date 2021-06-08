@@ -1,0 +1,35 @@
+TODO
+----
+
+Wishes
+
+* Integrated startup files for Mac OS X SystemStarter into the distribution
+
+* add timezone flag to meteodraw program, since some platforms ignore the
+  timezone environment variable, notably Mac OS X
+
+* add an operator that allows to determine maximum and/or minium, the
+  interval should be configurable and it should be possible to graphical
+  represent the interval
+
+* add an option to equip the graph with a documentation of the time interval
+  for which it was drawn.
+
+* add legend attribute to channel tag, which includes a legend in the graph
+
+* test the new minimum range code in GraphWindow.cc
+
+* update NEWS file
+
+Bugs
+
+* check 60 seconds graphs, there seem to be some problems with computed
+  channels
+
+* on a make clean, remove the .mo files in browser/po
+
+* timelabel normalization has a bug which causes it to normalize to the
+  previous week in 2005
+
+--
+$Id: TODO,v 1.52 2006/05/07 19:47:22 afm Exp $

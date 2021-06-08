@@ -1,0 +1,113 @@
+<page name="prereq">
+<!--
+	prereq.xml	prerequisites (hareware-wise) for meteo
+
+	(c) 2004 Dr. Andreas Mueller, Beratung und Entwicklung
+	$Id: prereq.xml,v 1.3 2004/04/02 16:00:02 afm Exp $
+-->
+<h1>Requirements</h1>
+<h2>Weather station</h2>
+<p>
+Only Davis Instruments stations are supported. The following stations have
+been reported to work
+<table border="1" cellspacing="0" cellpadding="3px">
+  <tr>
+    <td>Station</td>
+    <td>Releases</td>
+  </tr>
+  <tr>
+    <td>Weather Monitor II</td>
+    <td>all releases</td>
+  </tr>
+  <tr>
+    <td>Vantage Pro</td>
+    <td>all releases</td>
+  </tr>
+  <tr>
+    <td>Perception</td>
+    <td>Lajeado release 0.9.0 and above</td>
+  </tr>
+  <tr>
+    <td>Wizzard</td>
+    <td>Lajeado release 0.9.0 and above</td>
+  </tr>
+  <tr>
+    <td>GroWeather</td>
+    <td>0.9.10 and above</td>
+  </tr>
+</table>
+</p>
+<h2>Computer hardware</h2>
+<p>Generally speaking, <b>meteo</b> is quite lean, at least for current
+hardware. The reference installation is on a dual 60MHz processor
+SPARCstation 20 with 200MB of RAM, this can hardly be called current,
+Sun has canceled support for this platform for several years now.
+</p>
+<p>
+<strong>Disk space:</strong>
+To build meteo on a Linux system, you need at least 150MB of disk space,
+the installed libraries with debug symbols take about 45MB (they become
+considerably smaller if you strip them), the installed programms use
+about 5.5MB. On Solaris, the shared library is smaller, but the
+archive library is larger. The binaries are linked against the
+shared libraries by default.
+</p>
+<p>
+<strong>CPU:</strong> While compiling the software can take some
+time (it takes about an hour on the reference machine),
+running meteo hardly produces any noticeable load on current hardware.
+On the meteo website server, meteo's activities account for hardly more
+than about 10% of the CPU load. The most important portion of CPU load comes
+from the database, the meteo programs themselves cause less than 1% of
+the CPU load.
+</p>
+<p>
+<strong>Database space:</strong> 
+The most important requirement for meteo is database space. A VantagePro Plus
+station uses about 970kB in the <i>sdata</i> and <i>avg</i>
+per day of database space, or about 343MB per year. On october 30th, 2003,
+the database on the meteo website was about 1.4GB in size and contained
+more than 47mio rows in the large tables, more than 30mio rows
+in the <i>sdata</i> table alone.
+</p>
+
+<h2>Software</h2>
+<p>
+Most parts of meteo are written in C++. You'll need a current version of
+the GNU C++ compiler g++ to compile it. Please note that at least on Solaris,
+you should not try to use a g++ that uses the native assembler and linker,
+as this combination will trigger a bug that causes meteopoll to terminate
+prematurely. Do yourself a favor and use g++ 3.3 with the GNU assembler
+and linker.
+</p>
+<p>
+On some plattforms, libtool's support is rather new, and not always reliable.
+In particular, you should use <code>--disable-shared</code> on Mac OS X.
+</p>
+<p>
+meteo needs the following additional packages to build:
+</p>
+<dl>
+<dt>mysql</dt>
+<dd>If not installed yet on your system, get a copy from the
+<a href="http://www.mysql.com/">MySQL website</a>.
+The system running the meteo software needs only the client libraries,
+but to compile, you'll need the headers also. The MySQL server does not
+need to run on the same machine.</dd>
+<dt>libxml2</dt>
+<dd><a href="http://www.libxml.org/">Libxml2</a> is used to parse the
+configuration file and to provide access to its contents.</dd>
+<dt>libpng</dt>
+<dd>The meteodraw program always creates PNG images. The GD2 library (see
+below needs <a href="http://www.libpng.org">libpng</a> to encode such images.
+Note the libpng depends on <a href="http://www.zlib.org/">zlib</a>.</dd>
+<dt>GD2</dt>
+<dd><a href="http://www.boutell.com">Thomas Boutell</a>'s
+<a href="http://www.obutell.com/gd/">GD library</a> is
+used to draw the graphs.</dd>
+<dt>gettext</dt>
+<dd>The localization of the meteobrowser is done using gettext. If you want
+to change the translations, you will need
+<a href="http://www.gnu.org/software/gettext/gettext.html">gettext</a>.</dd>
+</dl>
+</page>

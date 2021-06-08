@@ -1,0 +1,58 @@
+0.9.17	a new outlet interface can be used to process meteo station data
+	directly. In contrast to the map interface, the data is pushed
+	to a file or into a pipe by the meteopoll process every minute.
+
+0.9.15	new interface which allows to read current readings from the console
+	to display on the web page. The new -m option to meteopoll makes
+	sure current data is written to a file (the argument to the option)
+	in XML format. Since updates to this file are very frequent, one
+	should read the file atomically, one should use the meteomap program
+	to read the data.
+	fix of a nasty bug in the week label code, causing navigation failure
+	at week resolution in some cases
+
+0.9.14	gallery files included as samples
+	can now compute sunrise and sunset (through meteosunriset and Sun.cc)
+
+0.9.13	minor bug in meteobrowser.php
+	gallery pages
+
+0.9.12	some minor fixes, plus a security fix: remote code execution in
+	meteobrowser.php because of missing escapeshellcmd
+
+0.9.11	some bug fixes for GroWeather
+
+0.9.10	turn of CRC0 for GroWeather and possibly other type E weatherlinks.
+
+0.9.9	A hack to protect from IE reading the complete meteobrowser.php
+	space offline
+
+0.9.8	fixes a integer overflow bug: to compute the time labels for the
+	maps, GraphWindow.cc used the formular (start + end)/2, but since
+	about the middle of january, this causes an overflow, so that the
+	target ends up in february 1936. Replace that by start/2 + end/2.
+	
+0.9.7	some bug fixes
+	removal of offset configuration variable
+	added averages configuration in XML file, so the user now gets full
+	control about which averages are compute, and how
+	battery and transmitter fields now work
+	sunrise and sunset can also be stored in the database (this is a
+		waste of space, but who cares about a few gibabytes these
+		days)
+	added channel of type sun, which indicates the time during which
+		the sun is above the horizon
+
+0.9.6	some bug fixes
+	removal of header table
+
+0.9.5	some minor fixes
+
+(for further news please check the ChangeLog)
+
+0.9.0	Major rewrite of many aspects of meteo sponsored by the University
+	Univates in Lajeado in Rio Grande do Sul, Southern Brazil. Further
+	contributions: Jeff Wabik (new derived value computations).
+
+--
+$Id: NEWS,v 1.32 2009/01/10 19:00:23 afm Exp $

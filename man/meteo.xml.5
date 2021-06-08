@@ -1,0 +1,722 @@
+.TH METEO.XML "5" "December 2001" "Meteo station tools" Othello
+.SH NAME
+meteo.xml \- description of configuration file format
+.SH DESCRIPTION
+The meteo station tools are described in 
+.BR meteo (1),
+this manual page defines the configuration file format used by all
+the utilities.
+The configuration file users XML syntax. A single file can be shared
+among all the stations that use the same database.
+
+The file contains all configuration information needed to talk to
+the database (only one database configuration per file) and to
+the station. In addition, it describes all the graphs that can
+be produced from the data. It does not, however, specify how data
+is stored in the database. In particular, id values for stations,
+sensors and data fields, which are needed to build the key to the
+data value, are only defined in the database.
+
+The contains a mandatory top level
+.B <meteo>
+element, and meteo expects at least one
+.B <database>
+element and one or more 
+.B <station>
+elements within it. For each graph to be produced, a
+.B <graph>
+element should be placed in the
+.B <graphs>
+element.
+Their contents are described in the sections below.
+
+When used with the meteobrowser, a web robot running havoc (e.g. a
+MSIE trying to read the browser contents offline) can case the system
+to start many
+.BR meteodraw (1)
+processes in parallel. The following attributes of the
+.B <grahps>
+element allow to limit the damage.
+The 
+.I queued
+attribute limits the number of
+.BR meteodraw (1)
+processes that may be
+active at any one time. If an additional
+.BR meteodraw (1)
+process is started, it will exit without doing anything.
+The
+.I running
+attribute allows to limit the number of
+.BR meteodraw (1)
+processes that may actually run in parallel.
+These locking functions need a file name to attach the locks to,
+which is specified by the
+.I lockfile
+attribute.
+
+.SH "DATABASE CONFIGURATION"
+The
+.B <database>
+tag defines the connection to the database, i.e. hostname,
+database name and user names and passwords.
+It also includes the prefix by which data from this station is identified
+in the database. This prefix is also used for the graph names.
+The section contains the following elements
+
+.TP
+.BI <hostname> dbserver </hostname>
+The host name on which the MySQL server runs.
+.TP
+.BI <dbname> databasename </dbname>
+The name of the database, usualy
+.IR meteo .
+.TP
+.BI <prefix> stationname </prefix>
+The name of the weather station.
+.TP
+.BI <user> readonly-user </user>
+A user name for a user that is granted select access to the
+.I stationdata 
+and the
+.I averages
+tables. The
+.BR meteodraw (1)
+program uses this identity to access the database.
+.TP
+.BI <password> readonly-password </password>
+The password for the read only user.
+.TP
+.BI <writer> readwrite-user </writer>
+The name of a user granted select, update and insert on the
+.I sdata
+and
+.I avg
+tables.  The 
+.BR meteopoll (1)
+and 
+.BR meteoavg (1)
+programs use this identity to update the database.
+.TP
+.BI <writerpassword> readwrite-password </writerpassword>
+The password of the read/write identity defined with the
+.B writer
+directive.
+.TP
+.BI <msgqueue> queuefile </msgqueue>
+System V message queues are identified by a 32bit message ID, but this
+is very system dependent. The
+.B msgqueue
+directive specifies the name of a file, from which a message queue
+id will be derived. There are no other requirements on the file name
+than that it exists.
+
+Here is the configuration of the station in Bosco/Gurin as a sample
+
+.nf
+.in +4
+<database>
+.in +4
+<hostname>localhost</hostname>
+<dbname>meteo</dbname>
+<prefix>Gurin</prefix>
+<user>meteo</user>
+<password>public</password>
+<writer>meteoupdate</writer>
+<writerpassword>secret</writerpassword>
+<msgqueue>/tmp/meteodb-queue</msgqueue>
+.in -4
+</database>
+.in -4
+.fi
+
+
+Further sections describe the graphs to be produced, and are only
+used by the
+.BR meteodraw (1)
+program. The names of these sections are the graph names defined
+in the manual page of
+.BR meteodraw (1).
+The contens of these sections are explained below.
+Strings have to be enclosed in quotation marks.
+
+.SH "STATION CONFIGURATION"
+The station elemnt defines the interface through which weather data
+is to be read from the station. It contains the following tags:
+.TP
+.BI <url> stationurl </url>
+can be a file URL
+.IR file:///dev/ttyS0 ,
+indicating that a serial device should be used to communicate with
+the station.
+USB serial ports on Linux work also, the URL will usually be
+.IR file:///dev/ttyUSB0 .
+A TCP url of the form
+.I tcp://192.168.7.3:10001
+can be used to communicate with the station over the network through
+a terminal server or device server, the example works for a 
+Lantronix UDS-10 devices server.
+.TP
+.BI <speed> baudrate </speed>
+This item is only needed for serial communication, and specifies the
+baud rate to use. Older Davis stations (Weather Monitor II) use
+2400 baud, the Vantage Pro runs at 19200 baud.
+.TP
+.BI <type> stationtype </type>
+As weather station protocols vary substantially for the various types
+of stations, and there don't seem to be reliably methods to find out
+the type of station, the station type must be specified. Possible
+values are
+.IR WMII ,
+.IR Perception ,
+.IR Wizzard , 
+.IR GroWeather , 
+.IR Energy , 
+.I Health
+and
+.IR VantagePro .
+The
+.I type
+element has an option
+.I crc
+attribute. The value 
+.I off
+for the
+.I crc
+attribute causes meteopoll to send a CRC0 command to the weatherlink,
+which is necessary for GroWeather which always starts up with CRC checked
+commands.
+
+The following
+.I station
+tag sample is used with the Vantage Pro station in Bosco/Gurin (which
+uses UDS-10 device server):
+
+.nf
+.in +4
+<station>
+.in +4
+<url>tcp://192.168.7.3:10001</url>
+<type>Vantage</type>
+.in -4
+</station>
+.in -4
+.fi
+
+The <offset> tag is no longer supported, the offset for a station is now
+set in the station table in the database.
+Please consult
+.BR meteo.sql (5)
+for an explanation of the issue.
+
+.SH SENSORS
+
+Since some stations have optional sensors, meteo must be told which
+sensors to look at. For each available sensor, a sensor tag must be
+included in the station tag. A standard Vantage Pro Plus has the following
+sensors:
+
+.nf
+.in +4
+<station>
+.in +4
+<url>tcp://192.168.7.3:10001</url>
+<type>Vantage</type>
+<sensors>
+.in +4
+<sensor name="iss">
+.in +4
+<field>temperature</sensor>
+<field>humidity</sensor>
+<field>rain</sensor>
+<field>wind</sensor>
+<field>solar</sensor>
+<field>uv</sensor>
+.in -4
+</sensor>
+<sensor name="console">
+.in +4
+<field>temperature</sensor>
+<field>humidity</sensor>
+<field>barometer</sensor>
+.in -4
+</sensor>
+.in -4
+</sensors>
+.in -4
+</station>
+.in -4
+.fi
+
+Please read the file doc/sensors for details about sensors and a
+complete list of sensors known to meteo.
+
+.SH AVERAGES
+
+The 
+.BR meteoavg (1)
+program computes averages from the data in the sdata table and stores
+it in the avg table.
+The set of averages actually computed by meteoavg and
+the methods used to compute the averages are specified in the <averages>
+element inside the station configuration.
+Each average that is to be computed is specified with a field element
+as in the following example
+
+.nf
+.in +4
+<station>
+.in +4
+ ...
+<sensors>
+.in +4
+ ...
+.in -4
+</sensors>
+<averages>
+.in +4
+<sensor name="iss">
+.in +4
+<average name="temperature" base="temperature" operator="avg"/>
+<average name="temperature_min" base="temperature" operator="min"/>
+<average name="temperature_max" base="temperature" operator="max"/>
+<average name="humidity" base="humidity" operator="avg"/>
+<average name="humidity_min" base="humidity" operator="min"/>
+<average name="humidity_max" base="humidity" operator="max"/>
+<average name="rain" base="rain" operator="sum"/>
+<average name="wind" base="wind" operator="wind"/>
+<average name="windgust" base="windgust" operator="max"/>
+<average name="solar" base="solar" operator="avg"/>
+<average name="uv" base="uv" operator="avg"/>
+.in -4
+</sensor>
+<sensor name="console">
+.in +4
+<average name="temperature" base="temperature" operator="avg"/>
+<average name="temperature_min" base="temperature" operator="min"/>
+<average name="temperature_max" base="temperature" operator="max"/>
+<average name="humidity" base="humidity" operator="avg"/>
+<average name="humidity_min" base="humidity" operator="min"/>
+<average name="humidity_max" base="humidity" operator="max"/>
+<average name="barometer" base="barometer" operator="avg"/>
+<average name="barometer_min" base="barometer" operator="min"/>
+<average name="barometer_max" base="barometer" operator="max"/>
+.in -4
+</sensor>
+.in -4
+</averages>
+.in -4
+</station>
+.in -4
+.fi
+
+Each average element has the three attributes name, base and operator, which
+have the following meaning. The name is the field name in the mfield table
+for the value to be stored in the avg table. The base is the field name
+of the field in the sdata table that should be used to base the computation.
+The operator field describes the operation used to compute the average.
+The following operator values are known:
+
+.TS
+tab(&);
+l l.
+min&sql min aggregation operator
+max&SQL max aggregation operator
+avg&SQL avg aggregation operator
+sum&SQL sum aggregation operator
+wind&pseudo operator for wind aggregation
+.TE
+
+.SH "SUNRISE AND SUNSET"
+
+Starting with version 0.9.14, meteodraw can compute sunrise and sunset
+times, so that it is no longer necessary to rely on the data delivered
+by the station. To configure the station to compute sunrise and sunset
+add the element <sun method="compute"/> to the station definition.
+
+.SH UNITS
+
+Starting with version 0.9.0, units are configured in the database.
+The following strings are valid for units:
+
+.TS
+tab(&);
+l l.
+data type&values
+
+temperature&degrees Celsius, degC, C,
+&degrees Fahrenheit F, degF, F, K
+humidity&%
+pressure&hPa, inHg, mmHg
+wind&m/s, mph, kmh
+rain&mm, in
+solar&W/m2
+uv&index, med
+soil moisture&cb
+leaf wetness&index
+voltage&V
+.TE
+
+Releases 0.7.0 to 0.8.6 used information in the XML file for unit
+configuration, but as the database should be useful independently of
+configuration file, 0.9.0 moved this information to the database.
+
+.SH "GRAPH CONFIGURATION"
+The graphs produced by
+.BR meteodraw (1)
+are wildly configurable (perhaps not as flexible as with gnuplot, but better
+adapted to the requirements of weather web sites, hopefully).
+The options can roughly be devided into the following topics:
+they describe the dimensions and colours, the axes and scales, the data
+and how the data is to be displayed. There are different tags for these
+tasks, which are individually described in the sections below.
+
+Each graph description is contained in one <graph> tag. This tag has the
+following for attributes:
+
+.TS
+tab(&);
+l l l.
+attribute&default&description
+height&144&height of the produced PNG image
+width&500&width of the produced PNG image
+bgcolor&white&background color
+fgcolor&black&foreground color (grid, axes, text)
+.TE
+
+All other information is defined in enclosed tags.
+
+.SH "THE GRAPHWINDOW"
+The graph itself does not occupy the complete area of the image, the
+<graphwindow> tag is used to specify the part of the image that
+can be used for the graph. It has the following attributes:
+
+.TS
+tab(&);
+l r l.
+attribute&default&description
+
+llx&55&x coordinate of lower left corner
+lly&19&y coorindate of lower left corner
+urx&455&x coorindate of upper right corner
+ury&139&y coorindate of upper right corner
+.TE
+
+.SH "LABELS"
+On the left and on the right of the graph there is usually a label describing
+the parameter plotted along the vertical axes.
+The content of the <leftlabel> and <rightlabel> tags specifies the
+labels on the left and the right respectively. There is a single
+attribute, align, with possible values
+.IR top ,
+.I bottom
+and
+.IR center ,
+with obvious meaning.
+
+.SH "COLORS"
+Every color in the graph in the produced images is configurable. The
+syntax accepts normal rgb color specifications in hex like
+#ff0000 for red, #00ff00 for green and #0000ff for blue. In addition,
+every color can carry an alpha value between 0 (opaque) and 127
+(transparent), which can be specified as a fourth byte in the color string.
+E.g. #ff00003f means semi-transparent red, #0000ff00 is opaque blue.
+It is thus possible to let the humidity graph shine through the temperature
+graph, if the are drawn in the same graph window.
+
+.SH "AXES AND SCALES"
+While the scales along the time axes are completely fixed by the interval
+and point in time, the vertical axes need to be specified by the
+configuration file, or the configuration file needs to specify how to
+derive suitable scales from the data. Note that graphs that change scale
+from day to day are difficult to use in visual comparisons, so it
+is often more useful to have graphs with a constant scale.
+
+The
+.BR meteodraw (1)
+program understands the <leftaxis> and <rightaxis> tags to specify
+scales. There are two groups of attributes that apply to these tags.
+The first group specifies the scale, i.e. the way data is ``distributed''
+along the vertical axis. The second group of attributes describes how
+the vertical axes is labeled, and how grid lines are drawn.
+
+In contrast to all other options, axis and scales may depend on the
+time resolution. The optional interval attribute allows to include
+several axis definitions in on configuration file, the one that matches
+the interval length of the graph will be taken. If no interval matches
+the current graph, then the first axis specification is used regardless
+of its interval attribute. Thus if you want a default definition to
+be taken unless the interval does not match, you must put before all the
+other axis definitions for the same graph.
+
+There are four possible types of scales, specified by the value of the
+.B type attribute:
+
+.TP
+.BI type=" static"
+The scale is fixed, data falling outside of the range is not displayed.
+
+.TP
+.BI type=" dynamic"
+The scale is adjusted dynamically so that all data is displayed.
+
+.TP
+.BI type=" toprange"
+This scale has a static range, but the maximum is adapted so that the
+maximum value is always visible. If the data does not show a lot of
+variation, and does not use the full range, the maximum and minimum
+values are used to display a constant window to the data, that is moved
+only if data leaves this range.
+
+.TP
+.BI type=" bottomrange"
+As with previous type but for the minimum.
+
+.P
+The following attributes can be used to modify the scale
+
+.TS
+tab(&);
+l l.
+attribute&description
+
+min&minimum value for fixed range, or default for dynamic
+max&maximum value for fixed scale, or default for dynamic
+minname&data set to use to find minimum
+maxname&data set to use to find maximum
+.TE
+
+The following options are provided to modify how the axes are labeled and
+grid lines are drawn.
+
+.TS
+tab(&);
+l l l.
+attribute&values&description
+
+ticks&yes/no&whether or not to draw ticks/labels
+gridlines&yes/no&whether or not to draw grid lines
+first&double&first tick/label
+last&double&last tick/label
+step&double&step between ticks/labels
+origin&double&
+maxtickcount&integer&max number of vertical ticks
+format&format string&how to format tick labels
+.TE
+
+The
+.I static 
+type uses only the attributes first, last and step. The
+dynamic
+formats use origin and step to determine the values where ticks
+and/or gridlines should be drawn. The maxtickcount attribute
+is used only by the
+.I dynamic
+format, which uses the following algorithm to derive the the step size
+between ticks: if the specified step size produces too many ticks,
+try 2*step and 5*step as step size. If that still produces too many
+ticks, retry the algorithm with 10*step. There is therefore no minimum
+number of ticks, to produce enough ticks, use a small step size to
+start with.
+
+.SH "CHANNELS"
+While 
+.BR meteodraw (1)
+knows how to address time, station and resolution, it does not know
+what data to retrieve for a certain graph. All the data, the computations
+with it, and how it is displayed, is specified inside the <channels>
+tag. It contains a <query> tag, which specifies what data to
+retrieve, and <channel> tags to display the data retrieved.
+
+.SH "QUERY"
+The <query>
+tag not only retrieves data, but also performs arithmetic operations on
+it, this is described separately in the COMPUTATIONS section below.
+The <query> tag contains <select> tags and <data> tags. <select> tags
+specify select clauses for the database, and give the data retrieved
+this way a name. <data> tags process the data retrieved.
+
+The content of a <select> element is the SQL select clause used to
+retrieve a value. In most cases, this will be column name in the
+stationdata or averages table. It is possible, however, to specify
+an SQL expression, to perform arithmetic or logic operations on the
+data. Internally to 
+.BR meteodraw (1),
+the result is a set of time/value pairs for each point in time where
+a value exists.
+
+The <select> element always has a name attribute. The name is used to
+refer to the data either when performing computations (in <data> elements)
+or when graphing the data (in <channel> elements).
+
+.SH "COMPUTATIONS"
+<data> tags allow to perform operations on the data retrieved and named 
+with the <select> elements.
+One should look at the data sets retrieved by <select> elements as maps
+from the time domain to the real numbers. Arithmetic operations are
+pointwise, i.e. the result is defined on the intersection of the
+domains of the arguments. The following operations are available as
+separate tags:
+
+.TS
+tab(&);
+l l.
+element&description
+
+constant&numeric constant
+value&refers to <select> statment or previous <data>
+function&compute monadic function
+function2&compute binary function
+sum&compute sum of all contained
+mult&compute product of all contained data
+diff&compute difference of two data sets
+quot&compute quotient of two data sets
+.TE
+
+The <constant> element creates a map that is defined everywhere and
+has always the same value. The precise function to apply is specified
+with a name attribute. The following monic functions are available:
+
+.TS
+tab(&);
+l l.
+name&description
+
+sqr&see sqr(3)
+sqrt&see sqrt(3)
+sin&see sin(3)
+cos&see cos(3)
+tan&see tan(3)
+ceil&cut off data at maximum value
+floor&cut off data at minimum value
+accumulate&compute sum of all values up to a point in time
+.TE
+
+The last two functions take an additional attribute limit. The ceil
+function produces a map which replaces all values that exceed limit
+by limit. Similarly for floor.
+
+The following binary functions are available:
+
+.TS
+tab(&);
+l l.
+name&description
+
+atan2(y,x)&see atan(2)
+azi(x,y)&azimut angle in degreees
+hypot(x,y)&see hypto(3)
+dewpoint(h,t)&compute dewpoint corresponding to humidity h (@T = t)
+heatindex(h,t)&compute heat index from humidity h and temperature t
+windchill(v,t)&compute windchill from wind speed v and temperature t
+.TE
+
+Note that for the most obvious applications, namely wind graphs, these
+functions are not necessary, as the data is already in a suitable
+format in the database tables.
+
+.SH "THE <CHANNEL> TAG"
+The <channel> tag finally draws the computed data in the color specified
+in by the color attribute that all these tags use.
+The mandatory type attribute defines what should be drawn and in what style.
+Additional attributes are necessary to specify the date to graph, with the
+exception of the
+.I range
+type (see below), this is done with the name attribute.
+The following
+types are defined
+
+.TS
+tab(&);
+l l.
+type&description
+
+curve&draw a curve from a single map
+range&draw the range between two maps
+histogram&draw a histogram based on a map
+lowdata&hide all data where the value is below some limit
+nodata&hide everything outside the domain
+windbackground&show wind direction colors
+.TE
+
+The
+.I curve
+type has an additional option
+.IR connected ,
+which defaults to no. If set to yes, the curve drawn by
+.BR meteodraw (1)
+interpolates accross time intervals where data is missing.
+The default is to only draw a line where we do have data.
+
+The
+.I range
+type needs two map names to fill the range between them with a color.
+The attributes nameupper and namelower set the name of the map to
+use for upper and lower bounds.
+
+The two types
+.I nodata
+and
+.I lowdata
+require a name attribute of a map defined previously,
+and draw vertical stripes of the color specified in the color attribute
+for each point in time for which either the value of the named map is
+below the limit attribute
+value for the lowdata element, or which simply is not in the domain of
+the named map.
+
+The 
+.I windbackground
+draws the background for wind (this is a bit hackish, but I had no
+better idea). The element requires the for attributes
+.IR northcolor ,
+.iR southcolor ,
+.I westcolor
+and 
+.I eastcolor
+with the colors for the winds the blow from the corresponding direction
+as values. Furthermore it is possible to specify the
+.I letters
+attribute that contains the wind direction letters to use (in that
+sequence) for winds from south, west, north and east. No letters are
+drawn if this attribute is not present. The value usually used for
+this attribute ist "SWNE". Note that these letters correctly denominate
+the wind for swiss users: `Nordwind' means wind from the north, i.e.
+a wind with an azimut of 180deg. Of course, this is a wind blowing to
+the south, so some people may prefer the letter S for this direction,
+or the setting letters="NESW".
+
+The type
+.I sun
+draws a colored line along the time axis to indicate daylight.
+You must specify the station relative to which to determine sunrise
+and sunset. For VantagePro stations the default is to use sunrise
+and sunset times from the station, but if the <sun method="compute"/>
+flag is set in the station configuration, sunrise and sunset is computed
+for the VantagePro as well. For all other stations, the <sun/> element
+is not necessary, as sunrise and sunset are always computed.
+Note that this only works if longitude and latitude are correct.
+
+.SH EXAMPLES
+The meteo.xml and meteo-60.xml included in the distribution show how these
+elements are used to produce the standard graphs as they can bee seen
+on the home page of the meteo package, http://meteo.othello.ch/.
+
+.SH BUGS
+There is no tool to verify the correctness of the configuration file.
+The easiest way to do this would be to provide a DTD, so that one
+could simply check whether the configuration file matches the DTD.
+In the meantime, the best one can do is to at least check well formedness
+using
+.BR xmllint (1).
+
+.SH "SEE ALSO"
+.BR meteo (1),
+.BR meteopoll (1),
+.BR meteoavg (1),
+.BR meteodraw (1),
+.BR meteodequeue (1),
+.BR meteojob (1)
+
+.SH AUTHOR
+Dr. Andreas Mueller <afm@othello.ch>
