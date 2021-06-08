@@ -31,5 +31,3 @@ Bugs
 * timelabel normalization has a bug which causes it to normalize to the
   previous week in 2005
 
---
-$Id: TODO,v 1.52 2006/05/07 19:47:22 afm Exp $

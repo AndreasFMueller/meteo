@@ -1,9 +1,7 @@
 #
 # Makefile.am -- generate a portable Makefile for the meteo interface package
 #
-# (c) 2001 Dr. Andreas Mueller, Beratung und Entwicklung
-#
-# $Id: Makefile.am,v 1.18 2006/05/07 19:47:22 afm Exp $
+# (c) 2001-2021 Prof. Dr. Andreas Mueller
 #
 HTML =	ack.html gallery.html prereq.html install.html util.html 	\
 	news.html about.html config.html support.html

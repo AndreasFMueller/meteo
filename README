@@ -6,6 +6,10 @@ Davis Instruments weather station. The architecture is sufficiently
 generic to acommodate other weather stations as well, but as I don't
 have access to other hardware, no interface code is included.
 
+Unfortunately, I have no longer access to weather station hardware
+as I used to have, so the sample installations mentionned below are
+no longer functional.
+
 The home of the meteo tools is at http://meteo.othello.ch, where 
 you will always find the current release. For sample installations
 see http://www.othello.ch/meteo and http://grossalp.othello.ch/meteo.
@@ -237,5 +241,3 @@ shtool
 gettext
 xsltproc
 
---
-$Id: README.tmpl,v 1.19 2006/05/07 19:51:18 afm Exp $

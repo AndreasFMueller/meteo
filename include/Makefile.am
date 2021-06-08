@@ -1,64 +1,160 @@
 #
 # Makefile.am -- generate a portable Makefile for the meteo interface package
 #
-# (c) 2001 Dr. Andreas Mueller, Beratung und Entwicklung
-#
-# $Id: Makefile.am,v 1.44 2008/09/07 15:18:52 afm Exp $
+# (c) 2001-2021 Prof. Dr. Andreas Mueller
 #
 
 noinst_HEADERS =							\
-	MeteoTypes.h MeteoException.h Vector.h				\
-	Value.h BasicValue.h VoltageValue.h TransmitterStatus.h		\
-	TemperatureValue.h HumidityValue.h PressureValue.h 		\
-	SolarValue.h UVValue.h MoistureValue.h LeafwetnessValue.h 	\
-	LevelValue.h WindSpeed.h Wind.h Rain.h RainRate.h TimeValue.h	\
-	BasicValueFactory.h ValueFactory.h				\
-	Recorder.h BasicRecorder.h MinmaxRecorder.h VoltageRecorder.h	\
-	TemperatureRecorder.h HumidityRecorder.h PressureRecorder.h	\
-	SolarRecorder.h UVRecorder.h MoistureRecorder.h TimeRecorder.h	\
-	LeafwetnessRecorder.h LevelRecorder.h WindRecorder.h		\
-	RainRecorder.h RainRateRecorder.h TransmitterRecorder.h		\
-	LastRecorder.h							\
-	RecorderFactory.h DataRecorder.h 				\
-	Configuration.h Field.h Field_internals.h StationInfo.h		\
-	FQField.h FQField_internals.h					\
-	Timeval.h Channel.h SerialChannel.h TcpChannel.h FileChannel.h	\
+	Averager.h							\
+	Axis.h								\
+	BarometerReader.h						\
+	BasicConverter.h						\
+	BasicPacketReader.h						\
+	BasicQueryResult.h						\
+	BasicRecorder.h							\
+	BasicValue.h							\
+	BasicValueFactory.h						\
+	BytePacketReader.h						\
+	Calibrator.h							\
+	Channel.h							\
 	ChannelFactory.h						\
-	SensorStationInfo.h SensorStation.h				\
-	Station.h DavisStation.h OldDavisStation.h 			\
-	WMII.h GroWeather.h Energy.h Health.h				\
-	VantagePro.h ReaderInfo.h StationFactory.h			\
-	Converter.h BasicConverter.h ConverterFactory.h TimeConverter.h	\
-	TemperatureConverter.h HumidityConverter.h RainConverter.h	\
-	PressureConverter.h SolarConverter.h UVConverter.h		\
-	MoistureConverter.h LeafwetnessConverter.h LevelConverter.h	\
-	WindConverter.h RainRateConverter.h VoltageConverter.h		\
-	TransmitterConverter.h Calibrator.h				\
-	PacketReader.h BasicPacketReader.h				\
-	BytePacketReader.h ShortPacketReader.h NibblePacketReader.h	\
-	TemperatureReader.h OldTemperatureReader.h 			\
-	ExtraTemperatureReader.h BarometerReader.h UVReader.h 		\
-	WMIIWindReader.h VantageProWindReader.h OldWindReader.h		\
-	RainReader.h RainRateReader.h TimeReader.h VoltageReader.h	\
-	PacketReaderFactory.h						\
-	Datasink.h Pidfile.h Level.h Timelabel.h			\
-	Derivedvalue.h Dewpoint.h Heatindex.h Windchill.h		\
-	BasicQueryResult.h Query.h QueryResult.h QueryProcessor.h	\
-	Tdata.h Dataset.h						\
-	Point.h Dimension.h Rectangle.h Color.h Label.h Frame.h		\
-	Scale.h Axis.h GraphPoint.h MapArea.h ImageMap.h GraphWindow.h	\
-	Graphics.h SunData.h Sun.h					\
-	Datarecord.h Averager.h						\
-	MsgCommon.h MsgQueuer.h MsgDequeuer.h				\
-	Timestamp.h Format.h 						\
-	Mapfile.h							\
-	Daemon.h							\
 	ChunkDumper.h							\
+	Color.h								\
+	Configuration.h							\
+	Converter.h							\
+	ConverterFactory.h						\
+	Daemon.h							\
+	DataRecorder.h							\
+	Datarecord.h							\
+	Dataset.h							\
+	Datasink.h							\
+	DavisStation.h							\
+	Derivedvalue.h							\
+	Dewpoint.h							\
+	Dimension.h							\
+	Energy.h							\
+	ExtraTemperatureReader.h					\
+	FQField.h							\
+	FQField_internals.h						\
+	Field.h								\
+	Field_internals.h						\
+	FileChannel.h							\
+	Format.h							\
+	Frame.h								\
+	GraphPoint.h							\
+	GraphWindow.h							\
+	Graphics.h							\
+	GroWeather.h							\
+	Health.h							\
+	Heatindex.h							\
+	HumidityConverter.h						\
+	HumidityRecorder.h						\
+	HumidityValue.h							\
+	ImageMap.h							\
+	Label.h								\
+	LastRecorder.h							\
+	LeafwetnessConverter.h						\
+	LeafwetnessRecorder.h						\
+	LeafwetnessValue.h						\
+	Level.h								\
+	LevelConverter.h						\
+	LevelRecorder.h							\
+	LevelValue.h							\
 	Lock.h								\
-	Outlet.h QueryOutlet.h XmlOutlet.h XmlOutletDelegate.h		\
+	MapArea.h							\
+	Mapfile.h							\
+	MeteoException.h						\
+	MeteoTypes.h							\
+	MinmaxRecorder.h						\
+	MoistureConverter.h						\
+	MoistureRecorder.h						\
+	MoistureValue.h							\
+	MsgCommon.h							\
+	MsgDequeuer.h							\
+	MsgQueuer.h							\
+	NibblePacketReader.h						\
+	OldDavisStation.h						\
+	OldTemperatureReader.h						\
+	OldWindReader.h							\
+	Outlet.h							\
+	PacketReader.h							\
+	PacketReaderFactory.h						\
+	Pidfile.h							\
+	Point.h								\
+	PressureConverter.h						\
+	PressureRecorder.h						\
+	PressureValue.h							\
+	Query.h								\
+	QueryOutlet.h							\
+	QueryProcessor.h						\
+	QueryResult.h							\
+	Rain.h								\
+	RainConverter.h							\
+	RainRate.h							\
+	RainRateConverter.h						\
+	RainRateReader.h						\
+	RainRateRecorder.h						\
+	RainReader.h							\
+	RainRecorder.h							\
+	ReaderInfo.h							\
+	Recorder.h							\
+	RecorderFactory.h						\
+	Rectangle.h							\
+	Scale.h								\
+	SensorStation.h							\
+	SensorStationInfo.h						\
+	SerialChannel.h							\
+	ShortPacketReader.h						\
+	SolarConverter.h						\
+	SolarRecorder.h							\
+	SolarValue.h							\
+	Station.h							\
+	StationFactory.h						\
+	StationInfo.h							\
+	Sun.h								\
+	SunData.h							\
+	TcpChannel.h							\
+	Tdata.h								\
+	TemperatureConverter.h						\
+	TemperatureReader.h						\
+	TemperatureRecorder.h						\
+	TemperatureValue.h						\
+	TimeConverter.h							\
+	TimeReader.h							\
+	TimeRecorder.h							\
+	TimeValue.h							\
+	Timelabel.h							\
+	Timestamp.h							\
+	Timeval.h							\
+	TransmitterConverter.h						\
+	TransmitterRecorder.h						\
+	TransmitterStatus.h						\
+	UVConverter.h							\
+	UVReader.h							\
+	UVRecorder.h							\
+	UVValue.h							\
+	Value.h								\
+	ValueFactory.h							\
+	VantagePro.h							\
+	VantageProWindReader.h						\
+	Vector.h							\
+	VoltageConverter.h						\
+	VoltageReader.h							\
+	VoltageRecorder.h						\
+	VoltageValue.h							\
+	WMII.h								\
+	WMIIWindReader.h						\
+	Wind.h								\
+	WindConverter.h							\
+	WindRecorder.h							\
+	WindSpeed.h							\
+	Windchill.h							\
+	XmlOutlet.h							\
+	XmlOutletDelegate.h						\
 	XmlOutletFactory.h						\
 	crc.h 								\
-	printver.h mdebug.h
+	mdebug.h							\
+	printver.h
 
 VERSION_FILE = meteo_vers.h
 

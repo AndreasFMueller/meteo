@@ -2,8 +2,6 @@
 #
 # sample configure call
 #
-# $Id: configureit,v 1.22 2009/01/10 21:06:40 afm Exp $
-#
 
 CFLAGS="-g -Wall -Wshadow  -Wpointer-arith -Wcast-align -Winline -Wmissing-prototypes -Wmissing-declarations -Wnested-externs"
 CXXFLAGS="-g -Wall -Wshadow  -Wpointer-arith -Wcast-align -Winline"

@@ -117,5 +117,3 @@ probably want to rebuild the averages table using the -a option to
 meteoavg, since some averages may have been computed by the new meteoavg
 with incomplete data (old data not yet converted).
 
---
-$Id: SETUP,v 1.7 2006/05/16 11:19:54 afm Exp $

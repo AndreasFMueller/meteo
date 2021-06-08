@@ -1,9 +1,7 @@
 #
 # Makefile.am -- generate a portable Makefile for the meteo interface package
 #
-# (c) 2001 Dr. Andreas Mueller, Beratung und Entwicklung
-#
-# $Id: Makefile.am,v 1.7 2006/05/16 13:05:29 afm Exp $
+# (c) 2001-2021 Prof. Dr. Andreas Mueller
 #
 BROWSERFILES = meteobrowser.php	   					\
 	up.png upup.png upupup.png week.png month.png year.png 		\
