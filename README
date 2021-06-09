@@ -10,7 +10,7 @@ Unfortunately, I have no longer access to weather station hardware
 as I used to have, so the sample installations mentionned below are
 no longer functional.
 
-The home of the meteo tools is at http://meteo.othello.ch, where 
+The home of the meteo tools is at http://meteo.othello.ch, where
 you will always find the current release. For sample installations
 see http://www.othello.ch/meteo and http://grossalp.othello.ch/meteo.
 
@@ -184,14 +184,15 @@ detail can be found in the doc/architecture file.
 Installation
 ------------
 
-Read the INSTALL for installation instructions. Please also check the end
-of that file for plattform specific instructions. meteo has been tested on
-Solaris 2.9 and on Linux 2.4, which are the plattforms of the two sample
-installations. It also works on Mac OS X (large parts of the development
-are actually done on a Powerbook) and there are users using it on FreeBSD.
+Read the INSTALL for installation instructions. Please also check
+the end of that file for plattform specific instructions. meteo has
+been tested on Solaris 2.9 and on Linux 2.4, which are the plattforms
+of the two sample installations. It also works on Mac OS X (large
+parts of the development are actually done on a Powerbook) and there
+are users using it on FreeBSD.
 
-There is a README in the db directory that explains how to set up the
-MySQL tables.
+There is a README in the db directory that explains how to set up
+the MySQL tables.
 
 Special installation instructions for the meteo browser (meteobrowser.php)
 can be found in the file README.browser.
@@ -200,28 +201,30 @@ can be found in the file README.browser.
 Thanks
 ------
 
-Over time, many people have contributed to meteo by asking questions (thus
-pointing out deficiencies in code and/or documentation), providing bug
-reports or fixes. I hope I've recorded all of them in the AUTHORS file.
-Thanks to all those who have helped.
+Over time, many people have contributed to meteo by asking questions
+(thus pointing out deficiencies in code and/or documentation),
+providing bug reports or fixes. I hope I've recorded all of them
+in the AUTHORS file.  Thanks to all those who have helped.
 
 The most substantial contribution came from the university Univates
 (http://www.univates.br) in Lajeado, Rio Grande do Sul, Brazil. The
-university has sponsored the development of the 0.9.0 release. I would
-like to express my gratitude towards Univates for their generous help.
+university has sponsored the development of the 0.9.0 release. I
+would like to express my gratitude towards Univates for their
+generous help.
 
 
 Directions for Contributors
 ---------------------------
 
-If possible, please send diffs against the most recent version of meteo.
-This can save me a lot of time and improves the probability that Your
-contribution gets included in the release. If you add something completely
-new, it may be more convenient to put it in a separate file. In this case
-send all new files, and diffs for the files that have changed. In any
-event, try to change as little as possible of the existing code, since
-extensive changes make for very large patches, that are difficult to read.
-If there is no other way, please contact me first, so that we can team up.
+If possible, please send pull requests directly on github.  This
+can save me a lot of time and improves the probability that Your
+contribution gets included in the release. If you add something
+completely new, it may be more convenient to put it in a separate
+file. In this case send all new files, and diffs for the files that
+have changed. In any event, try to change as little as possible of
+the existing code, since extensive changes make for very large
+patches, that are difficult to read.  If there is no other way,
+please contact me first, so that we can team up.
 
 Debian prerequisites
 --------------------
