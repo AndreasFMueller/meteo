@@ -37,6 +37,7 @@ std::string	StationInfo::getField(const std::string& fieldname) const {
 int	StationInfo::getId(void) const {
 	return std::stoi(getField("id"));
 }
+
 int	StationInfo::getOffset(void) {
 	// in case we have done the query before, return the already known
 	// offset value
@@ -54,6 +55,7 @@ int	StationInfo::getOffset(void) {
 	// return the field
 	return offset;
 }
+
 std::string	StationInfo::getTimezone(void) const {
 	std::string	f = getField("timezone");
 	if (f == "NULL")
