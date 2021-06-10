@@ -140,8 +140,8 @@ static fieldid	getfieldid(MYSQL *mysql, const char *stationname,
 		exit(EXIT_FAILURE);
 	}
 	MYSQL_ROW	row = mysql_fetch_row(res);
-	int	sensorid = atoi(row[0]);
-	int	mfieldid = atoi(row[1]);
+	int	sensorid = std::stoi(row[0]);
+	int	mfieldid = std::stoi(row[1]);
 	if (debug)
 		fprintf(stderr, "%s:%d: fieldid for %s is (%d, %d)\n", __FILE__,
 			__LINE__, mfieldname, sensorid, mfieldid);
@@ -180,7 +180,7 @@ static void	insertheader(MYSQL *mysql, time_t t) {
 	mysql_query(mysql, query);
 	MYSQL_RES	*res = mysql_store_result(mysql);
 	MYSQL_ROW	row = mysql_fetch_row(res);
-	int	exists = atoi(row[0]);
+	int	exists = std::stoi(row[0]);
 	mysql_free_result(res);
 
 	// if no row exists, add one
@@ -223,7 +223,7 @@ static void	insertsrow(MYSQL *mysql, time_t t, const fieldid& sfi,
 		return;
 
 	// convert to double, and build a query that is acceptable to mysql
-	double	v = atof(value);
+	double	v = std::stod(value);
 	snprintf(query, sizeof(query),
 		"insert into sdata(timekey, sensorid, fieldid, value) "
 		"values (%ld, %d, %d, %.5f)",
@@ -248,7 +248,7 @@ static void	insertarow(MYSQL *mysql, time_t t, int intval,
 	char	query[1024];
 	if (value == NULL)
 		return;
-	double	v = atof(value);
+	double	v = std::stod(value);
 	snprintf(query, sizeof(query), "insert into avg(timekey, intval, "
 		"sensorid, fieldid, value) values (%ld, %d, %d, %d, %.5f)",
 		t + offset, intval, sfi.sensorid, sfi.mfieldid, v);
@@ -314,7 +314,7 @@ static int	getschunk(MYSQL *mysql, const std::string& station,
 	stationdata += nrows;
 	MYSQL_ROW	row;
 	while (NULL != (row = mysql_fetch_row(res))) {
-		endtime = t = atoi(row[0]);
+		endtime = t = std::stoi(row[0]);
 		if (debug)
 			fprintf(stderr, "%s:%d: stationdata timekey: %d\n",
 				__FILE__, __LINE__, t);
@@ -326,7 +326,7 @@ static int	getschunk(MYSQL *mysql, const std::string& station,
 			}
 		}
 		stationdata++;
-		endtime = atoi(row[0]);
+		endtime = std::stoi(row[0]);
 	}
 
 	// free the result from this query
@@ -382,8 +382,8 @@ static int	getachunk(MYSQL *mysql, const std::string& station,
 	averages += nrows;
 	MYSQL_ROW	row;
 	while ((row = mysql_fetch_row(res))) {
-		int	intval = atoi(row[2]);
-		endtime = t = atoi(row[0]);
+		int	intval = std::stoi(row[2]);
+		endtime = t = std::stoi(row[0]);
 		for (int i = 0, j = 1; i < nfields; i++) {
 			if (map[i].inaverages) {
 				insertarow(mysql, t, intval, idlist[i],
@@ -426,7 +426,7 @@ time_t	firstkey(MYSQL *mysql, const std::string& station) {
 	{
 		MYSQL_ROW	row = mysql_fetch_row(res);
 		if (row[0] == NULL) return 0;
-		result = atoi(row[0]);
+		result = std::stoi(row[0]);
 	}
 haveit:
 	// free the result from this query
@@ -467,7 +467,7 @@ int	main(int argc, char *argv[]) {
 			hostname = std::string(optarg);
 			break;
 		case 'o':
-			offset = atoi(optarg);
+			offset = std::stoi(optarg);
 			break;
 		case 'u':
 			user = std::string(optarg);
@@ -485,10 +485,10 @@ int	main(int argc, char *argv[]) {
 			stationtype = std::string(optarg);
 			break;
 		case 'c':
-			chunksize = atoi(optarg);
+			chunksize = std::stoi(optarg);
 			break;
 		case 'f':
-			t = atoi(optarg);
+			t = std::stoi(optarg);
 			break;
 		case 'q':
 			quiet = true;

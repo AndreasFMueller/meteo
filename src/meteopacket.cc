@@ -95,7 +95,7 @@ static int	main(int argc, char *argv[]) {
 			logurl = std::string(optarg);
 			break;
 		case 'p':
-			port = atoi(optarg);
+			port = std::stoi(optarg);
 			break;
 		case 's':
 			stationname = std::string(optarg);

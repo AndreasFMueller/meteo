@@ -70,10 +70,10 @@ int	Field_internals::lookup(const int mfieldid) {
 	// fieldname
 	bqr = qp("select count(*) from mfield where name = '" + mf.name
 		+ "_max'");
-	mf.hasmax = (1 == atoi((*bqr.begin())[0].c_str()));
+	mf.hasmax = (1 == std::stoi((*bqr.begin())[0]));
 	bqr = qp("select count(*) from mfield where name = '" + mf.name
 		+ "_min'");
-	mf.hasmin = (1 == atoi((*bqr.begin())[0].c_str()));
+	mf.hasmin = (1 == std::stoi((*bqr.begin())[0]));
 
 	// store the mf structure in the cache
 	mfieldmap.insert(mfieldmap_t::value_type(mfieldid, mf));
@@ -105,7 +105,7 @@ int	Field_internals::lookup(const std::string& fieldname) {
 			fieldname.c_str());
 		throw MeteoException("nothing known about field", fieldname);
 	}
-	int	id = atoi((*bqr.begin())[0].c_str());
+	int	id = std::stoi((*bqr.begin())[0]);
 	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "found id %d for %s", id,
 		fieldname.c_str());
 

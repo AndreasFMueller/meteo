@@ -79,7 +79,7 @@ TcpChannel::TcpChannel(const std::string& url) {
 	memcpy(&sin.sin_addr.s_addr, hep->h_addr, sizeof(in_addr_t));
 
 	// convert port number from string to short
-	unsigned short	ps = atoi(port.c_str());
+	unsigned short	ps = std::stoi(port);
 	sin.sin_port = htons(ps);
 
 	// connect to the server

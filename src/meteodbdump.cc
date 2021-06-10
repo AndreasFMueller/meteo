@@ -76,7 +76,7 @@ static void	main(int argc, char *argv[]) {
 			basename = std::string(optarg);
 			break;
 		case 'c':
-			chunksize = atoi(optarg);
+			chunksize = std::stoi(optarg);
 			break;
 		case 'r':
 			raw = !raw;

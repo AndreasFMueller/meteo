@@ -16,6 +16,7 @@
 #include <SensorStationInfo.h>
 #include <Field.h>
 #include <set>
+#include <string.h>
 
 namespace meteo {
 

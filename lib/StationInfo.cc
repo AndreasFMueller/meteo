@@ -35,7 +35,7 @@ std::string	StationInfo::getField(const std::string& fieldname) const {
 }
 
 int	StationInfo::getId(void) const {
-	return atoi(getField("id").c_str());
+	return std::stoi(getField("id"));
 }
 int	StationInfo::getOffset(void) {
 	// in case we have done the query before, return the already known
@@ -48,7 +48,7 @@ int	StationInfo::getOffset(void) {
 	std::string	offsetstring = getField("offset");
 
 	// remember the offset value
-	offset = atoi(offsetstring.c_str());
+	offset = std::stoi(offsetstring);
 	offsetknown = true;
 
 	// return the field
@@ -65,21 +65,21 @@ double	StationInfo::getLongitude(void) const {
 	std::string	f = getField("longitude");
 	if (f == "NULL")
 		throw MeteoException("Longitude not found", "");
-	return atof(f.c_str());
+	return std::stod(f);
 }
 
 double	StationInfo::getLatitude(void) const {
 	std::string	f = getField("latitude");
 	if (f == "NULL")
 		throw MeteoException("Latitude not found", "");
-	return atof(f.c_str());
+	return std::stod(f);
 }
 
 double	StationInfo::getAltitude(void) const {
 	std::string	f = getField("altitude");
 	if (f == "NULL")
 		throw MeteoException("Altitude not found", "");
-	return atof(f.c_str());
+	return std::stod(f);
 }
 
 // retrieve the nonqualified names of the sensors
@@ -105,7 +105,7 @@ intlist	StationInfo::getSensorIds(void) const {
 	BasicQueryResult::iterator	i;
 	intlist	result;
 	for (i = bqr.begin(); i != bqr.end(); i++) {
-		result.push_back(atoi((*i)[0].c_str()));
+		result.push_back(std::stoi((*i)[0]));
 	}
 	return result;
 }
