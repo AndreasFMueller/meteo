@@ -34,12 +34,12 @@ extern meteo_version_t meteo_version;
 meteo_version_t meteo_version = {
     0x009214,
     "0.9.20",
-    "0.9.20 (09-Jun-2021)",
-    "This is Meteo, Version 0.9.20 (09-Jun-2021)",
-    "Meteo 0.9.20 (09-Jun-2021)",
+    "0.9.20 (10-Jun-2021)",
+    "This is Meteo, Version 0.9.20 (10-Jun-2021)",
+    "Meteo 0.9.20 (10-Jun-2021)",
     "Meteo/0.9.20",
-    "@(#)Meteo 0.9.20 (09-Jun-2021)",
-    "$Id: shtool,v 1.1 2001/03/18 15:07:34 afm Exp Meteo 0.9.20 (09-Jun-2021) $"
+    "@(#)Meteo 0.9.20 (10-Jun-2021)",
+    "$Id: shtool,v 1.1 2001/03/18 15:07:34 afm Exp Meteo 0.9.20 (10-Jun-2021) $"
 };
 
 #endif /* _METEO_VERS_H_AS_HEADER_ */

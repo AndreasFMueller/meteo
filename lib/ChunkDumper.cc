@@ -26,6 +26,7 @@
 #include <unistd.h>
 #endif /* HAVE_UNISTD_H */
 #include <mdebug.h>
+#include <cstdlib>
 
 namespace meteo {
 
@@ -183,8 +184,8 @@ void	ChunkDumper::dump(int sensorid) {
 				"where sensorid = %d",
 				sensorid);
 			BasicQueryResult	bqr = qp(query);
-			t = atoi((*bqr.begin())[0].c_str());
-			last = atoi((*bqr.begin())[1].c_str());
+			t = std::stoi((*bqr.begin())[0]);
+			last = std::stoi((*bqr.begin())[1]);
 			mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "data from %d to %d",
 				t, last);
 		} else {
@@ -215,8 +216,8 @@ void	ChunkDumper::dump(int sensorid) {
 				"where sensorid = %d",
 				sensorid);
 			BasicQueryResult	bqr = qp(query);
-			t = atoi((*bqr.begin())[0].c_str());
-			last = atoi((*bqr.begin())[1].c_str());
+			t = std::stoi((*bqr.begin())[0]);
+			last = std::stoi((*bqr.begin())[1]);
 			mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "data from %d to %d",
 				t, last);
 		} else {

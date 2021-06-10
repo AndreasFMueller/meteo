@@ -18,6 +18,7 @@
 #ifdef HAVE_ALLOCA_H
 #include <alloca.h>
 #endif /* HAVE_ALLOCA_H */
+#include <cstdlib>
 
 namespace meteo {
 
@@ -171,13 +172,14 @@ void	QueryProcessor_internal::perform(const Query& query,
 	while (NULL != (row = mysql_fetch_row(mres))) {
 		// convert fields from text (as returned by mysql) to native
 		// types, the timekey and value are simple
-		int	timekey = atoi(row[0]);
-		double	value = atof(row[3]);
+		int	timekey = std::stoi(row[0]);
+		double	value = std::stoi(row[3]);
 
 		// to access the other fields, we need to convert the pair
 		// (sensorid,mfieldid) to a fieldid (since this is the key
 		// to the idmap member of the Query object)
-		fieldid	id = FQField().getFieldid(atoi(row[1]), atoi(row[2]));
+		fieldid	id = FQField().getFieldid(std::stoi(row[1]),
+					std::stoi(row[2]));
 		mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "%d,%.2f id = %d,%d,%d",
 			timekey, value, id.stationid, id.sensorid, id.mfieldid);
 
@@ -346,7 +348,7 @@ Datarecord	QueryProcessor::nearRecord(const time_t timekey,
 	}
 
 	// extract the timekey from the result
-	result.setTimekey(atoi((*bqr.begin())[0].c_str()));
+	result.setTimekey(std::stoi((*bqr.begin())[0]));
 
 	// retrieve all the data fields together with the class information
 	snprintf(query, sizeof(query),
@@ -373,11 +375,11 @@ Datarecord	QueryProcessor::nearRecord(const time_t timekey,
 			fieldname.c_str());
 
 		// decode data
-		double	value = atof((*j)[0].c_str());		// a.value
-		int	mfieldid = atoi((*j)[2].c_str());	// c.id
+		double	value = std::stod((*j)[0]);		// a.value
+		int	mfieldid = std::stoi((*j)[2]);	// c.id
 		std::string	classname = (*j)[3];		// c.class
 		std::string	unit = (*j)[4];			// c.unit
-		int	sensorid = atoi((*j)[5].c_str());	// b.id
+		int	sensorid = std::stoi((*j)[5]);	// b.id
 
 		// using sensorid and mfieldid, retrieve the complete 
 		// fqfieldname

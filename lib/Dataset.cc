@@ -66,7 +66,7 @@ static const Tdata	processNode(Dataset *dset, xmlNodePtr cur) {
 			throw MeteoException("constant without value", "");
 		}
 		mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "constant node %s", value);
-		double	v = atof((char *)value);
+		double	v = std::stod((char *)value);
 		xmlFree(value);
 		return	Tdata(v);
 	}
@@ -127,7 +127,7 @@ static const Tdata	processNode(Dataset *dset, xmlNodePtr cur) {
 			xmlFree(name);
 			if (NULL == limitname)
 				throw MeteoException("limit arg missing", "");
-			double limit = atof((char *)limitname);
+			double limit = std::stod((char *)limitname);
 			xmlFree(limitname);
 			return d.ceil(limit);
 		}
@@ -135,7 +135,7 @@ static const Tdata	processNode(Dataset *dset, xmlNodePtr cur) {
 			xmlFree(name);
 			if (NULL == limitname)
 				throw MeteoException("limit arg missing", "");
-			double limit = atof((char *)limitname);
+			double limit = std::stod((char *)limitname);
 			xmlFree(limitname);
 			return d.floor(limit);
 		}

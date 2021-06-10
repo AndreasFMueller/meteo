@@ -71,7 +71,7 @@ fieldid	FQField_internals::lookup(const fieldid id) {
 	// build the fqfieldname
 	fqfieldname	fq((*bqr.begin())[0], (*bqr.begin())[1],
 				(*bqr.begin())[2]);
-	fieldid	newid(atoi((*bqr.begin())[3].c_str()), id.sensorid,
+	fieldid	newid(std::stoi((*bqr.begin())[3]), id.sensorid,
 			id.mfieldid);
 
 	// store the mf structure in the cache
@@ -119,9 +119,8 @@ fieldid	FQField_internals::lookup(const std::string& fieldname) {
 			fieldname.c_str());
 		throw MeteoException("nothing known about field", fieldname);
 	}
-	fieldid	id(atoi((*bqr.begin())[0].c_str()),
-			atoi((*bqr.begin())[1].c_str()),
-			atoi((*bqr.begin())[2].c_str()));
+	fieldid	id(std::stoi((*bqr.begin())[0]), std::stoi((*bqr.begin())[1]),
+			std::stoi((*bqr.begin())[2]));
 	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "found id %d,%d,%d for %s",
 		id.stationid, id.sensorid, id.mfieldid, fieldname.c_str());
 

@@ -82,7 +82,7 @@ static int	main(int argc, char *argv[]) {
 			} while (0);
 			break;
 		case 't':
-			timekey = atoi(optarg);
+			timekey = std::stoi(optarg);
 			break;
 		case 'x':
 			xmloutput = true;
@@ -91,7 +91,7 @@ static int	main(int argc, char *argv[]) {
 			searchbackwards = false;
 			break;
 		case 'w':
-			window = atoi(optarg);
+			window = std::stoi(optarg);
 			break;
 		}
 

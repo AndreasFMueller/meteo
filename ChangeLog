@@ -1,4 +1,7 @@
 Release 0.9.20:
+	* migrate atoi to std::stoi and atof to std::stod (which were not
+	  available back then)
+	* portability changes for Linux
 	* the mailing list no longer exists
 	* make port for database configurable
 	* migrate everything to github

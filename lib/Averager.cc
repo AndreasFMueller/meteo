@@ -244,14 +244,14 @@ int	Averager::addWind(const time_t timekey, const int interval,
 	// go through the query result to compute averages for this station
 	BasicQueryResult::const_iterator	i;
 	for (i = bqr.begin(); i != bqr.end(); i++) {
-		double	duration = atof((*i)[2].c_str());
-		double	samples = atof((*i)[3].c_str());
+		double	duration = std::stod((*i)[2]);
+		double	samples = std::stod((*i)[3]);
 		mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "duration: %f", duration);
 		if (duration > 0) {
 			// compute the wind vector
 			double	x, y;
-			x = atof((*i)[0].c_str())/duration;
-			y = atof((*i)[1].c_str())/duration;
+			x = std::stod((*i)[0])/duration;
+			y = std::stod((*i)[1])/duration;
 			mdebug(LOG_DEBUG, MDEBUG_LOG, 0,
 				"wind components: %f, %f", x, y);
 			Vector	v(x, y);
@@ -401,7 +401,7 @@ bool	Averager::have(const time_t timekey, const int interval,
 	if (qr.size() == 0) {
 		return false;
 	}
-	return (0 < atoi((*qr.begin())[0].c_str()));
+	return (0 < std::stoi((*qr.begin())[0]));
 }
 
 bool	Averager::have(const time_t timekey, const int interval) {
@@ -419,7 +419,7 @@ bool	Averager::have(const time_t timekey, const int interval) {
 	BasicQueryResult	qr = queryproc(query);
 	if (qr.size() == 0)
 		return false;
-	return (0 < atoi((*qr.begin())[0].c_str()));
+	return (0 < std::stoi((*qr.begin())[0]));
 }
 
 } /* namespace meteo */

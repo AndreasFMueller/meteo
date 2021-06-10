@@ -144,7 +144,7 @@ static int	main(int argc, char *argv[]) {
 			foreground = true;
 			break;
 		case 'i':
-			interval = atoi(optarg);
+			interval = std::stoi(optarg);
 			switch (interval) {
 			case 300:
 			case 1800:
@@ -161,7 +161,7 @@ static int	main(int argc, char *argv[]) {
 			pidfileprefix = optarg;
 			break;
 		case 'r':
-			naverages = atoi(optarg);
+			naverages = std::stoi(optarg);
 			break;
 		case 'n':
 			average_fake = true;

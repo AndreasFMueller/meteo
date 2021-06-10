@@ -99,7 +99,7 @@ double	Configuration::getDouble(const std::string& xpath, double def) const {
 			xpath.c_str(), def);
 		return def;
 	} else
-		return atof(r.begin()->c_str());
+		return std::stod(*r.begin());
 }
 
 doublelist	Configuration::getDoubleList(const std::string& xpath) const {
@@ -109,7 +109,7 @@ doublelist	Configuration::getDoubleList(const std::string& xpath) const {
 	for (i = r.begin(); i != r.end(); i++) {
 		mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "found %s = %s",
 			xpath.c_str(), i->c_str());
-		result.push_back(atof(i->c_str()));
+		result.push_back(std::stod(*i));
 	}
 	return result;
 }
@@ -121,7 +121,7 @@ int	Configuration::getInt(const std::string& xpath, int def) const {
 			xpath.c_str(), def);
 		return def;
 	} else
-		return atoi(r.begin()->c_str());
+		return std::stoi(*r.begin());
 }
 
 intlist	Configuration::getIntList(const std::string& xpath) const {
@@ -131,7 +131,7 @@ intlist	Configuration::getIntList(const std::string& xpath) const {
 	for (i = r.begin(); i != r.end(); i++) {
 		mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "found %s = %s",
 			xpath.c_str(), i->c_str());
-		result.push_back(atoi(i->c_str()));
+		result.push_back(std::stoi(*i));
 	}
 	return result;
 }

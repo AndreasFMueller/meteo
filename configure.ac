@@ -1,4 +1,4 @@
-AC_PREREQ([2.71])dnl
+AC_PREREQ([2.69])dnl
 AC_REVISION([1.0])dnl
 
 dnl Process this file with autoconf to produce a configure script.

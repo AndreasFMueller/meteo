@@ -98,7 +98,7 @@ static void	readintervals(int argc, char *argv[],
 		// this is the case where we have read the required intervals
 		// from the command line
 		for (; optind < argc; optind++) {
-			switch (int interval = atoi(argv[optind])) {
+			switch (int interval = std::stoi(argv[optind])) {
 			case 60:
 			case 300:
 			case 1800:

@@ -77,7 +77,7 @@ int	SSI_internals::lookup(const std::string& station,
 	}
 
 	// look up the rest of the info
-	return lookup(atoi((*bqr.begin())[0].c_str()));
+	return lookup(std::stoi((*bqr.begin())[0]));
 }
 
 int	SSI_internals::lookup(const int sensorid) {

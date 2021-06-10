@@ -97,7 +97,7 @@ std::vector<time_t>	SunData::from_database(int interval, time_t startkey,
 	// vector
 	std::vector<time_t>	result;
 	for (BasicQueryResult::iterator i = bqr.begin(); i != bqr.end(); i++) {
-		result.push_back(atoi((*i)[0].c_str()));
+		result.push_back(std::stoi((*i)[0]));
 	}
 	
 	// return the result

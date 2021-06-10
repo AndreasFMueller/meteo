@@ -18,7 +18,7 @@
 #include <stdlib.h>
 
 namespace meteo {
-namespace sunriset {
+namespace sunriset {
 
 // main function for sunriset program
 void	main(int argc, char *argv[]) {
@@ -32,7 +32,7 @@ void	main(int argc, char *argv[]) {
 	while (EOF != (c = getopt(argc, argv, "e:s:f:F:V")))
 		switch (c) {
 		case 'e':
-			elevation = atof(optarg);
+			elevation = std::stod(optarg);
 			break;
 		case 's':
 			station = std::string(optarg);

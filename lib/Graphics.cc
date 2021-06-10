@@ -68,7 +68,7 @@ static void	drawChannel(xmlNodePtr x, GraphWindow *gw, const Dataset *ds) {
 		// limit, and use it to draw the nodata
 		std::string	name = xmlGetAttrString(x, "name");
 		std::string	limit = xmlGetAttrString(x, "limit");
-		double	l = atof(limit.c_str());
+		double	l = std::stod(limit);
 
 		// remove all the data below the limit
 		Tdata	ld = ds->getData(name).limit(l);

@@ -134,23 +134,23 @@ void	Timelabel::parse(const std::string& labelstring) {
 	tms.tm_sec = 0;
 	
 	// extract year
-	tms.tm_year = atoi(labelstring.substr(1, 4).c_str()) - 1900;
+	tms.tm_year = std::stoi(labelstring.substr(1, 4)) - 1900;
 	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "parsed year: %d", tms.tm_year);
 
 	// extract remaining fields, depending on level
 	switch (level.getLevel()) {
 	case week:
-		tm_week = atoi(labelstring.substr(5).c_str());
+		tm_week = std::stoi(labelstring.substr(5));
 		t = week2time(tms.tm_year, tm_week);
 		tmp = localtime(&t);
 		memcpy(&tms, tmp, sizeof(tms));
 		break;
 	case hour:
-		tms.tm_hour = atoi(labelstring.substr(9, 2).c_str());
+		tms.tm_hour = std::stoi(labelstring.substr(9, 2));
 	case day:
-		tms.tm_mday = atoi(labelstring.substr(7, 2).c_str());
+		tms.tm_mday = std::stoi(labelstring.substr(7, 2));
 	case month:
-		tms.tm_mon = atoi(labelstring.substr(5, 2).c_str()) - 1;
+		tms.tm_mon = std::stoi(labelstring.substr(5, 2)) - 1;
 		break;
 	case year:
 		break;
@@ -178,9 +178,9 @@ Timelabel::Timelabel(const std::string& datestring, const Level& l) : level(l) {
 	tms.tm_hour = 12; 
 	tms.tm_min = 0; 
 	tms.tm_sec = 0; 
-	tms.tm_mday = atoi(datestring.substr(6, 2).c_str()); 
-	tms.tm_mon = atoi(datestring.substr(4, 2).c_str()); 
-	tms.tm_year = atoi(datestring.substr(0, 4).c_str()); 
+	tms.tm_mday = std::stoi(datestring.substr(6, 2)); 
+	tms.tm_mon = std::stoi(datestring.substr(4, 2)); 
+	tms.tm_year = std::stoi(datestring.substr(0, 4)); 
 	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "%02d/%02d/%04d %02d:%02d:%02d",
 		tms.tm_mday, tms.tm_mon, tms.tm_year,
 		tms.tm_hour, tms.tm_min, tms.tm_sec);
