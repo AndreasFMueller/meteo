@@ -6,6 +6,7 @@
 #include <UdpOutlet.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <mdebug.h>
 #include <netdb.h>
 #include <MeteoException.h>
