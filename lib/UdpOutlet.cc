@@ -4,6 +4,8 @@
  * (c) 2021 Prof Dr Andreas Müller
  */
 #include <UdpOutlet.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include <mdebug.h>
 #include <netdb.h>
 #include <MeteoException.h>
