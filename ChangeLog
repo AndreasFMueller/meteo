@@ -1,4 +1,5 @@
 Release 0.9.20:
+	* fix a typo in UdpOutlet.cc
 	* additional header includes in UdpOutlet.cc
 	* migrate atoi to std::stoi and atof to std::stod (which were not
 	  available back then)

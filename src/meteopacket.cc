@@ -78,7 +78,7 @@ static int	main(int argc, char *argv[]) {
 	// parse command line
 	int	longindex;
 	int	c;
-	while (EOF != (c = getopt_long(argc, argv, "dh?l:s:S:p:",
+	while (EOF != (c = getopt_long(argc, argv, "c:dh?l:s:S:p:",
 		options, &longindex)))
 		switch (c) {
 		case 'c':
