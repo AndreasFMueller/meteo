@@ -48,6 +48,9 @@ user will look like
 
 and for the read/write user:
 
+	mysql> grant select on station to mtp@localhost;
+	mysql> grant select on sensor to mtp@localhost;
+	mysql> grant select on mfield to mtp@localhost;
 	mysql> grant select, insert on sdata to mtp@localhost;
 	mysql> grant select, insert on avg to mtp@localhost;
 	mysql> flush privilges;
