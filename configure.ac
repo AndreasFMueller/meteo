@@ -22,6 +22,12 @@ AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_ARG_VAR(MSGFMT, [name of msgfmt program from gettext package])
 AC_CHECK_PROG(MSGFMT, msgfmt, msgfmt)
+AC_PATH_PROG(XSLTPROC, xsltproc, na)
+if test "${XSLTPROC}" = na
+then
+	AC_MSG_ERROR([xsltproc binary not found])
+fi
+AC_SUBST(XSLTPROC)
 
 dnl Checks for libraries.
 AC_CHECK_LIB(nsl, gethostbyname)

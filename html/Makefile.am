@@ -27,31 +27,31 @@ install-data-local:	html
 	fi
 
 ack.html:	ack.xml
-	xsltproc meteo.xsl $< > $@
+	@XSLTPROC@ meteo.xsl $< > $@
 
 gallery.html:	gallery.xml
-	xsltproc meteo.xsl $< > $@
+	@XSLTPROC@ meteo.xsl $< > $@
 
 prereq.html:	prereq.xml
-	xsltproc meteo.xsl $< > $@
+	@XSLTPROC@ meteo.xsl $< > $@
 
 install.html:	install.xml
-	xsltproc meteo.xsl $< > $@
+	@XSLTPROC@ meteo.xsl $< > $@
 
 util.html:	util.xml
-	xsltproc meteo.xsl $< > $@
+	@XSLTPROC@ meteo.xsl $< > $@
 
 news.html:	news.xml
-	xsltproc meteo.xsl $< > $@
+	@XSLTPROC@ meteo.xsl $< > $@
 
 about.html:	about.xml
-	xsltproc meteo.xsl $< > $@
+	@XSLTPROC@ meteo.xsl $< > $@
 
 config.html:	config.xml
-	xsltproc meteo.xsl $< > $@
+	@XSLTPROC@ meteo.xsl $< > $@
 
 support.html:	support.xml
-	xsltproc meteo.xsl $< > $@
+	@XSLTPROC@ meteo.xsl $< > $@
 
 html-local:	$(HTML)
 
