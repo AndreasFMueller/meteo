@@ -90,20 +90,39 @@ printf(
 "repeats intervals. With no arguments run as a daemon that computes\n"
 "averages whenever all the data from the station can reasonably be expected\n"
 "to have been inserted in the database.\n"
-"  -l logurl       send log messages to this url\n"
-"  -p pidfile      write the process pid to the pidfile\n"
-"  -F              stay in foreground (for debugging)\n"
-"  -s stationname  station name, mandatory\n"
-"  -d              increase debug level\n"
-"  -f conffile     read configuration from conffile\n"
-"  -i interval     compute averages for this interval (300, 1800, 7200 or 86400\n"
-"  -r              number of averages to compute\n"
-"  -n              just tell what you are about to do, don't actually do it\n"
-"  -V              print version and exit\n"
-"  -h, -?          print this help and exit\n"
+"  -a,--all                   force all averages\n"
+"  -l,--logurl=<logurl>       send log messages to this url\n"
+"  -p,--pidfile=<pidfile>     write the process pid to the pidfile\n"
+"  -F,--foreground            stay in foreground (for debugging)\n"
+"  -s,--station=<stationname  station name, mandatory\n"
+"  -d,--debug                 increase debug level\n"
+"  -f,--config=<conffile>     read configuration from conffile\n"
+"  -i,--interval=<interval>   compute averages for this interval (300, 1800,\n"
+"                             7200 or 86400)\n"
+"  -r,--repeats=<repeats>     number of averages to compute\n"
+"  -n,--dryrun                just tell what you are about to do,\n"
+"                             don't actually do it\n"
+"  -V,--version               print version and exit\n"
+"  -h,-?,--help               print this help and exit\n"
 "starttime and endtime have format YYYYMMDDhhmmss\n"
 );
 }
+
+static struct option	options[] = {
+{ "all",		no_argument,		NULL,		'a' },
+{ "config",		required_argument,	NULL,		'f' },
+{ "debug",		no_argument,		NULL,		'd' },
+{ "dryrun",		no_argument,		NULL,		'n' },
+{ "foreground",		no_argument,		NULL,		'F' },
+{ "help",		no_argument,		NULL,		'h' },
+{ "interval",		required_argument,	NULL,		'i' },
+{ "logurl",		required_argument,	NULL,		'l' },
+{ "numavg",		required_argument,	NULL,		'r' },
+{ "pid",		required_argument,	NULL,		'p' },
+{ "station",		required_argument,	NULL,		's' },
+{ "version",		no_argument,		NULL,		'V' },
+{ NULL,			0,			NULL,		 0  }
+};
 
 static int	main(int argc, char *argv[]) {
 	std::string	conffilename(METEOCONFFILE);
@@ -116,7 +135,9 @@ static int	main(int argc, char *argv[]) {
 	std::string	pidfileprefix("/var/run/meteoavg-");
 
 	// parse the command line					
-	while (EOF != (c = getopt(argc, argv, "adf:Fi:l:r:np:Vs:h?")))
+	int	longindex;
+	while (EOF != (c = getopt_long(argc, argv, "adf:Fi:l:r:np:Vs:h?",
+		options, &longindex)))
 		switch (c) {
 		case 'l':
 			if (mdebug_setup("meteoavg", optarg) < 0) {

@@ -54,11 +54,11 @@ XML-formatted data is written to the file or piped into the command
 every minute.
 .SH OPTIONS
 .TP
-.B \-d
+.B \-d,\-\-debug
 increase the debug level by one. Debug messages are written to standard
 error.
 .TP
-.BI \-b dest
+.BI \-b,\-\-backend= dest
 set preference for database backend communication. The 
 .B \-b
 option may appear multiple times. When meteopoll connects to the database
@@ -87,21 +87,21 @@ to write queries to a file that can be later fed into the database and
 .B debug
 to simple send the queries to the debug log.
 .TP
-.BI \-f conffile
+.BI \-f,\-\-config= conffile
 Use 
 .I conffile
 to read the configuration, see 
 .BR meteo.xml (5)
 for the configuration syntax.
 .TP
-.BI \-m mapfile
+.BI \-m,\-\-map= mapfile
 map all data read from the station in XML form to the
 .IR mapfile .
 .TP
-.B \-F
+.B \-F,\-\-foreground
 stay in foreground. Useful during debugging.
 .TP
-.BI \-l logurl
+.BI \-l,\-\-logurl= logurl
 send log messages to the destination described by the 
 .IR logurl .
 Log URLs are of the form 
@@ -114,28 +114,28 @@ See
 .BR meteo (1)
 for details.
 .TP
-.BI \-p pidfile
+.BI \-p,\-\-pidfile= pidfile
 When running in daemon mode, write the process id of the 
 .BR meteopoll (1)
 process to this file. Defaults to
 .IR /var/run/meteopoll-<station>.pid .
 .TP
-.BI \-P port
+.BI \-P,\-\-port= port
 Send RTS2 UDP packets containing station data to this port.
 .TP
-.BI \-s stationname
+.BI \-s,\-\-station= stationname
 Name of the station from which to read data. This argument is mandatory.
 .TP
-.BI \-S servername
+.BI \-S,\-\-server= servername
 Send RTS2 UDP packet to this server.
 The port can be specified using the 
 .B \-P
 option.
 .TP
-.B \-V
+.B \-V,\-\-version
 print version information and exit.
 .TP
-.BI \-x xmloutlet
+.BI \-x,\-\-xml= xmloutlet
 Add 
 .I xmloutlet
 as an outlet specification.

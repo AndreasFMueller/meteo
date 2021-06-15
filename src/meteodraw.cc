@@ -24,6 +24,7 @@
 #include <unistd.h>
 #include <Lock.h>
 #include <MeteoException.h>
+#include <getopt.h>
 
 namespace meteo {
 namespace draw {
@@ -124,23 +125,44 @@ static void	usage(void) {
 "usage: meteodraw [ -dtVmIx ] [ -l logurl ] [ -c dir ] [ -G graph ] \n"
 "    [ -s station ] [ -p prefix ] [ -g graph ] [ -f config ] [ -u url ] \n"
 "    [ -e endtime ] [ -L label ] [ interval ... ]\n"
-"	-d		increase debug level\n"
-"	-t		include timestamp in generated file name\n"
-"	-s stationname	name of the station for which to compute graphs\n"
-"	-V		display version and exit\n"
-"	-I		create graphs only of the last update is more than\n"
-"			the interval length back\n"
-"	-l logfile	write debug to log destionation logurl\n"
-"	-L label	compute the image for the label\n"
-"	-m              write image map info to stdout\n"
-"	-c dir		change directory to dir before writing any image files\n"
-"	-g graph	include only graph (can be given multiple times)\n"
-"	-f config	use configuration file config\n"
-"	-p prefix	store images in files with this prefix\n"
-"	-u url		use this URL prefix for image maps\n"
-"	-e endtime	specify end time of graph\n"
-"	-x		lock processes according to graphs attributes\n");
+"   -d,--debug                  increase debug level\n"
+"   -t,--timestamps             include timestamp in generated file name\n"
+"   -s,--station=<stationname>  name of the station for which to compute\n"
+"                               graphs\n"
+"   -V,--version                display version and exit\n"
+"   -I,--with-new-data-only     create graphs only of the last update is\n"
+"                               more than the interval length back\n"
+"   -l,--logurl=<logfile>       write debug to log destionation logurl\n"
+"   -L,--label=<label>          compute the image for the label\n"
+"   -m,--map                    write image map info to stdout\n"
+"   -c,--chdir=<dir>            change directory to dir before writing any\n"
+"                               image files\n"
+"   -g,--graph=<graph>          include only graph (can be given multiple times)\n"
+"   -f,--config=<config>        use configuration file config\n"
+"   -p,--prefix=<prefix>        store images in files with this prefix\n"
+"   -u,--url=<url>              use this URL prefix for image maps\n"
+"   -e,--endtime=<endtime>      specify end time of graph\n"
+"   -x,--lock                   lock processes according to graphs attributes\n");
 }
+
+static struct option	options[] = {
+{ "debug",			no_argument,		NULL,		'd' },
+{ "timestamps",			no_argument,		NULL,		't' },
+{ "station",			required_argument,	NULL,		's' },
+{ "version",			no_argument,		NULL,		'V' },
+{ "with-new-data-only",		no_argument,		NULL,		'I' },
+{ "logurl",			required_argument,	NULL,		'l' },
+{ "label",			required_argument,	NULL,		'L' },
+{ "map",			no_argument,		NULL,		'm' },
+{ "chdir",			required_argument,	NULL,		'c' },
+{ "graph",			required_argument,	NULL,		'g' },
+{ "config",			required_argument,	NULL,		'f' },
+{ "prefix",			required_argument,	NULL,		'p' },
+{ "url",			required_argument,	NULL,		'u' },
+{ "endtime",			required_argument,	NULL,		'e' },
+{ "lock",			no_argument,		NULL,		'x' },
+{ NULL,				0,			NULL,		 0  }
+};
 
 // draw a graph based on a timelabel
 void	drawlabeled(const std::string& currentgraph, const Timelabel& ti) {
@@ -261,7 +283,9 @@ static int	main(int argc, char *argv[]) {
 	time(&end);
 
 	// parse the command line
-	while (EOF != (c = getopt(argc, argv, "adc:e:f:g:iIl:L:mp:ts:V?u:x")))
+	int	longindex;
+	while (EOF != (c = getopt_long(argc, argv,
+		"adc:e:f:g:iIl:L:mp:ts:V?u:x", options, &longindex)))
 		switch (c) {
 		case '?':
 			usage();

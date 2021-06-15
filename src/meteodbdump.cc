@@ -25,6 +25,7 @@
 #include <unistd.h>
 #include <mdebug.h>
 #include <fstream>
+#include <getopt.h>
 
 namespace meteo {
 namespace dbdump {
@@ -33,15 +34,28 @@ static void	usage(const char *progname) {
 	printf("usage: %s [ options ] tables \n", progname);
 	printf("dump meteo database contents to a file. valid table names are avg and sdata\n");
 	printf("options:\n");
-	printf("  -f <conffile>    read <conffile> on startup instead of the default\n");
-	printf("  -l <logurl>      send log messages to this url instead of stderr\n");
-	printf("  -d               increase debug level\n");
-	printf("  -s <station>     include data for this station (multiple stations allowed\n");
-	printf("  -b <base>        base path name, file namess will be built by\n");
-	printf("  -c <size>        dump data in chunks of size <size> seconds\n");
-	printf("  -h,-?            display this help message and exit\n");
-	printf("  -r               write data raw instead of SQL insert statements\n");
+	printf("  -f,--config=<conffile>  read <conffile> on startup instead of the default\n");
+	printf("  -l,--logurl=<logurl>    send log messages to this url instead of stderr\n");
+	printf("  -d,--debug              increase debug level\n");
+	printf("  -s,--station=<station>  include data for this station\n"
+	       "                          (multiple stations allowed\n");
+	printf("  -b,--base=<base>        base path name, file namess will be built by\n");
+	printf("  -c,--chunksize=<size>   dump data in chunks of size <size> seconds\n");
+	printf("  -h,-?,--help            display this help message and exit\n");
+	printf("  -r,--raw                write data raw instead of SQL insert statements\n");
 }
+
+static struct option	options[] = {
+{ "help",	no_argument,		NULL,		'h' },
+{ "config",	required_argument,	NULL,		'c' },
+{ "logurl",	required_argument,	NULL,		'l' },
+{ "debug",	no_argument,		NULL,		'd' },
+{ "station",	required_argument,	NULL,		's' },
+{ "base",	required_argument,	NULL,		'b' },
+{ "chunksize",	required_argument,	NULL,		'c' },
+{ "raw",	required_argument,	NULL,		'r' },
+{ NULL,		0,			NULL,		 0  }
+};
 
 static void	main(int argc, char *argv[]) {
 	stringlist	stations;
@@ -53,7 +67,9 @@ static void	main(int argc, char *argv[]) {
 	bool	raw = false;
 
 	// parse the command line
-	while (EOF != (c = getopt(argc, argv, "db:l:s:f:c:rh?")))
+	int	longindex;
+	while (EOF != (c = getopt_long(argc, argv, "db:l:s:f:c:rh?",
+		options, &longindex)))
 		switch (c) {
 		case '?':
 		case 'h':

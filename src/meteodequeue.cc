@@ -17,6 +17,7 @@
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
+#include <getopt.h>
 #include <Daemon.h>
 #include <printver.h>
 #include <mdebug.h>
@@ -31,15 +32,25 @@ namespace dequeue {
 static void	usage(void) {
 printf(
 "usage: meteodequeue [ -dFVh? ] [ -l logurl ] [ -p pidfile ] [ -f conffile ]\n"
-" -d             increase debug level\n"
-" -F             stay in foreground (for debuggin)\n"
-" -V             display version and exit\n"
-" -h, -?         display this help text and exit\n"
-" -l logurl      write log messages to this log url (see meteo(1))\n"
-" -p pidfile     write pid to pidfile\n"
-" -c conffile    use conffile, see meteo.xml(5)\n"
+" -d,--debug             increase debug level\n"
+" -F,--foreground        stay in foreground (for debuggin)\n"
+" -V,--version           display version and exit\n"
+" -h,-?,--help           display this help text and exit\n"
+" -l,--logurl=logurl     write log messages to this log url (see meteo(1))\n"
+" -p,--pidfile=pidfile   write pid to pidfile\n"
+" -f,--config=conffile   use conffile, see meteo.xml(5)\n"
 );
 }
+
+static struct option	options[] = {
+{ "logurl",		required_argument,		NULL,	'l' },
+{ "debug",		no_argument,			NULL,	'd' },
+{ "foreground",		no_argument,			NULL,	'F' },
+{ "version",		no_argument,			NULL,	'V' },
+{ "pidfile",		required_argument,		NULL,	'p' },
+{ "config",		required_argument,		NULL,	'f' },
+{ NULL,			0,				NULL,	 0  }
+};
 
 static int	main(int argc, char *argv[]) {
 	int		c, foreground = 0;
@@ -47,7 +58,9 @@ static int	main(int argc, char *argv[]) {
 	std::string	pidfilename("/var/run/meteodequeue.pid");
 
 	// parse command line						
-	while (EOF != (c = getopt(argc, argv, "l:df:Fp:Vh?")))
+	int	longindex;
+	while (EOF != (c = getopt_long(argc, argv, "l:df:Fp:Vh?",
+		options, &longindex)))
 		switch (c) {
 		case 'l':
 			if (mdebug_setup("meteodequeue", optarg) < 0) {

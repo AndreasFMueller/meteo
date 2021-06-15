@@ -25,23 +25,26 @@ contains the label, the sunrise and the sunset time in the form
 HH:MM, or formatted using the format string if specified.
 .SH OPTIONS
 .TP
-.BI \-e elevation
+.BI \-e,\-\-elevation= elevation
 return the time when sun is
 .I elevation
 degrees above the horizon.
 .TP
-.BI \-f configfile
+.BI \-f,\-\-config= configfile
 use the configuration file
 .I configfile
 instead of the default.
 .TP
-.BI \-F format
+.BI \-F,\-\-format= format
 use the format string 
 .I format
 to format the time.
 .TP
-.BI \-V
+.BI \-V,\-\-version
 display the version of meteo and exit.
+.TP
+.BI \-s,\-\-station= stationlabel
+the name of the station for which to compute sun rise times
 
 .SH "SEE ALSO"
 .BR meteo (1),

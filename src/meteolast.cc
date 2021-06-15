@@ -24,12 +24,42 @@
 #include <MeteoException.h>
 #include <Timestamp.h>
 #include <iostream>
+#include <getopt.h>
 
 namespace meteo {
 namespace last {
 
 static void	usage(const char *progname) {
+printf("retrieve recent meteo data from the database\n"
+"usage:\n"
+"%s [ -dxh?+HV ] [ -l logurl ] [ -f conffile ] [ -t time ] [ -w window ] stationname ...\n"
+"options:\n"
+" -d,--debug                 increase debug level\n"
+" -x,--xml                   produce XML format output instead of plain text\n"
+" -h,-?,--help               show this help message and exit\n"
+" -V,--version               show version and exit\n"
+" -f,--config=<confffile>    use <conffile> as configuration file\n"
+" -t,--timekey=<timekey>     retrieve data before unix time spec <timekey>\n"
+" -T,--timestamp=<timestamp> retrieve data before the timestamp <timestamp>\n"
+" -+,--backwards             search backwards in time\n"
+" -w,--window=<secs>         window length in seconds to search\n"
+"\n", progname);
 }
+
+static struct option	options[] = {
+{ "logurl",		required_argument,		NULL,		'l' },
+{ "xmlheader",		no_argument,			NULL,		'H' },
+{ "debug",		no_argument,			NULL,		'd' },
+{ "config",		required_argument,		NULL,		'f' },
+{ "version",		no_argument,			NULL,		'V' },
+{ "help",		no_argument,			NULL,		'h' },
+{ "timestamp",		required_argument,		NULL,		'T' },
+{ "timekey",		required_argument,		NULL,		't' },
+{ "xml",		no_argument,			NULL,		'x' },
+{ "backwards",		no_argument,			NULL,		'+' },
+{ "window",		required_argument,		NULL,		'w' },
+{ NULL,			0,				NULL,		 0  }
+};
 
 static int	main(int argc, char *argv[]) {
 	std::string	conffilename(METEOCONFFILE);
@@ -51,7 +81,9 @@ static int	main(int argc, char *argv[]) {
 	timekey = time(NULL);
 
 	// parse command line
-	while (EOF != (c = getopt(argc, argv, "l:df:Vh?t:T:+w:xH")))
+	int	longindex;
+	while (EOF != (c = getopt_long(argc, argv, "l:df:Vh?t:T:+w:xH",
+		options, &longindex)))
 		switch (c) {
 		case 'l':
 			logurl = optarg;
@@ -75,11 +107,10 @@ static int	main(int argc, char *argv[]) {
 			exit(EXIT_SUCCESS);
 			break;
 		case 'T':
-			do { // creates a block, keeps compiler from complaining
-			     // about skipping ts initialization
+			{
 				Timestamp	ts(optarg);
 				timekey = ts.getTime();
-			} while (0);
+			}
 			break;
 		case 't':
 			timekey = std::stoi(optarg);

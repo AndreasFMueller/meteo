@@ -10,9 +10,18 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
+#include <getopt.h>
 
 namespace meteo {
 namespace label {
+
+static struct option	options[] = {
+{ "timestamp",		no_argument,		NULL,		's' },
+{ "ctime",		no_argument,		NULL,		'c' },
+{ "title",		no_argument,		NULL,		't' },
+{ "label",		no_argument,		NULL,		'L' },
+{ NULL,			0,			NULL,	 	 0  }
+};
 
 static int	main(int argc, char *argv[]) {
 	int	c;
@@ -20,7 +29,9 @@ static int	main(int argc, char *argv[]) {
 		outtitle = false;
 
 	// read the command line
-	while (EOF != (c = getopt(argc, argv, "scLt")))
+	int	longindex;
+	while (EOF != (c = getopt_long(argc, argv, "scLt", options,
+		&longindex)))
 		switch (c) {
 		case 's':
 			// output as timestamp

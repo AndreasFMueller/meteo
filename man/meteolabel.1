@@ -3,11 +3,13 @@
 meteolabel \- compute labels to identify graphs to meteodraw
 .SH SYNOPSIS
 meteolabel [
-.B \-s
+.B \-s,\-\-timestamp
 ] [
-.B \-c
+.B \-c,\-\-ctime
 ] [
-.B \-L
+.B \-t,\-\-title
+] [
+.B \-L,\-\-label
 ]
 .I label
 [
@@ -63,16 +65,19 @@ move backward in time, e.g. the month label m200301 becomes m200212
 
 .SH OPTIONS
 .TP
-.B \-c
+.B \-c,\-\-ctime
 display the central time of the current label in 
 .BR ctime (3)
 format.
 .TP
-.B \-s
+.B \-s,\-\-timestamp
 display the central time of the current label as Unix time in seconds
 since midnight of 1st januar 1970.
 .TP
-.B \-L
+.B \-t,\-\-title
+suitable for a title
+.TP
+.B \-L,\-\-label
 suppress the default display of the label.
 
 .SH "SEE ALSO"

@@ -48,6 +48,7 @@
 #include <signal.h>
 #endif
 #include <sys/resource.h>
+#include <getopt.h>
 
 #define	ALARMTIMEOUT	30
 
@@ -171,20 +172,36 @@ static void	usage(void) {
 	printf(
 "usage: meteopoll [ -dFVh? ] [ -l logurl ] [ -f conffile ] [ -b prefs ] \\\n"
 "       [ -p pidfile ] [ -m mapfile ] [ -x xmlfile ] -s stationname\n"
-"   -d                increase debug level\n"
-"   -F                don't fork (used for debugging)\n"
-"   -V                print version and exit\n"
-"   -h, -?            print this help screen and exit\n"
-"   -f conffile       use conffile, see meteo.xml(5)\n"
-"   -s stationname    let this process connect to station named stationname\n"
-"   -S servername     send RTS2 UDP data packets to this host\n"
-"   -b prefs          add backend preference prefs (one of msgqueue, mysql\n"
-"                     file, debug)\n"
-"   -p pidfile        write the process pid to this file\n"
-"   -P port           use this port for RTS2 udp data packets\n"
-"   -m mapfile        keep current sensor information in mapfile\n"
-"   -x xmlfile        send output to XML file as well\n");
+"   -d,--debug               increase debug level\n"
+"   -F,--foreground          don't fork (used for debugging)\n"
+"   -V,--version             print version and exit\n"
+"   -h,-?,--help             print this help screen and exit\n"
+"   -f,--config=<conffile>   use conffile, see meteo.xml(5)\n"
+"   -s,--station=<station>   let this process connect to station named stationname\n"
+"   -S,--server=<server>     send RTS2 UDP data packets to this host\n"
+"   -b,--backend=<prefs>     add backend preference prefs (one of msgqueue,\n"
+"                            mysql, file, debug)\n"
+"   -p,--pidfile=<pidfile>   write the process pid to this file\n"
+"   -P,--port=<port>         use this port for RTS2 udp data packets\n"
+"   -m,--mapfile=<mapfile>   keep current sensor information in mapfile\n"
+"   -x,--xml=<xmlfile>       send output to XML file as well\n");
 }
+
+static struct option	options[] = {
+{ "backend",		required_argument,	NULL,		'b' },
+{ "config",		required_argument,	NULL,		'f' },
+{ "debug",		no_argument,		NULL,		'd' },
+{ "foreground",		no_argument,		NULL,		'F' },
+{ "help",		no_argument,		NULL,		'x' },
+{ "logurl",		required_argument,	NULL,		'l' },
+{ "mapfile",		required_argument,	NULL,		'm' },
+{ "pidfile",		required_argument,	NULL,		'p' },
+{ "port",		required_argument,	NULL,		'P' },
+{ "server",		required_argument,	NULL,		'S' },
+{ "station",		required_argument,	NULL,		's' },
+{ "xml",		required_argument,	NULL,		'x' },
+{ NULL,			0,			NULL,		 0  }
+};
 
 static int	main(int argc, char *argv[]) {
 	std::string	conffile(METEOCONFFILE);
@@ -198,7 +215,9 @@ static int	main(int argc, char *argv[]) {
 
 	// parse command line
 	int	c;
-	while (EOF != (c = getopt(argc, argv, "dl:f:m:s:b:p:VFh?x:S:P:")))
+	int	longindex;
+	while (EOF != (c = getopt_long(argc, argv, "dl:f:m:s:b:p:VFh?x:S:P:",
+		options, &longindex)))
 		switch (c) {
 		case 'd':
 			debug++;

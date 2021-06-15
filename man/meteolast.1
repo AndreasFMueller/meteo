@@ -32,43 +32,42 @@ in the plain text format. Only lines/elements for which there is
 data in the database are printed.
 .SH OPTIONS
 .TP
-.B \-d
+.B \-d,\-\-debug
 increase the debug level by one. Debug messages are written to standard
 error.
 .TP
-.B \-x
+.B \-x,\-\-xml
 produce XML format instead of plain text.
 .TP
-.B \-E
-output in english units.
-.TP
-.B \-M
-output in metric units (the default).
-.TP
-.B \-H
+.B \-H,\-\-xmlheader
 add an XML header and a root element <meteolist>
 to the output, so that the output is legal XML
 .TP
-.B \-f conffile
+.BI \-f,\-\-config= conffile
 read configuration from
 .IR conffile ,
 usually something like
 .IR /usr/local/etc/meteo.xml .
 .TP
-.B \-V
+.B \-V,\-\-version
 print version and exit
 .TP
-.B \-h
-.B \-?
+.B \-h,\-?,\-\-help
 print a help message and exit
 .TP
-.BI \-t time
+.BI \-t,\-\-timekey= time
 look for the last entry before time 
-.IR time .
+.IR time ,
+specified as a unix time.
 Together with the \-+ option, looks for the first entry after time
 .IE time .
 .TP
-.B \-+
+.BI \-T,\-\-timestamp= time
+similar to the
+.B \-t
+option, but using timestamp format instead of unix time.
+.TP
+.B \-+,\-\-backwards
 instead of search for the last record before a given time, look for
 the first record after that time. Using this option without
 the 
@@ -80,7 +79,7 @@ will look into the future, for which normally no data is available yet.
 Suggestions for algorithms that allow to add such data to the database
 are highly welcome, though.
 .TP
-.B \-w window
+.B \-w,\-\-window= window
 The program performs a query of the form
 .I select max(timekey) from stationdata where station = 'Altendor' and timekey ...
 Such a query would normally be extremely slow, as the restriction

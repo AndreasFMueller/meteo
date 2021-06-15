@@ -16,9 +16,19 @@
 #include <Sun.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <getopt.h>
 
 namespace meteo {
 namespace sunriset {
+
+static struct option	options[] = {
+{ "elevation",		required_argument,		NULL,		'e' },
+{ "station",		required_argument,		NULL,		's' },
+{ "config",		required_argument,		NULL,		'f' },
+{ "format",		required_argument,		NULL,		'F' },
+{ "version",		no_argument,			NULL,		'V' },
+{ NULL,			0,				NULL,		 0  }
+};
 
 // main function for sunriset program
 void	main(int argc, char *argv[]) {
@@ -29,7 +39,9 @@ void	main(int argc, char *argv[]) {
 	int		c;
 
 	// parse command line
-	while (EOF != (c = getopt(argc, argv, "e:s:f:F:V")))
+	int	longindex;
+	while (EOF != (c = getopt_long(argc, argv, "e:s:f:F:V", options,
+		&longindex)))
 		switch (c) {
 		case 'e':
 			elevation = std::stod(optarg);

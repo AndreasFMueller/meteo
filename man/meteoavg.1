@@ -51,11 +51,11 @@ The timestamps must be specified as strings of length 14 in the format
 .IR YYYYMMDDhhmmss .
 .SH OPTIONS
 .TP
-.B \-d
+.B \-d,\-\-debug
 increase the debug level by one. Debug messages are written to standard
 error.
 .TP
-.B \-a
+.B \-a,\-\-all
 force recomputation of all averages in a given range. If this option
 is not set, 
 .BR meteoavg (1)
@@ -66,44 +66,44 @@ you suspect some of the averages in the
 .I averages
 table to be incorrect.
 .TP
-.BI \-f conffile
+.BI \-f,\-\-config= conffile
 Use 
 .I conffile
 to read the configuration, see 
 .BR meteo.xml (5)
 for the configuration syntax.
 .TP
-.B \-F
+.B \-F,\-\-foreground
 stay in foreground even when running in daemon mode. Useful during
 debugging.
 .TP
-.BI \-i interval
+.BI \-i,\-\-interval= interval
 Compute averages over samples in intervals of length
 .IR interval .
 Must be one of 300, 1800, 7200 or 86400. In command line mode, this option
 is mandatory. In daemon mode, averages for all intervals are computed whenever
 they are due.
 .TP
-.BI \-l logurl
+.BI \-l,\-\-logurl= logurl
 send log messages to the destination described by the
 .IR logurl . See
 .BR meteo (1)
 for a description of possible forms of log URLs.
 .TP
-.BI \-p pidfile
+.BI \-p,\-\-pidfile= pidfile
 When running in daemon mode, write the process id of the 
 .BR meteoavg (1)
 process to this file. Defaults to
 .IR /var/run/meteoavg-<station>.pid .
 .TP
-.BI \-r repeats
+.BI \-r,\-\-numavg repeats
 Only useful if exactly one timestamp has been specified. Indicates the
 number of intervals for which averages should be computed.
 .TP
-.BI \-s stationname
+.BI \-s,\-\-station= stationname
 Name of the station for which averages should be computed.
 .TP
-.B \-n 
+.B \-n,\-\-dryrun
 Do everything you are supposed to, but don't write anything into
 the 
 .I averages

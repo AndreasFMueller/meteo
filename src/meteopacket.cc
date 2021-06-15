@@ -21,12 +21,13 @@ printf(
 "usage:\n"
 "meteopacket [ -dh? ] [ -l logurl ] [ -P port ] [ -c config ] -S servername -s stationame\n"
 "options:\n"
-"  -d                  enable debugging\n"
-"  -h,-?               show this help message and exit\n"
-"  -c <config>         use the configfile <config>\n"
-"  -l <logurl>         send log messages to <logurl>\n"
-"  -P <port>           the port to send the packet to\n"
-"  -S <servername>     the name or IP address of the serer\n");
+"  -d,--debug                   enable debugging\n"
+"  -h,-?,--help                 show this help message and exit\n"
+"  -c,--config=<config>         use the configfile <config>\n"
+"  -l,--logurl=<logurl>         send log messages to <logurl>\n"
+"  -P,--port=<port>             the port to send the packet to\n"
+"  -S,--server=<servername>     the name or IP address of the server\n"
+"  -s,--station=<stationname>   the name weather station\n");
 }
 
 static struct option	options[] = {

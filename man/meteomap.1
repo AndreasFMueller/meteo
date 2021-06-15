@@ -3,6 +3,9 @@
 meteomap \- display the contents of the map file
 .SH SYNOPSIS
 meteomap
+[
+.B -dh?
+]
 .I mapfile
 .SH DESCRIPTION
 Since most such programs do not read their input in an atomic operation,
@@ -20,6 +23,14 @@ It is possible to use other programs, like
 provided they are used with a block size of at least the length
 of the map file. Currently, an 8k map file is allocated independently
 of the station type.
+
+.SH OPTIONS
+.TP
+.B \-d,\-\-debug
+increase the debug level
+.TP
+.B \-h,\-?,\-\-help
+show a help message and exit
 
 .SH "SEE ALSO"
 .BR meteo (1),
