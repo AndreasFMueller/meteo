@@ -116,5 +116,5 @@ testdump:	meteodbdump
 # test the packet program
 #
 testpacket:	meteopacket
-	DYLD_BIND_AT_LAUNCH=1 ./meteopacket --debug --station=altendorf \
+	DYLD_BIND_AT_LAUNCH=1 ./meteopacket --debug --station=Gurin \
 		--server=miranda --config=meteo-test.xml

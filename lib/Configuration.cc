@@ -565,5 +565,41 @@ stringlist	Configuration::getGraphStringList(const std::string& graphname,
 	}
 }
 
+std::string     Configuration::getXPath(const xmlNodePtr node) const {
+	std::string	result((char *)node->name);
+	if (node->type == XML_ATTRIBUTE_NODE) {
+		result = std::string("@") + result;
+	}
+	result = std::string("/") + result;
+	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "name: %s", result.c_str());
+	xmlNodePtr	p = node;
+	while (NULL != p->parent) {
+		p = p->parent;
+		if (p->properties) {
+			std::string	props;
+			props = std::string("[@")
+				+ std::string((char *)p->properties->name)
+				+ std::string("='")
+				+ std::string((char *)p->properties->children->content)
+				+ std::string("']");
+			result = props + result;
+		}
+		if (p->name) {
+			switch (p->type) {
+			case XML_ATTRIBUTE_NODE:
+				result = std::string("@")
+					+ std::string((char *)p->name)
+					+ result;
+				break;
+			case XML_TEXT_NODE:
+			case XML_ELEMENT_NODE:
+				result = std::string((char *)p->name) + result;
+				break;
+			}
+		}
+		result = std::string("/") + result;
+	}
+	return result;
+}
 
 } /* namespace meteo */

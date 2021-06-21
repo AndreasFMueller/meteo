@@ -109,19 +109,19 @@
     <speed>19200</speed>
     <sensors>
       <sensor name="console">
-        <field>temperature</field>
-        <field>humidity</field>
-        <field>barometer</field>
+        <field rts2name="rtInsideTemp">temperature</field>
+        <field rts2name="rtInsideHum">humidity</field>
+        <field rts2name="rtBarCurr">barometer</field>
         <field>battery</field>
         <field>sunrise</field>
         <field>sunset</field>
       </sensor>
       <sensor name="iss">
-        <field>temperature</field>
-        <field>humidity</field>
+        <field rts2name="rtOutsideTemp">temperature</field>
+        <field rts2name="rtOutsideHum">humidity</field>
         <field>rain</field>
-        <field>rainrate</field>
-        <field>wind</field>
+        <field rts2name="rtRainRate">rainrate</field>
+        <field rts2name="rtWind">wind</field>
         <field>solar</field>
         <field>uv</field>
         <field>transmitter</field>

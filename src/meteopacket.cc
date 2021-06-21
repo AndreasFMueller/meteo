@@ -136,15 +136,14 @@ static int	main(int argc, char *argv[]) {
 	UdpOutlet	*outlet = new UdpOutlet(stationname, servername, port);
 
 	// add data to the packet
-	send(outlet, "inside", "temperature", 22.5, "C");
-	send(outlet, "inside", "humidity", 62.5, "%");
-	send(outlet, "inside", "barometer", 1020, "hPa");
-	send(outlet, "outside", "temperature", 2.5, "C");
-	send(outlet, "outside", "humidity", 82.5, "%");
-	send(outlet, "outside", "wind", 15., "m/s");
-	send(outlet, "outside", "winddir", 47, "deg");
-	send(outlet, "outside", "windgust", 25., "m/s");
-	send(outlet, "outside", "rainrate", 3., "mm/h");
+	send(outlet, "iss", "temperature", 2.5, "C");
+	send(outlet, "iss", "humidity", 82.5, "%");
+	send(outlet, "iss", "wind", 15., "m/s");
+	send(outlet, "iss", "winddir", 47, "deg");
+	send(outlet, "iss", "rainrate", 3., "mm/h");
+	send(outlet, "console", "temperature", 22.5, "C");
+	send(outlet, "console", "humidity", 62.5, "%");
+	send(outlet, "console", "barometer", 1020, "hPa");
 
 	// send a packet
 	outlet->flush(0);

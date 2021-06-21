@@ -87,6 +87,7 @@ public:
 	// we want to perform operations on data according to the XML tree
 	const xmlNodePtr	getNode(const std::string& xpath) const;
 	const std::list<xmlNodePtr>	getNodeList(const std::string& xpath) const;
+	std::string	getXPath(const xmlNodePtr node) const;
 };
 
 } /* namespace meteo */

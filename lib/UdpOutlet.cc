@@ -20,6 +20,7 @@
 #include <Field.h>
 #include <set>
 #include <string.h>
+#include <Configuration.h>
 
 namespace meteo {
 
@@ -44,31 +45,40 @@ UdpOutlet::UdpOutlet(const std::string& stationname,
 	: _stationname(stationname), _hostname(hostname), _port(port) {
 	setup();
 
-	// inside sensor
-	_names.insert(std::make_pair(fqname("console", "temperature"),
-		std::string("rtInsideTemp")));
-	_names.insert(std::make_pair(fqname("console", "humidity"),
-		std::string("rtInsideHum")));
-	_names.insert(std::make_pair(fqname("console", "barometer"),
-		std::string("rtBaroCurr")));
+	// build the Xpath for the configuration
+	std::string	xpath = stringprintf("/meteo/station[@name='%s']/sensors/sensor/field[string-length(@rts2name)>0]/@rts2name", stationname.c_str());
+	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "search xpath: %s", xpath.c_str());
 
-	// outside sensor
-	_names.insert(std::make_pair(fqname("iss", "temperature"),
-		std::string("rtOutsideTemp")));
-	_names.insert(std::make_pair(fqname("iss", "humidity"),
-		std::string("rtOutsideHum")));
+	// get the configuration
+	std::list<xmlNodePtr> 	l = Configuration().getNodeList(xpath);
+	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "found %d paths", l.size());
 
-	// wind
-	_names.insert(std::make_pair(fqname("iss", "wind"),
-		std::string("rtWindAvgSpeed")));
-	_names.insert(std::make_pair(fqname("iss", "windgust"),
-		std::string("rtWindSpeed")));
-	_names.insert(std::make_pair(fqname("iss", "winddir"),
-		std::string("rtWindDir")));
+	// iterate through the paths
+	std::list<xmlNodePtr>::const_iterator	i;
+	for (i = l.begin(); i != l.end(); i++) {
+		std::string	xp = Configuration().getXPath(*i);
+		mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "processing path '%s'",
+			xp.c_str());
 
-	// rain
-	_names.insert(std::make_pair(fqname("iss", "rainrate"),
-		std::string("rtRainRate")));
+		std::string	rts2name(Configuration().getString(xp, ""));
+		mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "rts2name: %s",
+			rts2name.c_str());
+
+		std::string	sensor = Configuration().getString(
+					xp + std::string("/../../@name"), "");
+		mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "sensor = %s", sensor.c_str());
+
+		std::string	fieldname = Configuration().getString(
+					xp + std::string("/.."), "");
+		mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "fieldname = %s",
+			fieldname.c_str());
+
+		std::string	fq = fqname(sensor, fieldname);
+		mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "fq = %s", fq.c_str());
+
+		_names.insert(std::make_pair(fq, rts2name));
+	}
+	
 	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "%d names prepared", _names.size());
 }
 
