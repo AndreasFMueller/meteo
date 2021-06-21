@@ -1,4 +1,7 @@
 Release 0.9.20:
+	* we really should make the mapping for the RTS2 packet configurable,
+	  for the time being we just use hard wired names that should work
+	  with the vantage pro
 	* fix missing grants in db/README
 	* fix a typo in UdpOutlet.cc
 	* additional header includes in UdpOutlet.cc
