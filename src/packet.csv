@@ -1,0 +1,8 @@
+iss,temperature,2.5,C
+iss,humidity,82.5,%
+iss,wind,15.,m/s
+iss,winddir,47,deg
+iss,rainrate,3.,mm/hg
+console,temperature,22.5,C
+console,humidity,62.5,%
+console,barometer,1020,hPa

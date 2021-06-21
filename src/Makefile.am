@@ -6,6 +6,8 @@
 METEOCONFFILE = \"@METEOCONFFILE@\"
 AM_CPPFLAGS = -DMETEOCONFFILE=$(METEOCONFFILE) @LIBXML_CFLAGS@
 
+EXTRA_DIST = packet.csv
+
 LDADD = ../lib/libmeteo.la
 
 bin_PROGRAMS =								\
@@ -118,3 +120,5 @@ testdump:	meteodbdump
 testpacket:	meteopacket
 	DYLD_BIND_AT_LAUNCH=1 ./meteopacket --debug --station=Gurin \
 		--server=miranda --config=meteo-test.xml
+	DYLD_BIND_AT_LAUNCH=1 ./meteopacket --debug --station=Gurin \
+		--server=miranda --config=meteo-test.xml --file=packet.csv

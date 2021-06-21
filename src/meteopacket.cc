@@ -12,6 +12,10 @@
 #include <SensorStationInfo.h>
 #include <UdpOutlet.h>
 #include <FQField.h>
+#include <Format.h>
+#include <vector>
+#include <fstream>
+#include <sstream>
 
 namespace meteo {
 namespace packet {
@@ -24,15 +28,47 @@ printf(
 "  -d,--debug                   enable debugging\n"
 "  -h,-?,--help                 show this help message and exit\n"
 "  -c,--config=<config>         use the configfile <config>\n"
+"  -f,--file=<csvfile>          data to use for sending\n"
 "  -l,--logurl=<logurl>         send log messages to <logurl>\n"
 "  -P,--port=<port>             the port to send the packet to\n"
 "  -S,--server=<servername>     the name or IP address of the server\n"
 "  -s,--station=<stationname>   the name weather station\n");
 }
 
+class entry {
+public:
+	std::string	sensor;
+	std::string	field;
+	double		value;
+	std::string	unit;
+	entry(const std::string _sensor, const std::string& _field,
+		double _value, const std::string& _unit)
+		: sensor(_sensor), field(_field), value(_value), unit(_unit) {
+	}
+	std::string	toString() const {
+		return stringprintf("%s,%s,%d,%s",
+			sensor.c_str(), field.c_str(), value, unit.c_str());
+	}
+};
+
+std::vector<std::string>	split(const std::string& s, char delimiter) {
+	std::vector<std::string>	result;
+	std::string	s2 = s;
+	while (1) {
+		size_t	i = s2.find(delimiter);
+		if (i == std::string::npos) {
+			result.push_back(s2);
+			return result;
+		}
+		result.push_back(s2.substr(0, i));
+		s2 = s2.substr(i+1);
+	}
+}
+
 static struct option	options[] = {
 {	"config",	required_argument,	NULL,		'c' },
 {	"debug",	no_argument,		NULL,		'd' },
+{	"file",		required_argument,	NULL,		'f' },
 {	"help",		no_argument,		NULL,		'h' },
 {	"logurl",	required_argument,	NULL,		'l' },
 {	"port",		required_argument,	NULL,		'p' },
@@ -70,16 +106,54 @@ static void	send(Outlet *outlet,
 	outlet->send(sensorid, fieldid, value, unit);
 }
 
+static void	send(Outlet *outlet, const entry& entry) {
+	send(outlet, entry.sensor, entry.field, entry.value, entry.unit);
+}
+
+class packetconfig : public std::list<entry> {
+public:
+	packetconfig(const std::string& filename) {
+		std::istream	*in = new std::ifstream(filename.c_str());
+		while (!in->eof()) {
+			char	buffer[1024];
+			in->getline(buffer, sizeof(buffer)-1);
+			std::vector<std::string>	v = split(std::string(buffer), ',');
+			if (v.size() == 4) {
+				double	d = std::stod(v[2]);
+				push_back(entry(v[0], v[1], d, v[3]));
+			}
+		}
+		mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "%d entries", size());
+		delete in;
+	}
+	packetconfig() { }
+	void	sendall(Outlet *outlet) {
+		std::list<entry>::const_iterator	i;
+		for (i = begin(); i != end(); i++) {
+			send(outlet, *i);
+		}
+	}
+	std::string	toString() const {
+		std::ostringstream	out;
+		std::list<entry>::const_iterator	i;
+		for (i = begin(); i != end(); i++) {
+			out << i->toString() << std::endl;
+		}
+		return out.str();
+	}
+};
+
 static int	main(int argc, char *argv[]) {
 	std::string	conffile(METEOCONFFILE);
 	std::string	logurl("file:///-");
 	std::string	servername;
+	std::string	csvfile;
 	int	port = 5002;
 
 	// parse command line
 	int	longindex;
 	int	c;
-	while (EOF != (c = getopt_long(argc, argv, "c:dh?l:s:S:p:",
+	while (EOF != (c = getopt_long(argc, argv, "c:df:h?l:s:S:p:",
 		options, &longindex)))
 		switch (c) {
 		case 'c':
@@ -87,6 +161,9 @@ static int	main(int argc, char *argv[]) {
 			break;
 		case 'd':
 			debug++;
+			break;
+		case 'f':
+			csvfile = std::string(optarg);
 			break;
 		case 'h':
 		case '?':
@@ -136,20 +213,32 @@ static int	main(int argc, char *argv[]) {
 	UdpOutlet	*outlet = new UdpOutlet(stationname, servername, port);
 
 	// add data to the packet
-	send(outlet, "iss", "temperature", 2.5, "C");
-	send(outlet, "iss", "humidity", 82.5, "%");
-	send(outlet, "iss", "wind", 15., "m/s");
-	send(outlet, "iss", "winddir", 47, "deg");
-	send(outlet, "iss", "rainrate", 3., "mm/h");
-	send(outlet, "console", "temperature", 22.5, "C");
-	send(outlet, "console", "humidity", 62.5, "%");
-	send(outlet, "console", "barometer", 1020, "hPa");
+	packetconfig	*entries = NULL;
+	if (csvfile.size() > 0) {
+		mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "open csv file %s",
+			csvfile.c_str());
+		entries = new packetconfig(csvfile);
+	} else {
+		entries = new packetconfig();
+		entries->push_back(entry("iss", "temperature", 2.5, "C"));
+		entries->push_back(entry("iss", "humidity", 82.5, "%"));
+		entries->push_back(entry("iss", "wind", 15., "m/s"));
+		entries->push_back(entry("iss", "winddir", 47, "deg"));
+		entries->push_back(entry("iss", "rainrate", 3., "mm/h"));
+		entries->push_back(entry("console", "temperature", 22.5, "C"));
+		entries->push_back(entry("console", "humidity", 62.5, "%"));
+		entries->push_back(entry("console", "barometer", 1020, "hPa"));
+	}
+
+	// sending all the entries
+	entries->sendall(outlet);
 
 	// send a packet
 	outlet->flush(0);
 
 	return EXIT_SUCCESS;
 }
+
 
 } // namespace packet
 } // namespace meteo
