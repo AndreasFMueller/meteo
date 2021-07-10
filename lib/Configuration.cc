@@ -595,6 +595,9 @@ std::string     Configuration::getXPath(const xmlNodePtr node) const {
 			case XML_ELEMENT_NODE:
 				result = std::string((char *)p->name) + result;
 				break;
+			default:
+				// ignore all other elements
+				break;
 			}
 		}
 		result = std::string("/") + result;
