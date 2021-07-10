@@ -122,6 +122,11 @@ process to this file. Defaults to
 .TP
 .BI \-P,\-\-port= port
 Send RTS2 UDP packets containing station data to this port.
+See also the
+.B \-S
+or
+.B \-\-server
+options below.
 .TP
 .BI \-s,\-\-station= stationname
 Name of the station from which to read data. This argument is mandatory.
@@ -131,6 +136,14 @@ Send RTS2 UDP packet to this server.
 The port can be specified using the 
 .B \-P
 option.
+Note that to use this option, sensor configuration in
+.BR meteo.xml (5)
+must include 
+.I rts2sensor
+attributes to identify inside and outside sensors 
+and
+.I rts2name
+attributes to specify the attribute names to be used in the RTS2 packet.
 .TP
 .B \-V,\-\-version
 print version information and exit.
