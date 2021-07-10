@@ -21,11 +21,15 @@ namespace meteo {
  */
 class UdpOutlet : public Outlet {
 	std::string	_stationname;
+	std::string	_inside_sensor_name;
+	std::string	_outside_sensor_name;
 	std::string	_hostname;
 	unsigned short	_port;
 	std::map<std::string,std::string>	_names;
 	std::string	fqname(const std::string& sensorname,
 		const std::string& fieldname) const;
+	std::string	getSensorname(const std::string& stationname,
+		const std::string& rts2sensor);
 public:
 	const std::string&	stationname() const { return _stationname; }
 	const std::string&	hostname() const { return _hostname; }

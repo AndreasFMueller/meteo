@@ -49,3 +49,4 @@ meteodbmigrate
 meteofixtimestamps
 meteopacket
 libmeteo.la
+doc/uds10

@@ -34,6 +34,19 @@ std::string	UdpOutlet::fqname(const std::string& sensorname,
 	return result;
 }
 
+std::string	UdpOutlet::getSensorname(const std::string& stationname,
+			const std::string& rts2sensor) {
+	// build the Xpath for the configuration of the sensor
+	std::string	xpath = stringprintf("/meteo/station[@name='%s']"
+		"/sensors/sensor[@rts2sensor='%s']/@name",
+		stationname.c_str(), rts2sensor.c_str());
+
+	std::string	 result = Configuration().getString(xpath, "");
+	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "found sensor '%s' for '%s'",
+		result.c_str(), rts2sensor.c_str());
+	return result;
+}
+
 /**
  * \brief Construct a UDP outlet class instance
  *
@@ -45,7 +58,21 @@ UdpOutlet::UdpOutlet(const std::string& stationname,
 	: _stationname(stationname), _hostname(hostname), _port(port) {
 	setup();
 
-	// build the Xpath for the configuration
+	// get inside and outside sensor names
+	_inside_sensor_name = getSensorname(stationname, "inside");
+	if (_inside_sensor_name.size() == 0) {
+		std::string	msg("inside sensor not configured");
+		mdebug(LOG_ERR, MDEBUG_LOG, 0, "%s", msg.c_str());
+		throw MeteoException(msg, "");
+	}
+	_outside_sensor_name = getSensorname(stationname, "outside");
+	if (_outside_sensor_name.size() == 0) {
+		std::string	msg("outside sensor not configured");
+		mdebug(LOG_ERR, MDEBUG_LOG, 0, "%s", msg.c_str());
+		throw MeteoException(msg, "");
+	}
+
+	// build the Xpath for the configuration of the fields
 	std::string	xpath = stringprintf("/meteo/station[@name='%s']/sensors/sensor/field[string-length(@rts2name)>0]/@rts2name", stationname.c_str());
 	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "search xpath: %s", xpath.c_str());
 
@@ -142,9 +169,9 @@ void	UdpOutlet::flush(const time_t timekey) {
 	// we need a way to resolve the names
 	StationInfo	si(stationname());
 	int	stationid = si.getId();
-	SensorStationInfo	ossi(stationname(), "console");
+	SensorStationInfo	ossi(stationname(), _outside_sensor_name);
 	int	outsidesensorid = ossi.getId();
-	SensorStationInfo	issi(stationname(), "iss");
+	SensorStationInfo	issi(stationname(), _inside_sensor_name);
 	int	insidesensorid = issi.getId();
 	mdebug(LOG_DEBUG, MDEBUG_LOG, 0,
 		"station=%d, outside sensor=%d, inside sensor = %d", stationid,
@@ -169,10 +196,10 @@ void	UdpOutlet::flush(const time_t timekey) {
 				std::string	key = stationname();
 				key.append(".");
 				if (i->sensorid == outsidesensorid) {
-					key.append("console");
+					key.append(_inside_sensor_name);
 				}
 				if (i->sensorid == insidesensorid) {
-					key.append("iss");
+					key.append(_outside_sensor_name);
 				}
 				key.append(".");
 				key.append(name);
@@ -197,8 +224,9 @@ void	UdpOutlet::flush(const time_t timekey) {
 
 	// inspect the packet
 	std::string	packet = out.str();
-	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "packet length: %d", packet.size());
-	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "packet content: '%s'",
+	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "Rts2 packet length: %d",
+		packet.size());
+	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "Rts2 packet content: '%s'",
 		packet.c_str());
 
 	// send the packet
@@ -209,7 +237,10 @@ void	UdpOutlet::flush(const time_t timekey) {
 			strerror(errno));
 //		throw MeteoException(msg, "");
 	}
-	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "packet sent");
+	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "Rts2 packet sent");
+
+	// flush the outlet
+	Outlet::flush(timekey);
 }
 
 } // namespace meteo

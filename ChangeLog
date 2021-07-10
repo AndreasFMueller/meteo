@@ -1,4 +1,7 @@
 Release 0.9.20:
+	* add some more debug messages
+	* fix bug: missing Outlet::flush() at the end of UdpOutlet::flush()
+	* make inside/outside configurable in meteo-test.xml
 	* make packet contents for the meteopacket test program configurable
 	* make rts packet attributes configurable
 	* we really should make the mapping for the RTS2 packet configurable,

@@ -110,11 +110,13 @@ static void	loop(const std::string& station,
 	}
 
 	// if we have an XML file, create a XmlOutlet with a delegate
-	for (stringlist::const_iterator i = xmloutlets.begin(); i != xmloutlets.end(); i++) {
+	for (stringlist::const_iterator i = xmloutlets.begin();
+		i != xmloutlets.end(); i++) {
 		if (!i->empty()) {
-			mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "preparing XML outlet to %s",
-				i->c_str());
-			XmlOutlet *xmloutlet = XmlOutletFactory::get(station, *i);
+			mdebug(LOG_DEBUG, MDEBUG_LOG, 0,
+				"preparing XML outlet to %s", i->c_str());
+			XmlOutlet *xmloutlet = XmlOutletFactory::get(station,
+				*i);
 			s->addOutlet(xmloutlet); // takes ownership
 		}
 	}
@@ -124,6 +126,8 @@ static void	loop(const std::string& station,
 
 	// add udp outlet
 	if (!servername.empty()) {
+		mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "configure Rts2 server '%s'",
+			servername.c_str());
 		s->addOutlet(new UdpOutlet(station, servername, port));
 	}
 
