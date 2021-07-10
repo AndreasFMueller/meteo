@@ -1,4 +1,6 @@
 Release 0.9.20:
+	* add information about rts2name and rts2sensor attributes to
+	  meteo.xml(5) manual page
 	* improve error handling for sendto call
 	* add some more debug messages
 	* fix bug: missing Outlet::flush() at the end of UdpOutlet::flush()

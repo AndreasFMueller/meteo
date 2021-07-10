@@ -224,21 +224,21 @@ sensors:
 <type>Vantage</type>
 <sensors>
 .in +4
-<sensor name="iss">
+<sensor name="iss" rts2sensor="outside">
 .in +4
-<field>temperature</sensor>
-<field>humidity</sensor>
-<field>rain</sensor>
-<field>wind</sensor>
+<field rts2name="rtOutsideTemp">temperature</sensor>
+<field rts2name="rtOutsideHum">humidity</sensor>
+<field rts2name="rtRain">rain</sensor>
+<field rts2name="rtWind">wind</sensor>
 <field>solar</sensor>
 <field>uv</sensor>
 .in -4
 </sensor>
-<sensor name="console">
+<sensor name="console" rts2sensor="inside">
 .in +4
-<field>temperature</sensor>
-<field>humidity</sensor>
-<field>barometer</sensor>
+<field rts2name="rtInsideTemp">temperature</sensor>
+<field rts2name="rtInsideHum">humidity</sensor>
+<field rts2name="rtBaroCurr">barometer</sensor>
 .in -4
 </sensor>
 .in -4
@@ -250,6 +250,24 @@ sensors:
 
 Please read the file doc/sensors for details about sensors and a
 complete list of sensors known to meteo.
+
+The attributes
+.I rts2sensor
+and
+.I rts2name
+are used only when sending UDP packets to an RTS2 server.
+The values of the
+.I rts2sensor
+attribute can be
+.I inside
+or
+.IR outside ,
+identifying which sensor is to be considered as the inside or outside
+sensor.
+The 
+.I rts2name
+attribute specifies the name to use in the RTS2 packet for the value
+of this field.
 
 .SH AVERAGES
 
