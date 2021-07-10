@@ -1,4 +1,5 @@
 Release 0.9.20:
+	* improve error handling for sendto call
 	* add some more debug messages
 	* fix bug: missing Outlet::flush() at the end of UdpOutlet::flush()
 	* make inside/outside configurable in meteo-test.xml

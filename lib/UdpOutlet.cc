@@ -230,12 +230,17 @@ void	UdpOutlet::flush(const time_t timekey) {
 		packet.c_str());
 
 	// send the packet
-	if (sendto(_socket, packet.data(), packet.size(), 0,
-		(struct sockaddr *)&_destination,
-		sizeof(_destination)) != packet.size()) {
-		std::string	msg = stringprintf("cannot send: %s",
+	ssize_t	rc = sendto(_socket, packet.data(), packet.size(), 0,
+		(struct sockaddr *)&_destination, sizeof(_destination));
+	if (rc < 0) {
+		std::string msg = stringprintf("cannot send Rts2 packet: %s",
 			strerror(errno));
-//		throw MeteoException(msg, "");
+		mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "%s", msg.c_str());
+	}
+	if (packet.size() != (unsigned int)rc) {
+		std::string	msg = stringprintf("wrong number of bytes sent:"
+			" %lu != %ld", packet.size(), rc);
+		mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "%s", msg.c_str());
 	}
 	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "Rts2 packet sent");
 
