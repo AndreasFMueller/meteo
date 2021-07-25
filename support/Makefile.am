@@ -5,7 +5,8 @@
 #
 # $Id: Makefile.am,v 1.9 2004/05/08 22:07:17 afm Exp $
 #
-noinst_DATA = rc.meteo
+noinst_DATA = rc.meteo \
+	meteopoll.service meteodequeue.service meteoavg.service
 EXTRA_DIST = meteojob meteooverview meteodbmigrate How_to_migrate	\
 	How_to_migrate2 README $(noinst_DATA) 				\
 	meteo StartupParameters.plist

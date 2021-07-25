@@ -8,36 +8,12 @@ CXXFLAGS="-g -Wall -Wshadow  -Wpointer-arith -Wcast-align -Winline"
 
 export CXXFLAGS CFLAGS
 
-if [ webserver = `uname -n` ]
-then
-        CFLAGS="-g -Wall -pedantic -Wshadow  -Wpointer-arith -Wcast-align -Winline -Wmissing-prototypes -Wmissing-declarations -Wnested-externs"
-        CXXFLAGS="-g -Wall -Wshadow  -Wpointer-arith -Wcast-align -Winline"
-        export CFLAGS CXXFLAGS
-        basedir=/srv/www/vhosts/meteo.othello.ch/htdocs
-        ./configure --with-browser-dir=${basedir}/browser/ \
-                -with-html-dir=${basedir}/
-        exit
-fi
-
-if [ timon = `uname -n` ]
-then
-        PATH=/usr/local/mysql/bin:$PATH
-        export PATH
-        CFLAGS="-g -Wall -pedantic -Wshadow  -Wpointer-arith -Wcast-align -Winline -Wmissing-prototypes -Wmissing-declarations -Wnested-externs"
-        CXXFLAGS="-g -Wall -Wshadow  -Wpointer-arith -Wcast-align -Winline"
-        export CFLAGS CXXFLAGS
-        basedir=/usr/local/apache/htdocs/meteo.othello.ch
-        ./configure --with-browser-dir=${basedir}/meteo/ \
-                -with-html-dir=${basedir}/
-        exit
-fi
-
 case `uname` in
 	Linux)
-		# defaults I use on SuSE 8.2
+		# defaults I use on Raspi OS
 		./configure						\
-			--with-html-dir=/srv/www/htdocs/meteo		\
-			--with-browser-dir=/srv/www/htdocs/browser
+			--with-html-dir=/var/www/html/meteo		\
+			--with-browser-dir=/var/www/html/meteo/browser
 		;;
 	Darwin)
 		# make sure mysql_config is on the PATH

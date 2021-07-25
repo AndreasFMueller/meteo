@@ -27,6 +27,9 @@ insert into station(name, id, timezone, offset, longitude, latitude, altitude)
 -- Frauenfeld: a cabled VantagePro Plus 
 insert into station(name, id, timezone, offset, longitude, latitude, altitude)
 	values ('Frauenfeld', 3, 'MET', 3600, 8.9, 47.55, 477);
+-- Altendorf2:	a VantagePro 2
+insert into station(name, id, timezone, offset, longitude, latitude, altitude)
+	values ('Altendorf2', 4, 'MET', 3600, 47.18, 8.81, 610);
 
 create table if not exists sensor (
 	name		varchar(60) not null,
@@ -49,6 +52,9 @@ insert into sensor (name, id, stationid) values ('soil1', 6, 2);
 -- Frauenfeld is again an ordinary VantagePro Plus with only console and iss
 insert into sensor (name, id, stationid) values ('console', 7, 3);
 insert into sensor (name, id, stationid) values ('iss', 8, 3);
+-- The new VantagePro station in Altendorf
+insert into sensor (name, id, stationid) values ('console', 9, 4);
+insert into sensor (name, id, stationid) values ('iss', 10, 4);
 
 drop table if exists mfield;
 create table mfield (

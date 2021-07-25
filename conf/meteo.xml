@@ -18,16 +18,17 @@
     database holds data for the stations in Gurin and Altendorf)
   -->
   <database>
-    <hostname>localhost</hostname>
-    <dbname>meteo</dbname>
+    <hostname>ferdinand</hostname>
+    <dbname>meteonew</dbname>
+    <port>3307</port>
     <user>meteo</user>
-    <password>public</password>
+    <password>Public-4711</password>
     <writer>meteoupdate</writer>
-    <writerpassword>m57cwrt</writerpassword>
+    <writerpassword>Private-4711</writerpassword>
     <!-- the msgqueue tag is required if the meteodequeue process is used,
          which is highly recommended. Make sure the file referenced here
 	 exists, as it is needed by SysV IPC to generate a msgqueue id. -->
-    <msgqueue>/tmp/meteodb-queue</msgqueue>
+    <msgqueue>/usr/local/etc/meteodb-queue</msgqueue>
     <!-- the updatefile tag is only necessary if the database updates
          cannot be sent to a database directly. Use the file generated
 	 by this directive to update the database off line. -->
@@ -104,7 +105,65 @@
   </station>
 
   <station name="Gurin">
-    <url>file:///dev/ttyS1</url>
+    <url>file:///dev/ttyUSB0</url>
+    <url>tcp://vantagepro2.othello.ch:10001</url>
+    <type>VantagePro</type>
+    <speed>19200</speed>
+    <sensors>
+      <sensor name="console">
+        <field rts2name="rtInsideTemp">temperature</field>
+        <field rts2name="rtInsideHum">humidity</field>
+        <field rts2name="rtBarCurr">barometer</field>
+        <field>battery</field>
+        <field>sunrise</field>
+        <field>sunset</field>
+      </sensor>
+      <sensor name="iss">
+        <field rts2name="rtOutsideTemp">temperature</field>
+        <field rts2name="rtOutsideHum">humidity</field>
+        <field>rain</field>
+        <field rts2name="rtRainRate">rainrate</field>
+        <field rts2name="rtWind">wind</field>
+        <field>solar</field>
+        <field>uv</field>
+        <field>transmitter</field>
+      </sensor>
+    </sensors>
+    <averages>
+      <sensor name="console">
+	<average name="temperature" base="temperature" operator="avg"/>
+	<average name="temperature_min" base="temperature" operator="min"/>
+	<average name="temperature_max" base="temperature" operator="max"/>
+	<average name="humidity" base="humidity" operator="avg"/>
+	<average name="humidity_min" base="humidity" operator="min"/>
+	<average name="humidity_max" base="humidity" operator="max"/>
+	<average name="barometer" base="barometer" operator="avg"/>
+	<average name="barometer_min" base="barometer" operator="min"/>
+	<average name="barometer_max" base="barometer" operator="max"/>
+	<average name="battery" base="battery" operator="avg"/>
+	<average name="sunrise" base="sunrise" operator="avg"/>
+	<average name="sunset" base="sunset" operator="avg"/>
+      </sensor>
+      <sensor name="iss">
+	<average name="temperature" base="temperature" operator="avg"/>
+	<average name="temperature_min" base="temperature" operator="min"/>
+	<average name="temperature_max" base="temperature" operator="max"/>
+	<average name="humidity" base="humidity" operator="avg"/>
+	<average name="humidity_min" base="humidity" operator="min"/>
+	<average name="humidity_max" base="humidity" operator="max"/>
+	<average name="wind" base="wind" operator="wind"/>
+	<average name="windgust" base="windgust" operator="max"/>
+	<average name="solar" base="solar" operator="avg"/>
+	<average name="uv" base="uv" operator="avg"/>
+	<average name="rain" base="rain" operator="sum"/>
+	<average name="rainrate" base="rainrate" operator="avg"/>
+	<average name="transmitter" base="transmitter" operator="avg"/>
+      </sensor>
+    </averages>
+  </station>
+
+  <station name="Altendorf2">
+    <url>tcp://vantagepro2.othello.ch:10001</url>
     <type>VantagePro</type>
     <speed>19200</speed>
     <sensors>
@@ -931,6 +990,354 @@
       <channels>
 	<query>
 	  <select name="b">Gurin.console.battery</select>
+	</query>
+	<channel color="#7f7fff" type="curve" scale="left" name="b"/>
+	<channel color="#e6e6e6" type="nodata" name="b"/>
+      </channels>
+    </graph>
+
+    <graph name="Altendorf2.temperature-new" offset="3600"
+	height="300" width="600" bgcolor="#ffffff" fgcolor="#000000">
+      <!-- label and axis definitions -->
+      <leftlabel align="center">Temperatur grad C</leftlabel>
+      <rightlabel align="center">relative Humidity %</rightlabel>
+      <leftaxis type="dynamic" maxname="tt" minname="dd" min="-100" max="100"
+	origin="0" maxtickcount="20"
+	first="-100" 
+	last="100" step="10" format="%.1f" ticks="yes" gridlines="yes"/>
+      <rightaxis min="0" max="100" first="0" last="100" step="20" format="%3.0f"
+        ticks="yes" gridlines="no"/>
+      <!-- the graphwindow tag defines the area inside the image where the
+	   data will be plotted -->
+      <graphwindow llx="55" lly="19" urx="545" ury="293"/>
+
+      <!-- the channels contains the query definitions that tell meteodraw
+	   how to retrieve the data from the database, and give it symbolic
+	   names, and thq channel tags that describe how the data should
+	   be plotted -->
+      <channels>
+	<!-- 
+	  the query tag describes how data has to be retrived and modified
+	  before graphing.
+	-->
+	<query>
+	  <!-- give certain data sets in the DB a symbolic name -->
+	  <select name="t">Altendorf2.iss.temperature</select>
+	  <select name="tmax">Altendorf2.iss.temperature_max</select>
+	  <select name="tmin">Altendorf2.iss.temperature_min</select>
+	  <select name="h">Altendorf2.iss.humidity</select>
+	  <select name="hmax">Altendorf2.iss.humidity_max</select>
+	  <select name="hmin">Altendorf2.iss.humidity_min</select>
+	  <!-- perform some arithmetic on the data sets, give the result
+	       again a symbolic name -->
+	  <data name="tt">
+	    <function name="floor" limit="-50">
+	      <function name="ceil" limit="50">
+		<value name="t"/>
+	      </function>
+	    </function>
+	  </data>
+	  <data name="dewpointmin">
+	    <function2 name="dewpoint">
+	      <value name="hmin"/>
+	      <value name="tmin"/>
+	    </function2>
+	  </data>
+	  <data name="dewpointmax">
+	    <function2 name="dewpoint">
+	      <value name="hmax"/>
+	      <value name="tmax"/>
+	    </function2>
+	  </data>
+	  <data name="dewpoint">
+	    <function2 name="dewpoint">
+	      <value name="h"/>
+	      <value name="t"/>
+	    </function2>
+	  </data>
+	  <data name="dd">
+	    <function name="floor" limit="-50">
+	      <value name="dewpoint"/>
+	    </function>
+	  </data>
+	</query>
+
+	<!-- draw graphs for the datasets as specified in the previous tags -->
+	<channel color="#aaaaff" type="range" scale="left"
+	  namelower="dewpointmin" nameupper="dewpointmax"/>
+	<channel color="#0000ff" type="curve" scale="left" name="dewpoint"/>
+	<channel color="#ffaaaa" type="range" scale="left"
+	  namelower="tmin" nameupper="tmax"/>
+	<channel color="#654321" type="curve" scale="left" name="tt"/>
+	<channel color="#dddddd" type="nodata" name="t"/>
+
+      </channels>
+    </graph>
+
+    <!-- Temperature graph -->
+    <graph name="Altendorf2.temperature" offset="3600"
+	height="144" width="500" bgcolor="#ffffff" fgcolor="#000000">
+      <leftlabel align="center">Temperature (deg C)</leftlabel>
+      <leftaxis type="static" min="-15" max="35"
+	first="-10" last="30" step="10" format="%.0f"
+	ticks="yes" gridlines="yes"/>
+      <graphwindow llx="55" lly="19" urx="455" ury="139"/>
+      <channels>
+	<query>
+	  <select name="t">Altendorf2.iss.temperature</select>
+	  <select name="tmin">Altendorf2.iss.temperature_min</select>
+	  <select name="tmax">Altendorf2.iss.temperature_max</select>
+	  <select name="h">Altendorf2.iss.humidity</select>
+	  <select name="hmin">Altendorf2.iss.humidity_min</select>
+	  <select name="hmax">Altendorf2.iss.humidity_max</select>
+	  <data name="dewpoint">
+	    <function2 name="dewpoint">
+	      <value name="h"/>
+	      <value name="t"/>
+	    </function2>
+	  </data>
+	  <data name="dewpointmax">
+	    <function2 name="dewpoint">
+	      <value name="hmax"/>
+	      <value name="tmax"/>
+	    </function2>
+	  </data>
+	  <data name="dewpointmin">
+	    <function2 name="dewpoint">
+	      <value name="hmin"/>
+	      <value name="tmin"/>
+	    </function2>
+	  </data>
+	</query>
+	<channel color="#d2d2ff" type="range" scale="left"
+	  nameupper="dewpointmax" namelower="dewpointmin"/>
+	<channel color="#6464ff" type="curve" scale="left" name="dewpoint"/>
+	<channel color="#ffb4b4" type="range" scale="left"
+	  nameupper="tmax" namelower="tmin"/>
+	<channel color="#b40000" type="curve" scale="left" name="t"/>
+	<channel color="#e6e6e6" type="nodata" name="t"/>
+      </channels>
+    </graph>
+
+    <!-- inside Temperature graph -->
+    <graph name="Altendorf2.temperature_inside" offset="3600"
+	height="144" width="500" bgcolor="#ffffff" fgcolor="#000000">
+      <leftlabel align="center">Temperature (deg C)</leftlabel>
+      <leftaxis type="static" min="-15" max="35"
+	first="-10" last="30" step="10" format="%.0f"
+	ticks="yes" gridlines="yes"/>
+      <graphwindow llx="55" lly="19" urx="455" ury="139"/>
+      <channels>
+	<query>
+	  <select name="t">Altendorf2.console.temperature</select>
+	  <select name="tmin">Altendorf2.console.temperature_min</select>
+	  <select name="tmax">Altendorf2.console.temperature_max</select>
+	  <select name="h">Altendorf2.console.humidity</select>
+	  <select name="hmin">Altendorf2.console.humidity_min</select>
+	  <select name="hmax">Altendorf2.console.humidity_max</select>
+	  <data name="dewpoint">
+	    <function2 name="dewpoint">
+	      <value name="h"/>
+	      <value name="t"/>
+	    </function2>
+	  </data>
+	  <data name="dewpointmax">
+	    <function2 name="dewpoint">
+	      <value name="hmax"/>
+	      <value name="tmax"/>
+	    </function2>
+	  </data>
+	  <data name="dewpointmin">
+	    <function2 name="dewpoint">
+	      <value name="hmin"/>
+	      <value name="tmin"/>
+	    </function2>
+	  </data>
+	</query>
+	<channel color="#d2d2ff" type="range" scale="left"
+	  nameupper="dewpointmax" namelower="dewpointmin"/>
+	<channel color="#6464ff" type="curve" scale="left" name="dewpoint"/>
+	<channel color="#ffb4b4" type="range" scale="left"
+	  nameupper="tmax" namelower="tmin"/>
+	<channel color="#b40000" type="curve" scale="left" name="t"/>
+	<channel color="#e6e6e6" type="nodata" name="t"/>
+	<channel color="#ff0000" type="sun" station="Altendorf2"/>
+      </channels>
+    </graph>
+
+    <!-- Pressure -->
+    <graph name="Altendorf2.pressure" offset="3600"
+	height="144" width="500" bgcolor="#ffffff" fgcolor="#000000">
+      <leftlabel align="center">Pressure (hPa)</leftlabel>
+      <leftaxis type="static" min="830" max="890"
+	first="830" last="890" step="10" format="%.0f"
+	ticks="yes" gridlines="yes"/>
+      <graphwindow llx="55" lly="19" urx="455" ury="139"/>
+      <channels>
+	<query>
+	  <select name="p">Altendorf2.console.barometer</select>
+	  <select name="pmin">Altendorf2.console.barometer_max</select>
+	  <select name="pmax">Altendorf2.console.barometer_min</select>
+	</query>
+	<channel color="#d2d2ff" type="range" scale="left"
+	  nameupper="pmax" namelower="pmin"/>
+	<channel color="#7f7fff" type="curve" scale="left" name="p"/>
+	<channel color="#e6e6e6" type="nodata" name="p"/>
+      </channels>
+    </graph>
+
+    <!-- Wind -->
+    <graph name="Altendorf2.wind" offset="3600"
+	height="144" width="500" bgcolor="#ffffff" fgcolor="#000000">
+      <leftlabel align="bottom">Speed (m/s)</leftlabel>
+      <rightlabel align="top">Azimut (deg)</rightlabel>
+      <leftaxis type="static" min="0" max="25"
+	first="0" last="15" step="5" format="%.0f"
+	ticks="yes" gridlines="yes"/>
+      <rightaxis type="static" min="-540" max="360"
+	first="0" last="360" step="180" format="%.0f"
+	ticks="yes" gridlines="yes"/>
+      <graphwindow llx="55" lly="19" urx="455" ury="139"/>
+      <channels>
+	<query>
+	  <select name="azi">Altendorf2.iss.winddir</select>
+	  <select name="v">Altendorf2.iss.wind</select>
+	  <select name="vmax">Altendorf2.iss.windgust</select>
+	</query>
+	<!-- note that there are some cultural differences with the wind
+	     letters below. In Switzerland, Nordwind means wind _from_ the
+	     north, which is wind with azimut 180deg. In other places, the
+	     letters may be interpreted just the other way round, so you
+	     will prefer to use letters="NESW" (pointed out by Mark Trettin)
+	  -->
+	<channel type="windbackground" scale="right"
+	  northcolor="#e0e0ff" southcolor="#ffe0e0"
+	  westcolor="#e0ffe0" eastcolor="#ffffc8"
+	  letters="SWNE" />
+	<channel color="#6464ff" type="curve" scale="right" name="azi"/>
+	<channel color="#006400" type="histogram" scale="left" name="vmax"/>
+	<channel color="#00ff00" type="histogram" scale="left" name="v"/>
+	<channel color="#ffffff" type="lowdata" name="vmax" limit="0.1"/>
+	<channel color="#e6e6e6" type="nodata" name="azi"/>
+      </channels>
+    </graph>
+
+    <!-- Radiation -->
+    <graph name="Altendorf2.radiation" offset="3600"
+	height="144" width="500" bgcolor="#ffffff" fgcolor="#000000">
+      <leftlabel align="center">Solar Radiation (M/m2)</leftlabel>
+      <rightlabel align="center">UV index</rightlabel>
+      <leftaxis type="static" min="0" max="1200"
+	first="0" last="1200" step="200" format="%.0f"
+	ticks="yes" gridlines="yes"/>
+      <leftaxis interval="86400" type="static" min="0" max="600"
+	first="0" last="600" step="100" format="%.0f"
+	ticks="yes" gridlines="yes"/>
+      <rightaxis type="static" min="0" max="12"
+	first="0" last="12" step="2" format="%.0f"
+	ticks="yes" gridlines="no"/>
+      <rightaxis interval="86400" type="static" min="0" max="6"
+	first="0" last="6" step="1" format="%.0f"
+	ticks="yes" gridlines="no"/>
+      <graphwindow llx="55" lly="19" urx="455" ury="139"/>
+      <channels>
+	<query>
+	  <select name="solar">Altendorf2.iss.solar</select>
+	  <select name="uv">Altendorf2.iss.uv</select>
+	</query>
+	<channel color="#c8b400" type="histogram" scale="left" name="solar"/>
+	<channel color="#6400c8" type="curve" scale="right" name="uv"/>
+	<channel color="#e6e6e6" type="nodata" name="solar"/>
+      </channels>
+    </graph>
+
+    <!-- Rain -->
+    <graph name="Altendorf2.rain" offset="3600"
+	height="144" width="500" bgcolor="#ffffff" fgcolor="#000000">
+      <leftlabel align="center">Precipitation (mm)</leftlabel>
+      <rightlabel align="center">Total rain (mm)</rightlabel>
+      <leftaxis interval="300" type="static" min="0" max="6"
+	first="0" last="6" step="1" format="%.0f"
+	ticks="yes" gridlines="yes"/>
+      <leftaxis interval="1800" type="static" min="0" max="10"
+	first="0" last="10" step="2" format="%.0f"
+	ticks="yes" gridlines="yes"/>
+      <leftaxis type="static" min="0" max="30"
+	first="0" last="30" step="10" format="%.0f"
+	ticks="yes" gridlines="yes"/>
+      <rightaxis type="dynamic" minname="totalrain" maxname="totalrain"
+	origin="0" maxtickcount="10" step="10" ticks="yes" gridlines="no"
+	format="%3.0f" />
+      <graphwindow llx="55" lly="19" urx="455" ury="139"/>
+      <channels>
+	<query>
+	  <select name="rain">Altendorf2.iss.rain</select>
+	  <data name="totalrain">
+	    <function name="accumulate">
+	      <value name="rain"/>
+	    </function>
+	  </data>
+	</query>
+	<channel color="#0000ff" type="histogram" scale="left" name="rain"/>
+	<channel color="#00ffff3f" type="curve" scale="right" name="totalrain"/>
+	<channel color="#f3f3f33f" type="nodata" name="rain"/>
+      </channels>
+    </graph>
+
+    <!-- humidity graph -->
+    <graph name="Altendorf2.humidity" offset="3600"
+	height="144" width="500" bgcolor="#ffffff" fgcolor="#000000">
+      <leftlabel align="center">relavite Humdity (%)</leftlabel>
+      <leftaxis type="static" min="0" max="100"
+	first="0" last="100" step="20" format="%.0f"
+	ticks="yes" gridlines="yes"/>
+      <graphwindow llx="55" lly="19" urx="455" ury="139"/>
+      <channels>
+	<query>
+	  <select name="h">Altendorf2.iss.humidity</select>
+	  <select name="hmin">Altendorf2.iss.humidity_max</select>
+	  <select name="hmax">Altendorf2.iss.humidity_min</select>
+	</query>
+	<channel color="#d2d2ff" type="range" scale="left"
+	  nameupper="hmax" namelower="hmin"/>
+	<channel color="#7f7fff" type="curve" scale="left" name="h"/>
+	<channel color="#e6e6e6" type="nodata" name="h"/>
+      </channels>
+    </graph>
+
+
+    <!-- humidity_inside graph -->
+    <graph name="Altendorf2.humidity_inside" offset="3600"
+	height="144" width="500" bgcolor="#ffffff" fgcolor="#000000">
+      <leftlabel align="center">relavite Humdity (%)</leftlabel>
+      <leftaxis type="static" min="0" max="100"
+	first="0" last="100" step="20" format="%.0f"
+	ticks="yes" gridlines="yes"/>
+      <graphwindow llx="55" lly="19" urx="455" ury="139"/>
+      <channels>
+	<query>
+	  <select name="h">Altendorf2.console.humidity</select>
+	  <select name="hmin">Altendorf2.console.humidity_max</select>
+	  <select name="hmax">Altendorf2.console.humidity_min</select>
+	</query>
+	<channel color="#d2d2ff" type="range" scale="left"
+	  nameupper="hmax" namelower="hmin"/>
+	<channel color="#7f7fff" type="curve" scale="left" name="h"/>
+	<channel color="#e6e6e6" type="nodata" name="h"/>
+      </channels>
+    </graph>
+
+    <!-- console battery graph -->
+    <graph name="Altendorf2.battery" offset="3600"
+	height="144" width="500" bgcolor="#ffffff" fgcolor="#000000">
+      <leftlabel align="center">Battery voltage (V)</leftlabel>
+      <leftaxis type="static" min="0" max="5"
+	first="0" last="5" step="1" format="%.0f"
+	ticks="yes" gridlines="yes"/>
+      <graphwindow llx="55" lly="19" urx="455" ury="139"/>
+      <channels>
+	<query>
+	  <select name="b">Altendorf2.console.battery</select>
 	</query>
 	<channel color="#7f7fff" type="curve" scale="left" name="b"/>
 	<channel color="#e6e6e6" type="nodata" name="b"/>

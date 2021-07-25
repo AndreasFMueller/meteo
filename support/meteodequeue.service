@@ -1,0 +1,8 @@
+[Unit]
+Description=weather station data record dequeuer
+
+[Service]
+ExecStart=/usr/local/bin/meteodequeue -l syslog:local0 -F
+
+[Install]
+WantedBy=multi-user.target

@@ -1,4 +1,6 @@
 Release 0.9.20:
+	* add Altendorf2 station to configuration files
+	* add systemd configuration files
 	* add information about rts2name and rts2sensor attributes to
 	  meteo.xml(5) manual page
 	* improve error handling for sendto call
