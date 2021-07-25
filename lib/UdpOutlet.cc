@@ -104,9 +104,21 @@ UdpOutlet::UdpOutlet(const std::string& stationname,
 		mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "fq = %s", fq.c_str());
 
 		_names.insert(std::make_pair(fq, rts2name));
+
+		// handle the wind name specially
+		if (rts2name != std::string("rtWind")) 
+			continue;
+		mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "add keys for winddir/gust");
+		_names.insert(std::make_pair(fq + "dir", rts2name + "Dir"));
+		_names.insert(std::make_pair(fq + "gust", rts2name + "Gust"));
 	}
 	
 	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "%d names prepared", _names.size());
+	std::map<std::string, std::string>::const_iterator	n;
+	for (n = _names.begin(); n != _names.end(); n++) {
+		mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "%s -> %s", n->first.c_str(),
+			n->second.c_str());
+	}
 }
 
 /**
@@ -122,6 +134,7 @@ UdpOutlet::~UdpOutlet() {
 void	UdpOutlet::setup() {
 	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "setting up connection to %s:%hu",
 		hostname().c_str(), port());
+	memset(&_destination, 0, sizeof(_destination));
 	// try the hostname being an address
 	if (INADDR_NONE == (_destination.sin_addr.s_addr
 		= inet_addr(hostname().c_str()))) {
@@ -144,6 +157,9 @@ void	UdpOutlet::setup() {
 	// set the port number
 	_destination.sin_port = htons(_port);
 	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "port: %u", _port);
+
+	// set the address family
+	_destination.sin_family = AF_INET;
 
 	// create a socket
 	_socket = socket(AF_INET, SOCK_DGRAM, 0);
@@ -188,36 +204,42 @@ void	UdpOutlet::flush(const time_t timekey) {
 	std::set<int>::iterator	j;
 	std::string	separator;
 	for (j = sensorids.begin(); j != sensorids.end(); j++) {
+		mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "working on sensor id %d", *j);
 		SensorStationInfo	sensor(*j);
 		Field	f;
 		for (i = batch.begin(); i != batch.end(); i++) {
-			if (i->sensorid == *j) {
-				std::string	name = f.getName(i->fieldid);
-				std::string	key = stationname();
-				key.append(".");
-				if (i->sensorid == outsidesensorid) {
-					key.append(_inside_sensor_name);
-				}
-				if (i->sensorid == insidesensorid) {
-					key.append(_outside_sensor_name);
-				}
-				key.append(".");
-				key.append(name);
-				mdebug(LOG_DEBUG, MDEBUG_LOG, 0,
-					"field name: '%s', key: '%s'",
-					name.c_str(), key.c_str());
+			mdebug(LOG_DEBUG, MDEBUG_LOG, 0,
+				"batch sensorid=%d,fieldid=%d,value=%f",
+				i->sensorid, i->fieldid, i->value);
+			if (i->sensorid != *j) {
+				mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "wrong sensor");
+				continue;
+			}
+			std::string	name = f.getName(i->fieldid);
+			std::string	key = stationname();
+			key.append(".");
+			if (i->sensorid == outsidesensorid) {
+				key.append(_outside_sensor_name);
+			}
+			if (i->sensorid == insidesensorid) {
+				key.append(_inside_sensor_name);
+			}
+			key.append(".");
+			key.append(name);
+			mdebug(LOG_DEBUG, MDEBUG_LOG, 0,
+				"field name: '%s', key: '%s'",
+				name.c_str(), key.c_str());
 
-
-				std::map<std::string,std::string>::const_iterator n = _names.find(key);
-				if (n != _names.end()) {
-					out << separator;
-					separator = ",";
-					out << n->second << "=" << i->value;
-				} else {
-					mdebug(LOG_ERR, MDEBUG_LOG, 0,
-						"key %s not found",
-						key.c_str());
-				}
+			std::map<std::string,std::string>::const_iterator n
+				= _names.find(key);
+			if (n != _names.end()) {
+				out << separator;
+				separator = ",";
+				out << n->second << "=" << i->value;
+			} else {
+				mdebug(LOG_ERR, MDEBUG_LOG, 0,
+					"key %s not found",
+					key.c_str());
 			}
 		}
 	}

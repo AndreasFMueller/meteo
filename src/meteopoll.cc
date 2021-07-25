@@ -196,7 +196,7 @@ static struct option	options[] = {
 { "config",		required_argument,	NULL,		'f' },
 { "debug",		no_argument,		NULL,		'd' },
 { "foreground",		no_argument,		NULL,		'F' },
-{ "help",		no_argument,		NULL,		'x' },
+{ "help",		no_argument,		NULL,		'h' },
 { "logurl",		required_argument,	NULL,		'l' },
 { "mapfile",		required_argument,	NULL,		'm' },
 { "pidfile",		required_argument,	NULL,		'p' },
@@ -209,7 +209,7 @@ static struct option	options[] = {
 
 static int	main(int argc, char *argv[]) {
 	std::string	conffile(METEOCONFFILE);
-	std::string	logurl("file:///-");	// logging to stderr
+	std::string	logurl("file:///-");	// default logging to stderr
 	std::string	station, mapfilename;
 	stringlist	xmloutlets;
 	stringlist	preferences;
@@ -220,8 +220,10 @@ static int	main(int argc, char *argv[]) {
 	// parse command line
 	int	c;
 	int	longindex;
+	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "parsing command line options");
 	while (EOF != (c = getopt_long(argc, argv, "dl:f:m:s:b:p:VFh?x:S:P:",
-		options, &longindex)))
+		options, &longindex))) {
+		mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "processing option '%c'", c);
 		switch (c) {
 		case 'd':
 			debug++;
@@ -249,7 +251,7 @@ static int	main(int argc, char *argv[]) {
 			break;
 		case 'V':
 			fprintver(stdout);
-			exit(EXIT_SUCCESS);
+			return EXIT_SUCCESS;
 			break;
 		case 'F':
 			allowfork = false;
@@ -257,7 +259,7 @@ static int	main(int argc, char *argv[]) {
 		case 'h':
 		case '?':
 			usage();
-			exit(EXIT_SUCCESS);
+			return EXIT_SUCCESS;
 		case 'm':
 			mapfilename = std::string(optarg);
 			break;
@@ -269,6 +271,7 @@ static int	main(int argc, char *argv[]) {
 				"option %c not implemented", c);
 			break;
 		}
+	}
 
 	// set up logging
 	mdebug_setup("meteopoll", logurl.c_str());
@@ -401,7 +404,7 @@ static int	main(int argc, char *argv[]) {
 	} while (!giveup);
 
 	// child exited ok, so we do the same
-	exit(EXIT_SUCCESS);
+	return EXIT_SUCCESS ;
 }
 
 } // namespace poll
@@ -414,11 +417,10 @@ static int	main(int argc, char *argv[]) {
 //			already
 int	main(int argc, char *argv[]) {
 	try {
-		meteo::poll::main(argc, argv);
+		return meteo::poll::main(argc, argv);
 	} catch (meteo::MeteoException& me) {
 		fprintf(stderr, "MeteoException in meteopoll: %s/%s\n",
 			me.getReason().c_str(), me.getAddinfo().c_str());
-		exit(EXIT_FAILURE);
 	}
-	exit(EXIT_SUCCESS);
+	return EXIT_FAILURE;
 }

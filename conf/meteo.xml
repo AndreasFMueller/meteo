@@ -110,7 +110,7 @@
     <type>VantagePro</type>
     <speed>19200</speed>
     <sensors>
-      <sensor name="console">
+      <sensor name="console" rts2sensor="inside">
         <field rts2name="rtInsideTemp">temperature</field>
         <field rts2name="rtInsideHum">humidity</field>
         <field rts2name="rtBarCurr">barometer</field>
@@ -118,7 +118,7 @@
         <field>sunrise</field>
         <field>sunset</field>
       </sensor>
-      <sensor name="iss">
+      <sensor name="iss" rts2sensor="outside">
         <field rts2name="rtOutsideTemp">temperature</field>
         <field rts2name="rtOutsideHum">humidity</field>
         <field>rain</field>
@@ -167,7 +167,7 @@
     <type>VantagePro</type>
     <speed>19200</speed>
     <sensors>
-      <sensor name="console">
+      <sensor name="console" rts2sensor="inside">
         <field rts2name="rtInsideTemp">temperature</field>
         <field rts2name="rtInsideHum">humidity</field>
         <field rts2name="rtBarCurr">barometer</field>
@@ -175,10 +175,10 @@
         <field>sunrise</field>
         <field>sunset</field>
       </sensor>
-      <sensor name="iss">
+      <sensor name="iss" rts2sensor="outside">
         <field rts2name="rtOutsideTemp">temperature</field>
         <field rts2name="rtOutsideHum">humidity</field>
-        <field>rain</field>
+        <field rts2name="rtRain">rain</field>
         <field rts2name="rtRainRate">rainrate</field>
         <field rts2name="rtWind">wind</field>
         <field>solar</field>
