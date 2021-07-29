@@ -1,4 +1,6 @@
 Release 0.9.20:
+	* fix typos in service scripts
+	* fix a typo in QueryProcessor.cc
 	* fix bug in address creation
 	* fix wind interpretation for rts2 packets
 	* add Altendorf2 station to configuration files
