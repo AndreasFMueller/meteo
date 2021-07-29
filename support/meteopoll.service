@@ -3,7 +3,7 @@ Description=weather station interface program
 
 [Service]
 ExecStart=/usr/local/bin/meteopoll -l syslog:local0 -F -s Altendorf2 -b msgqueue
-Resatrt=always
+Restart=always
 
 [Install]
 WantedBy=multi-user.target

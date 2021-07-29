@@ -3,7 +3,7 @@ Description=weather station data averaging service
 
 [Service]
 ExecStart=/usr/local/bin/meteoavg -l syslog:local0 -F -s Altendorf2 
-Resatrt=always
+Restart=always
 
 [Install]
 WantedBy=multi-user.target

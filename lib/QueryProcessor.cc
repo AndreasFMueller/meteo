@@ -173,7 +173,7 @@ void	QueryProcessor_internal::perform(const Query& query,
 		// convert fields from text (as returned by mysql) to native
 		// types, the timekey and value are simple
 		int	timekey = std::stoi(row[0]);
-		double	value = std::stoi(row[3]);
+		double	value = std::stod(row[3]);
 
 		// to access the other fields, we need to convert the pair
 		// (sensorid,mfieldid) to a fieldid (since this is the key
