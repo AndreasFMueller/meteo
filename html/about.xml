@@ -9,8 +9,23 @@
 <page name="about">
 <h1>About</h1>
 <p>
-Welcome to the home of the meteo package, and in particular to its
-'Lajeado'-Release.
+After a long hiatus caused mainly by overwhelming work on other projects,
+some work on meteo has resumed.
+<ul>
+<li>
+The source code has been modernized to no longer generate any warnings
+or have problems with missing header files.
+Some functions that have been deprecated were eliminated.
+</li>
+<li>
+A new outlet class was added that allows weather data to be sent as a UDP
+packet to the telescope automation system RTS2.
+A request to make this feature available was the main driver of the
+renewed effort.
+</li>
+</ul>
+</p>
+<p>
 This free software package is used to retrieve meteorological data
 from a Davis Weather Monitor II, Perception, Weather Wizard
 or a Davis Vantage Pro Station.
@@ -25,25 +40,28 @@ Here are the stations used to develop this package:
 <table id="samplestations" width="100%">
 <tr>
 <th>Geographical Location</th>
-<th>Current data</th>
+<th align="left">Current data</th>
 
-<th>Browser</th>
+<th align="left">Browser</th>
 </tr>
 <tr>
 <td valign="top">Altendorf, Schwyz, Switzerland
-(<a href="http://meteo.othello.ch/altendorf/index.html">further info</a>)
+(<a href="http://cesario.othello.ch/meteo/index.html">further info</a>)
 </td>
 <td valign="top">
-<a href="http://meteo.othello.ch/altendorf/" target="_new">
-<img src="http://meteo.othello.ch/altendorf/Altendorf.temperature-week.png"
+<a href="http://cesario.othello.ch/meteo/" target="_new">
+<img src="http://cesario.othello.ch/meteo/Altendorf2.temperature-week.png"
 width="250" height="72" border="0" />
 </a>
 </td>
 <td valign="top">
+<!--
 <a href="http://meteo.othello.ch/meteo/meteobrowser.php" target="_new">
 <img src="http://meteo.othello.ch/altendorf/Altendorf.temperature-year.png"
 width="250" height="72" border="0" />
 </a>
+-->
+Browser currently not publicly accessible.
 </td>
 </tr>
 </table>

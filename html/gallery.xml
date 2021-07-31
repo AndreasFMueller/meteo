@@ -24,13 +24,17 @@ station).
 </tr>
 <tr>
   <td valign="top">Altendorf, Schwyz, Switzerland</td>
-  <td><a href="http://meteo.othello.ch/altendorf/"><img border="0"
+  <td><a href="http://cesario.othello.ch/meteo/"><img border="0"
     width="250" height="72"
-    src="http://meteo.othello.ch/altendorf/Altendorf.temperature-week.png" /></a>
+    src="http://cesario.othello.ch/meteo/Altendorf2.temperature-week.png" /></a>
   </td>
-  <td><a href="http://meteo.othello.ch/meteo/meteobrowser.php"><img border="0"
+  <td>
+    <!--
+    <a href="http://meteo.othello.ch/meteo/meteobrowser.php"><img border="0"
     src="http://meteo.othello.ch/altendorf/Altendorf.temperature-year.png"
     width="250" height="72" /></a>
+    -->
+    currently not available
   </td>
 </tr>
 <!--
@@ -69,8 +73,10 @@ to know about your station, send a message to
 URL to your installation and the geographic location, so that it can be
 included in the list below. You can simplify my taks if you fill in the
 <a href="gallery_template.xml">gallery_template.xml</a> file and send
-it to <a href="mailto:afm@othello.ch">Andreas M&#xFC;ller</a>.
+it to <a href="mailto:andreas.mueller@othello.ch">Andreas M&#xFC;ller</a>.
 </p>
 
+<table>
+</table>
 
 </page>

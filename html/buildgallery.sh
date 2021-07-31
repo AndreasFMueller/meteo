@@ -11,7 +11,7 @@
 	(
 		echo '<?xml version="1.0" encoding="UTF-8"?>'
 		echo '<gallery>'
-		cat ../gallery/*.xml
+		cat ../gallery/*.xml 2>/dev/null
 		echo '</gallery>'
 	) | xsltproc gallery.xsl -
 	sed -n -e '/GALLERY/,$p' gallery.xml.in | grep -v GALLERY
