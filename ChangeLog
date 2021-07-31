@@ -1,4 +1,5 @@
 Release 0.9.20:
+	* adapt documentation to the new situation
 	* fix typos in service scripts
 	* fix a typo in QueryProcessor.cc
 	* fix bug in address creation
