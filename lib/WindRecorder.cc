@@ -54,9 +54,9 @@ void	WindRecorder::reset(void) {
 
 void	WindRecorder::update(const Vector& v0) {
 	mdebug(LOG_DEBUG, MDEBUG_LOG, 0,
-		"WindRecorder udpate (start = %.f, last = %.f) with (%.1f, %.1f)",
+		"WindRecorder update (start = %.2f, last = %.2f) with (%.1f, %.1f)",
 		start.getValue(), lastupdate.getValue(), v0.getX(), v0.getY());
-	// handle the case where don't have anyhting yet (except a start
+	// handle the case where don't have anything yet (except a start
 	// time)
 	if (!isValid()) {
 		v = v0; max = v0; lastupdate.now(); setValid(true);
@@ -71,8 +71,9 @@ void	WindRecorder::update(const Vector& v0) {
 	if (duration > 0.1) {
 		mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "wind update: "
 			"(%.1f * (%.1f, %.1f) + %.1f * (%.1f, %.1f))/%.1f)",
-			t1, v.getX(), v.getY(), t2, v0.getX(), v0.getY(),
-			getDuration());
+			t1, v.getX(), v.getY(),
+			t2, v0.getX(), v0.getY(),
+			duration);
 		v = (1/duration) * (t1 * v + t2 * v0);
 	} else {
 		// ignore wind if duration is less than 0.1 sec
