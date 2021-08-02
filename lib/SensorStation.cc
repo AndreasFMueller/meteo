@@ -78,8 +78,9 @@ void	SensorStation::update(const std::string& packet, Mapfile *m) {
 			// mapfile updates
 			if (NULL != m) {
 				mdebug(LOG_DEBUG, MDEBUG_LOG, 0,
-					"mapfile update for %s",
-					readername.c_str());
+					"mapfile update for %s, value %.3f",
+					readername.c_str(),
+					i->second.getValue());
 				// update the mapfile
 				m->add(readername, i->second.getValue(),
 					i->second.getUnit());

@@ -37,10 +37,12 @@ meteopacket_SOURCES = meteopacket.cc
 
 test:	meteopoll
 	cp /dev/null /var/tmp/meteopoll.log
-	./meteopoll -F -s Altendorf -l file:///var/tmp/meteopoll.log \
-		-m /var/tmp/meteo.xml \
-		-p `pwd`/meteopoll- -b msgqueue \
-		-d -d -d -f `pwd`/../conf/meteo.xml
+	./meteopoll --debug --debug --debug \
+		--logurl=file:///var/tmp/meteopoll.log \
+		--config=`pwd`/../conf/meteo.xml \
+		--foreground --station=Altendorf2 \
+		--map=/var/tmp/meteo.xml \
+		--pidfile=`pwd`/meteopoll- --backend=msgqueue 
 
 #
 # draw standard graph
