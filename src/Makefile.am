@@ -96,8 +96,8 @@ testavgd:	meteoavg
 #
 testdequeue:	meteodequeue
 	DYLD_BIND_AT_LAUNCH=1 ./meteodequeue \
-		-p `pwd`/meteodequeue- \
-		-d -f `pwd`/../conf/meteo.xml
+		--pidfile=`pwd`/meteodequeue- \
+		--debug --config=`pwd`/../conf/meteo.xml
 
 #
 # test the meteolast program
