@@ -2,7 +2,7 @@ AC_PREREQ([2.69])dnl
 AC_REVISION([1.0])dnl
 
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT([meteo],[0.9.20],[andreas.mueller@othello.ch])
+AC_INIT([meteo],[0.9.21],[andreas.mueller@othello.ch])
 m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
 LT_INIT
 AC_CONFIG_SRCDIR([include/crc.h])

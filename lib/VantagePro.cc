@@ -51,7 +51,8 @@ VantagePro::VantagePro(const std::string& n) : DavisStation(n, 99) {
 	// read the temperature and humidity calibration numbers
 	std::string	packet = eeprom(0x32, 29);
 #define	CAL_OFFSET	0x32
-#define	TEMP_IN		51
+#define	TEMP_IN_CAL	50
+#define	TEMP_IN_COMP	51
 #define	TEMP_OUT_CAL	52
 #define	TEMP_CAL	53
 #define	HUM_IN_CAL	68
@@ -61,10 +62,10 @@ VantagePro::VantagePro(const std::string& n) : DavisStation(n, 99) {
 
 	// calibrate ordinary temperature sensors
 	calibrateReader("console.temperature",
-		Calibrator(1., BytePacketReader(CAL(TEMP_IN), true)
+		Calibrator(1., BytePacketReader(CAL(TEMP_IN_CAL), true)
 			.value(packet)/10.));
 	calibrateReader("iss.temperature",
-		Calibrator(1., BytePacketReader(CAL(TEMP_CAL), true)
+		Calibrator(1., BytePacketReader(CAL(TEMP_OUT_CAL), true)
 			.value(packet)/10.));
 
 	// extra temperature calibration
