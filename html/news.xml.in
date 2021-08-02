@@ -8,6 +8,9 @@
 
 <page name="news">
 <h1>News</h1>
+<p>Release 0.9.21 fixes two bugs: console temperature calibration
+was incorrect for VantagePro stations and wind was not properly represented
+in the mapfile.</p>
 <p>Release 0.9.20 adds the option to send meteo data to a RTS2
 telescope control system. 
 It also fixes many portability issues and modernizes the code.

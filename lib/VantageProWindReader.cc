@@ -35,12 +35,6 @@ Value	VantageProWindReader::v(const std::string& packet) const {
 	}
 	double	speed = windspeedreader(packet);
 	double	azideg = winddirreader(packet);
-#if 1
-if (debug) {
-	speed = 10;
-	azideg = 30;
-}
-#endif
 	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "wind azi %.f, speed %.1f",
 		azideg, speed);
 
