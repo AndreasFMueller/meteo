@@ -1,3 +1,9 @@
+Release 0.9.22:
+	* fix some errors in the browser
+	* change the default lock file in /usr/local/etc/meteo.xml to
+	  cache/lockfile (for permission reasons) and improve the documentation
+	  on this feature
+
 Releaes 0.9.21:
 	* update website
 	* fix a bug caused by getValue() in the BasicRecorder not being

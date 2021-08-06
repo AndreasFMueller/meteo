@@ -54,6 +54,15 @@ These locking functions need a file name to attach the locks to,
 which is specified by the
 .I lockfile
 attribute.
+It is interpretted relative to the current working directory of the
+meteodraw process.
+A good
+.I lockfile
+name to use is 
+.IR cache/lockfile ,
+as this is most probably writable by the
+.BR meteodraw (1)
+process started from the browser PHP script.
 
 .SH "DATABASE CONFIGURATION"
 The

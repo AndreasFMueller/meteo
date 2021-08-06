@@ -52,7 +52,7 @@ if ($_GET['station'] != "") {
 } else {
 	$station = $station_default;
 }
-$baseurl = $pageurl."?lang=".$_GET['lang']."&station=".$_GET['station'];
+$baseurl = $pageurl."?lang=".$_GET['lang']."&station=".$station;
 setlocale(LC_ALL, $_GET['lang']);
 putenv("LANG=".$_GET['lang']);
 bindtextdomain("meteobrowser", "./locale");
@@ -65,16 +65,12 @@ $label_default = "m".date("Ym");
 if ($_GET['label'] == "") {
 	$_GET['label'] = $label_default;
 }
-if ($_GET['station'] == "") {
-	$_GET['station'] = $station_default;
-}
-$station = $_GET['station'];
 
 // convert the label into a cleartext string
 $title = $_GET['label'];
 
 // compute the parameters for the new images
-$graphs =  split(":", $graphlist[$station]);
+$graphs =  preg_split("/:/", $graphlist[$station]);
 
 // check whether there is something in the conflist array for this station
 if ("" != $conflist[$station]) {
@@ -127,13 +123,13 @@ $fulltitle = $station." ".strftime($title, $timestamp);
 
 ?>
 
-<title><?echo $fulltitle?></title>
+<title><?php echo $fulltitle?></title>
 <meta name="robots" content="index,nofollow">
 </head>
 <body bgcolor="#ffffff">
 <div id="content">
 
-<h1><?echo $fulltitle?></h1>
+<h1><?php echo $fulltitle?></h1>
 
 <table cellpadding="0" cellspacing="0" border="0">
 
@@ -167,8 +163,8 @@ if ($starttime > $stationstart[$station]) {
 		" previous"));
 	$url = $baseurl . "&label=".$previouslabel;
 ?>
-<a href="<? echo $url ?>"><img src="previous.png"
-	alt="previous <?echo $_GET['label']?>"
+<a href="<?php echo $url ?>"><img src="previous.png"
+	alt="previous <?php echo $_GET['label']?>"
 	border="0" /></a>
 <?php
 }
@@ -185,9 +181,9 @@ if ($level == 0) {
 	$uplabel = shell_exec(escapeshellcmd($meteolabel." ".$_GET['label']." up"));
 	$url = $baseurl."&label=".$uplabel;
 ?>
-<a href="<? echo $url ?>"><img src="<? echo $hops ?>.png"
+<a href="<?php  echo $url ?>"><img src="<?php  echo $hops ?>.png"
 	border="0" /><img src="week.png" border="0" /><img
-	src="<? echo $hops ?>.png" border="0" /></a>
+	src="<?php  echo $hops ?>.png" border="0" /></a>
 <?php
 	$hops = $hops."up";
 }
@@ -212,9 +208,9 @@ if (($level == 0) || ($level == 1)) {
 	// compute higher level URL
 	$url = $baseurl."&label=".$uplabel;
 ?>
-<a href="<? echo $url ?>"><img src="<? echo $hops ?>.png"
+<a href="<?php  echo $url ?>"><img src="<?php  echo $hops ?>.png"
 	border="0" /><img src="month.png" border="0" /><img
-	src="<? echo $hops ?>.png" border="0" /></a>
+	src="<?php  echo $hops ?>.png" border="0" /></a>
 <?php
 	$hops = $hops."up";
 }
@@ -243,9 +239,9 @@ if (($level == 0) || ($level == 1) || ($level == 2)) {
 	// compute higher level URL
 	$url = $baseurl."&label=".$uplabel;
 ?>
-<a href="<? echo $url ?>"><img src="<? echo $hops ?>.png"
+<a href="<?php  echo $url ?>"><img src="<?php  echo $hops ?>.png"
 	border="0" /><img src="year.png" border="0" /><img
-	src="<? echo $hops ?>.png" border="0" /></a>
+	src="<?php  echo $hops ?>.png" border="0" /></a>
 <?php
 	$hops = $hops."up";
 }
@@ -258,8 +254,8 @@ if ($endtime < time()) {
 	$nextlabel = shell_exec(escapeshellcmd("$meteolabel ".$_GET['label']." next"));
 $url = $baseurl . "&label=".$nextlabel;
 ?>
-<a href="<? echo $url ?>"><img src="next.png"
-	alt="next <?echo $_GET['label']?>"
+<a href="<?php  echo $url ?>"><img src="next.png"
+	alt="next <?php echo $_GET['label']?>"
 	border="0" /></a>
 <?php
 }
@@ -331,7 +327,7 @@ foreach ($graphs as $graph) {
 	system(escapeshellcmd($cmd));
 ?>
 	</td>
-	<td valign="top"><? echo gettext($explanation[$explanationname[$graph]]) ?></td>
+	<td valign="top"><?php  echo gettext($explanation[$explanationname[$graph]]) ?></td>
 	</tr>
 <?php
 }

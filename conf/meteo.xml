@@ -317,7 +317,7 @@
     should not contain /, and shell metacharacters will cause file names
     that are clumsy to handle in shell scripts.
   -->
-  <graphs lockfile="lockfile" running="3" queued="10">
+  <graphs lockfile="cache/lockfile" running="3" queued="10">
     <graph name="Lajeado.temperature-new" offset="-10800"
 	height="300" width="600" bgcolor="#ffffff" fgcolor="#000000">
       <!-- label and axis definitions -->
