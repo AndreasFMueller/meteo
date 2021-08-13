@@ -1,4 +1,5 @@
 Release 0.9.22:
+	* fix solar radiation label in default configuration file
 	* fix some errors in the browser
 	* change the default lock file in /usr/local/etc/meteo.xml to
 	  cache/lockfile (for permission reasons) and improve the documentation
