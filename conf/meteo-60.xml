@@ -139,7 +139,7 @@
     <!-- Radiation -->
     <graph name="Gurin.radiation" height="144" width="500" bgcolor="#ffffff"
 	fgcolor="#000000">
-      <leftlabel align="center">Solar Radiation (M/m2)</leftlabel>
+      <leftlabel align="center">Solar Radiation (W/m2)</leftlabel>
       <rightlabel align="center">UV index</rightlabel>
       <leftaxis type="static" min="0" max="600"
 	first="0" last="1200" step="200" format="%.0f"
