@@ -223,6 +223,9 @@ For systems without System V semaphores, the number of waiting processes
 is not limited by 
 .BR meteodraw (1),
 the processes are simply serialized.
+For System V semaphores, the lock file simply has to exist because the 
+semaphore key is generated from it, otherwise the process must have permissions
+to write the lockfile.
 
 .SH OFFSETS
 The time values which are the key to the sdata values have a configurable

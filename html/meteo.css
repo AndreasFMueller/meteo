@@ -97,3 +97,26 @@ table#samplestations {
 dt {
 	font-weight: bold;
 }
+
+table {
+	border-style: solid;
+	border-width: 1px;
+	border-color: black;
+	border-collapse: collapse;
+}
+
+th {
+	border-style: solid;
+	border-color: black;
+	border-width: 1px;
+	text-align: left;
+	padding: 3px;
+}
+
+td {
+	border-style: solid;
+	border-width: 0px 1px 0px 1px;
+	border-color: black;
+	border-collapse: collapse;
+	padding: 3px;
+}

@@ -9,13 +9,6 @@
 <page name="support">
 <h1>Support</h1>
 <p>
-If you need help setting up meteo, consider asking the mailing list.
-You must be subscribed to the mailing list if you want to post, send
-a message with the single word <code>subscribe</code> in the body to
-<a href="mailto:meteo-request@lists.othello.ch">meteo-request@lists.othello.ch</a>.
-</p>
-<p>
-You may also send mail to the author, but your problem may actually take
-longer to be resolved, as I cannot always respond in a timely manner.
+If you run into problems, please send email to <a href="mailto:andreas.mueller@othello.ch">Andreas Müller</a>.
 </p>
 </page>

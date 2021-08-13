@@ -40,7 +40,7 @@ public:
 	}
 
 	// accessors to the value field
-	double	getValue(void) const;
+	virtual double	getValue(void) const;
 	std::string	getValueString(const std::string& format) const;
 	virtual std::string	getValueString(void) const;
 	virtual void	setValue(double v);
