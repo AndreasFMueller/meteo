@@ -88,6 +88,9 @@ libmeteo_la_SOURCES =							\
 	PacketReaderFactory.cc						\
 	Pidfile.cc							\
 	Point.cc							\
+	PowerConverter.cc						\
+	PowerRecorder.cc						\
+	PowerValue.cc							\
 	PressureConverter.cc						\
 	PressureRecorder.cc						\
 	PressureValue.cc						\
@@ -150,6 +153,7 @@ libmeteo_la_SOURCES =							\
 	VoltageReader.cc						\
 	VoltageRecorder.cc						\
 	VoltageValue.cc							\
+	CurrentValue.cc							\
 	WMII.cc								\
 	WMIIWindReader.cc						\
 	Wind.cc								\

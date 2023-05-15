@@ -53,7 +53,7 @@ public:
 	void	drawPoint(const Point& p, const Color& color);
 	void	drawRectangle(const Rectangle& rectangle, const Color& color);
 	void	drawLine(const Point& p1, const Point& p2, const Color& color,
-			linestyle style);
+			linestyle style, bool antialias = false);
 	void	drawText(const std::string& text, const Point& start,
 			const Color& color, bool horizontal = true);
 	void	drawLetter(const char c, const Point& center,

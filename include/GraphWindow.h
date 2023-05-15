@@ -21,6 +21,7 @@ class GraphWindow {
 	Rectangle	window;
 	int		offset;
 	int		interval;
+	bool		antialias;
 	// starttime and endtime are times such that starttime + offset
 	// is divisible by the interval. this ensures that all numbers
 	// of the form starttime + i * interval + offset are also valid
@@ -36,6 +37,7 @@ public:
 		time_t	e;
 		time(&e);
 		setEndTime(e);
+		antialias = false;
 	}
 	~GraphWindow(void) { }
 
@@ -71,6 +73,8 @@ public:
 	time_t	getTimekeyFromIndex(int i) const {
 		return getTimeFromIndex(i) - offset;
 	}
+	bool	getAntialias() const { return antialias; }
+	void	setAntialias(bool a) { antialias = a; }
 
 	// color access
 	Color	getForeground(void) const { return parent.getForeground(); }
@@ -124,9 +128,10 @@ public:
 	}
 	void	drawLine(bool useleftscale, const GraphPoint& gp1,
 			const GraphPoint& gp2, const Color& color,
-			linestyle style) {
+			linestyle style, bool antialiased = false) {
 		parent.drawLine(getPoint(useleftscale, gp1),
-			getPoint(useleftscale, gp2), color, style);
+			getPoint(useleftscale, gp2), color, style,
+			antialiased);
 	}
 	void	drawRectangle(bool useleftscale, const GraphPoint& lowerleft,
 		const GraphPoint& upperright, const Color& color) {
@@ -147,7 +152,7 @@ public:
 
 	// handle graphing for complete time series, i.e. maps time_t -> double
 	void	drawLine(bool useleftscale, const Tdata&, const Color&,
-			linestyle style, bool connected);
+			linestyle style, bool connected, bool antialiased = false);
 	void	drawHistogram(bool useleftscale, const Tdata&, const Color&);
 	void	drawRange(bool useleftscale, const Tdata& lower,
 			const Tdata& upper, const Color&);

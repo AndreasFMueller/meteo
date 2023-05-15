@@ -16,9 +16,9 @@
 namespace meteo {
 
 // VoltageValue methods
-VoltageValue::VoltageValue(void) : BasicValue("C") {
+VoltageValue::VoltageValue(void) : BasicValue("V") {
 }
-VoltageValue::VoltageValue(double v) : BasicValue("C") {
+VoltageValue::VoltageValue(double v) : BasicValue("V") {
 	setValue(v);
 }
 

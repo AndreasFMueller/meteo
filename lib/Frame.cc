@@ -52,7 +52,7 @@ public:
 	void	setLinestyle(const Color& c, linestyle style);
 	void	drawPoint(const Point& p, const Color& c);
 	void	drawLine(const Point& p1, const Point& p2, const Color& c,
-			linestyle style);
+			linestyle style, bool antialias);
 	void	drawRectangle(const Rectangle& rectangle, const Color& c);
 	void	drawText(const std::string& text, const Point& p1,
 		const Color& c, bool horizontal);
@@ -136,7 +136,7 @@ void	frame_internals::drawPoint(const Point& point, const Color& color) {
 }
 
 void	frame_internals::drawLine(const Point& p1, const Point& p2,
-		const Color& color, linestyle style) {
+		const Color& color, linestyle style, bool antialias) {
 	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "drawing line (%d, %d) - (%d, %d)\n",
 		p1.getX(), p1.getY(), p2.getX(), p2.getY());
 	// first find the index belonging to the color
@@ -151,6 +151,10 @@ void	frame_internals::drawLine(const Point& p1, const Point& p2,
 	else {
 		setLinestyle(color, style);
 		colorconst = gdStyled;
+	}
+	if (antialias) {
+		gdImageSetAntiAliased(gd, colorconst);
+		colorconst = gdAntiAliased;
 	}
 	gdImageLine(gd, getX(p1), getY(p1),
 			getX(p2), getY(p2), colorconst);
@@ -328,9 +332,9 @@ void	Frame::drawPoint(const Point& p, const Color& color) {
 }
 
 void	Frame::drawLine(const Point& p1, const Point& p2, const Color& color,
-		linestyle style) {
+		linestyle style, bool antialias) {
 	setupInternals();
-	fi->drawLine(p1, p2, color, style);
+	fi->drawLine(p1, p2, color, style, antialias);
 }
 
 void	Frame::drawRectangle(const Rectangle& r, const Color& color) {

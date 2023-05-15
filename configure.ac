@@ -112,7 +112,7 @@ socket sqrt strcasecmp strchr strdup strerror strrchr tzset floor pow strtol])
 dnl Check for the XML library
 XML_CONFIG=xml2-config
 AC_MSG_CHECKING(looking for xml2 library)
-if ${XML_CONFIG} --libs print > /dev/null 2>&1
+if ${XML_CONFIG} --libs > /dev/null 2>&1
 then
 	XMLVERS=`${XML_CONFIG} --version`
 	LIBXML_LIBS=`${XML_CONFIG} --libs`

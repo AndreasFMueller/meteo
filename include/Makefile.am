@@ -81,6 +81,9 @@ noinst_HEADERS =							\
 	PacketReaderFactory.h						\
 	Pidfile.h							\
 	Point.h								\
+	PowerConverter.h						\
+	PowerRecorder.h							\
+	PowerValue.h							\
 	PressureConverter.h						\
 	PressureRecorder.h						\
 	PressureValue.h							\
@@ -143,6 +146,9 @@ noinst_HEADERS =							\
 	VoltageReader.h							\
 	VoltageRecorder.h						\
 	VoltageValue.h							\
+	CurrentConverter.h						\
+	CurrentRecorder.h						\
+	CurrentValue.h							\
 	WMII.h								\
 	WMIIWindReader.h						\
 	Wind.h								\

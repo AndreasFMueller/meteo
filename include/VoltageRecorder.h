@@ -1,5 +1,5 @@
 /*
- * VoltageRecorder.h -- encapsulate temperature
+ * VoltageRecorder.h -- encapsulate voltage
  *
  * (c) 2003 Dr. Andreas Mueller, Beratung und Entwicklung
  *

@@ -57,7 +57,8 @@ Point	GraphWindow::getTopPoint(time_t t) const {
 //             color. If a datapoint is missing, interrupt the graph unless
 //             the connected flag is set
 void	GraphWindow::drawLine(bool useleftscale, const Tdata& data,
-		const Color& color, linestyle style, bool connected) {
+		const Color& color, linestyle style, bool connected,
+		bool antialiased) {
 	GraphPoint	previous;
 	bool		haveprevious = false;
 	tdata_t::const_iterator	j;
@@ -79,7 +80,7 @@ void	GraphWindow::drawLine(bool useleftscale, const Tdata& data,
 				mdebug(LOG_DEBUG, MDEBUG_LOG, 0,
 					"drawing data for time %d", timeindex);
 				drawLine(useleftscale, previous, current,
-					color, style);
+					color, style, antialiased && antialias);
 			}
 			previous = current;
 			haveprevious = true;
@@ -119,7 +120,7 @@ void	GraphWindow::drawRange(bool useleftscale, const Tdata& lower,
 			drawLine(useleftscale,
 				GraphPoint(i->first - offset, i->second),
 				GraphPoint(j->first - offset, j->second),
-				color, solid);
+				color, solid, antialias);
 		}
 	}
 }
