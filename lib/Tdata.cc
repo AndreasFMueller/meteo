@@ -255,6 +255,7 @@ static double	operatortan(double a) { return ::tan(a); }
 static double	limit;
 static double	operatorfloor(double a) { return (a < meteo::limit) ? meteo::limit : a; }
 static double	operatorceil(double a) { return (a < meteo::limit) ? a : meteo::limit; }
+static double	operatormult(double a) { return (a * meteo::limit); }
 
 Tdata	Tdata::sqr(void) const {
 	return apply(operatorsqr);
@@ -284,6 +285,11 @@ Tdata	Tdata::floor(double l) const {
 Tdata	Tdata::ceil(double l) const {
 	meteo::limit = l;
 	return apply(operatorceil);
+}
+
+Tdata	Tdata::timemult(void) const {
+	meteo::limit = interval;
+	return apply(operatormult);
 }
 
 Tdata	Tdata::accumulate(void) const {

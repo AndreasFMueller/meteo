@@ -122,6 +122,10 @@ static const Tdata	processNode(Dataset *dset, xmlNodePtr cur) {
 			xmlFree(name);
 			return d.tan();
 		}
+		if ((!xmlStrcmp(name, (const xmlChar *)"timemult"))) {
+			xmlFree(name);
+			return d.timemult();
+		}
 		xmlChar	*limitname = xmlGetProp(cur, (const xmlChar *)"limit");
 		if ((!xmlStrcmp(name, (const xmlChar *)"ceil"))) {
 			xmlFree(name);
