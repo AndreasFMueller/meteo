@@ -143,6 +143,10 @@ static const Tdata	processNode(Dataset *dset, xmlNodePtr cur) {
 			xmlFree(name);
 			return d.accumulate();
 		}
+		if ((!xmlStrcmp(name, (const xmlChar *)"integrate"))) {
+			xmlFree(name);
+			return d.integrate();
+		}
 	}
 
 	// binary function node: there must be exactly two children, the

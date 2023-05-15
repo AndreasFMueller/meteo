@@ -1,3 +1,8 @@
+Release 0.9.23:
+	* add power meter monitoring classes
+	* add value classes for current and power
+	* add integrate method
+
 Release 0.9.22:
 	* fix solar radiation label in default configuration file
 	* fix some errors in the browser

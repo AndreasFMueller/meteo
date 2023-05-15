@@ -483,7 +483,7 @@ std::string	Configuration::graphXpath(const std::string& graphname,
 		+ tag + "/@" + attribute;
 }
 
-// graph access convennience functions
+// graph access convenience functions
 bool	Configuration::hasGraphTag(const std::string& graphname,
 		int interval, const std::string& tag) const {
 	char	ii[10];

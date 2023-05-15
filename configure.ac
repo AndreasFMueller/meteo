@@ -2,7 +2,7 @@ AC_PREREQ([2.69])dnl
 AC_REVISION([1.0])dnl
 
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT([meteo],[0.9.21],[andreas.mueller@othello.ch])
+AC_INIT([meteo],[0.9.23],[andreas.mueller@othello.ch])
 m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
 LT_INIT
 AC_CONFIG_SRCDIR([include/crc.h])
@@ -40,7 +40,7 @@ dnl it does not find them
 
 dnl check for the right mysql flags, this should be done with the mysql_config
 dnl script
-MYSQL_CONFIG=mysql_config
+MYSQL_CONFIG=mariadb-config
 AC_MSG_CHECKING(looking for mysqlclient library)
 if ${MYSQL_CONFIG} --libs > /dev/null 2>&1
 then
