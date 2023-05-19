@@ -13,37 +13,255 @@
     <dbname>meteo</dbname>
     <user>powermaster</user>
     <password>tom,ri5tentR</password>
+    <writer>powermaster</writer>
+    <writerpassword>tom,ri5tentR</writerpassword>
     <prefix>power</prefix>
   </database>
   <station name="Bubental">
     <sensors>
       <sensor name="powermeter">
-	<average name="urms_phase1" base="voltage" operator="avg"/>
-	<average name="urms_phase2" base="voltage" operator="avg"/>
-	<average name="urms_phase3" base="voltage" operator="avg"/>
-	<average name="irms_phase1" base="current" operator="avg"/>
-	<average name="irms_phase2" base="current" operator="avg"/>
-	<average name="irms_phase3" base="current" operator="avg"/>
-	<average name="prms_phase1" base="power" operator="avg"/>
-	<average name="prms_phase1_min" base="power" operator="min"/>
-	<average name="prms_phase1_max" base="power" operator="max"/>
-	<average name="prms_phase2" base="power" operator="avg"/>
-	<average name="prms_phase2_min" base="power" operator="min"/>
-	<average name="prms_phase2_max" base="power" operator="max"/>
-	<average name="prms_phase3" base="power" operator="avg"/>
-	<average name="prms_phase3_min" base="power" operator="min"/>
-	<average name="prms_phase3_max" base="power" operator="max"/>
-	<average name="qrms_phase1" base="powerfactor" operator="avg"/>
-	<average name="qrms_phase2" base="powerfactor" operator="avg"/>
-	<average name="qrms_phase3" base="powerfactor" operator="avg"/>
-	<average name="cosphi_phase1" base="cosphi" operator="avg"/>
-	<average name="cosphi_phase2" base="cosphi" operator="avg"/>
-	<average name="cosphi_phase3" base="cosphi" operator="avg"/>
-	<average name="prms_total" base="power" operator="avg"/>
-	<average name="prms_total_min" base="power" operator="min"/>
-	<average name="prms_total_max" base="power" operator="max"/>
-	<average name="qrms_total" base="voltage" operator="avg"/>
+        <field>urms_phase1</field>
+        <field>irms_phase1</field>
+        <field>prms_phase1</field>
+        <field>qrms_phase1</field>
+        <field>cosphi_phase1</field>
+        <field>urms_phase2</field>
+        <field>irms_phase2</field>
+        <field>prms_phase2</field>
+        <field>qrms_phase2</field>
+        <field>cosphi_phase2</field>
+        <field>urms_phase3</field>
+        <field>irms_phase3</field>
+        <field>prms_phase3</field>
+        <field>qrms_phase3</field>
+        <field>cosphi_phase3</field>
+	<field>prms_total</field>
+	<field>qrms_total</field>
       </sensor>
     </sensors>
+    <averages>
+      <sensor name="powermeter">
+	<average name="urms_phase1"     base="urms_phase1"   operator="avg"/>
+	<average name="urms_phase1_min" base="urms_phase1"   operator="min"/>
+	<average name="urms_phase1_max" base="urms_phase1"   operator="max"/>
+	<average name="urms_phase2"     base="urms_phase2"   operator="avg"/>
+	<average name="urms_phase2_min" base="urms_phase2"   operator="min"/>
+	<average name="urms_phase2_max" base="urms_phase2"   operator="max"/>
+	<average name="urms_phase3"     base="urms_phase3"   operator="avg"/>
+	<average name="urms_phase3_min" base="urms_phase3"   operator="min"/>
+	<average name="urms_phase3_max" base="urms_phase3"   operator="max"/>
+
+	<average name="irms_phase1"     base="irms_phase1"   operator="avg"/>
+	<average name="irms_phase2"     base="irms_phase2"   operator="avg"/>
+	<average name="irms_phase3"     base="irms_phase3"   operator="avg"/>
+
+	<average name="prms_phase1"     base="prms_phase1"   operator="avg"/>
+	<average name="prms_phase1_min" base="prms_phase1"   operator="min"/>
+	<average name="prms_phase1_max" base="prms_phase1"   operator="max"/>
+
+	<average name="prms_phase2"     base="prms_phase2"   operator="avg"/>
+	<average name="prms_phase2_min" base="prms_phase2"   operator="min"/>
+	<average name="prms_phase2_max" base="prms_phase2"   operator="max"/>
+
+	<average name="prms_phase3"     base="prms_phase3"   operator="avg"/>
+	<average name="prms_phase3_min" base="prms_phase3"   operator="min"/>
+	<average name="prms_phase3_max" base="prms_phase3"   operator="max"/>
+
+	<average name="qrms_phase1"     base="qrms_phase1"   operator="avg"/>
+	<average name="qrms_phase2"     base="qrms_phase2"   operator="avg"/>
+	<average name="qrms_phase3"     base="qrms_phase3"   operator="avg"/>
+
+	<average name="cosphi_phase1"   base="cosphi_phase1" operator="avg"/>
+	<average name="cosphi_phase2"   base="cosphi_phase2" operator="avg"/>
+	<average name="cosphi_phase3"   base="cosphi_phase3" operator="avg"/>
+
+	<average name="prms_total"      base="prms_total"    operator="avg"/>
+	<average name="prms_total_min"  base="prms_total"    operator="min"/>
+	<average name="prms_total_max"  base="prms_total"    operator="max"/>
+
+	<average name="qrms_total"      base="qrms_total"    operator="avg"/>
+	<average name="qrms_total_min"  base="qrms_total"    operator="min"/>
+	<average name="qrms_total_max"  base="qrms_total"    operator="max"/>
+      </sensor>
+    </averages>
   </station>
+  <graphs lockfile="./lockfile" running="3" queued="10">
+    <graph name="Bubental.power" offset="3600"
+        height="144" width="500" bgcolor="#ffffff" fgcolor="#000000">
+      <leftlabel align="center">Power (kW)</leftlabel>
+      <leftaxis type="static" min="0" max="2" first="0" last="2"
+	step="0.5" format="%.1f" gridlines="yes" ticks="yes"/>
+      <graphwindow llx="55" lly="19" urx="455" ury="139"/>
+      <channels>
+	<query>
+	  <select name="p1">Bubental.powermeter.prms_phase1</select>
+	  <select name="p2">Bubental.powermeter.prms_phase2</select>
+	  <select name="p3">Bubental.powermeter.prms_phase3</select>
+	  <select name="t">Bubental.powermeter.prms_total</select>
+	  <data name="p123kW">
+	    <mult>
+	      <constant value="0.001"/>
+	      <sum>
+	        <value name="p1"/>
+	        <value name="p2"/>
+	        <value name="p3"/>
+	      </sum>
+	    </mult>
+	  </data>
+	  <data name="p12kW">
+	    <mult>
+	      <constant value="0.001"/>
+	      <sum>
+	        <value name="p1"/>
+	        <value name="p2"/>
+	      </sum>
+	    </mult>
+	  </data>
+	  <data name="p1kW">
+	    <mult>
+	      <constant value="0.001"/>
+	      <value name="p1"/>
+	    </mult>
+	  </data>
+	  <data name="tkW">
+	    <mult>
+	      <constant value="0.001"/>
+	      <value name="t"/>
+	    </mult>
+	  </data>
+	</query>
+	<channel color="#ff99cc" type="range" scale="left"
+	  nameupper="p123kW" namelower="p12kW"/>
+	<channel color="#cc99ff" type="range" scale="left"
+	  nameupper="p12kW" namelower="p1kW"/>
+	<channel color="#99ccff" type="histogram" scale="left" name="p1kW"/>
+	<channel color="#990000" type="curve" scale="left" name="tkW"/>
+      </channels>
+    </graph>
+    <graph name="Bubental.powerfactor" offset="3600"
+        height="144" width="500" bgcolor="#ffffff" fgcolor="#000000">
+      <leftlabel align="center">powerfactor</leftlabel>
+      <leftaxis type="static" min="0" max="0.4" first="0" last="0.4"
+	step="0.1" format="%.1f" gridlines="yes" ticks="yes"/>
+      <rightlabel align="center">phi</rightlabel>
+      <rightaxis type="static" min="0" max="90" first="0" last="90"
+	step="10" format="%3.0f" gridlines="no" ticks="yes"/>
+      <graphwindow llx="55" lly="19" urx="455" ury="139" alias="yes"/>
+      <channels>
+	<query>
+	  <select name="p1">Bubental.powermeter.prms_phase1</select>
+	  <select name="q1">Bubental.powermeter.qrms_phase1</select>
+	  <select name="p2">Bubental.powermeter.prms_phase2</select>
+	  <select name="q2">Bubental.powermeter.qrms_phase2</select>
+	  <select name="p3">Bubental.powermeter.prms_phase3</select>
+	  <select name="q3">Bubental.powermeter.qrms_phase3</select>
+	  <select name="p">Bubental.powermeter.prms_total</select>
+	  <select name="q">Bubental.powermeter.qrms_total</select>
+	  <data name="totalpower">
+	    <sum>
+	      <value name="p1"/>
+	      <value name="p2"/>
+	      <value name="p3"/>
+	    </sum>
+	  </data>
+	  <data name="r1">
+	    <mult>
+	      <value name="p1"/>
+	      <value name="q1"/>
+	    </mult>
+	  </data>
+	  <data name="r2">
+	    <mult>
+	      <value name="p2"/>
+	      <value name="q2"/>
+	    </mult>
+	  </data>
+	  <data name="r3">
+	    <mult>
+	      <value name="p3"/>
+	      <value name="q3"/>
+	    </mult>
+	  </data>
+	  <data name="pf123">
+	    <quot>
+	      <sum>
+		<value name="r1"/>
+		<value name="r2"/>
+		<value name="r3"/>
+	      </sum>
+	      <value name="totalpower"/>
+	    </quot>
+	  </data>
+	  <data name="pf12">
+	    <quot>
+	      <sum>
+		<value name="r1"/>
+		<value name="r2"/>
+	      </sum>
+	      <value name="totalpower"/>
+	    </quot>
+	  </data>
+	  <data name="pf1">
+	    <quot>
+	      <value name="r1"/>
+	      <value name="totalpower"/>
+	    </quot>
+	  </data>
+	  <data name="phi">
+	    <mult>
+	      <constant value="57.295779"/>
+	      <function name="asin">
+		<value name="q"/>
+	      </function>
+	    </mult>
+	  </data>
+        </query>
+	<channel color="#cccc33" type="histogram" scale="left" name="pf1"/>
+	<channel color="#339966" type="range" scale="left"
+	  namelower="pf1" nameupper="pf12"/>
+	<channel color="#3399ff" type="range" scale="left"
+	  namelower="pf12" nameupper="pf123"/>
+	<channel color="#ff6600" type="curve" scale="right" name="phi"/>
+      </channels>
+    </graph>
+    <graph name="Bubental.voltage" offset="3600"
+        height="144" width="500" bgcolor="#ffffff" fgcolor="#000000">
+      <leftlabel align="center">Voltage</leftlabel>
+      <leftaxis type="static" min="220" max="250" first="220" last="250"
+	step="10" format="%.0f" gridlines="yes" ticks="yes"/>
+      <graphwindow llx="55" lly="19" urx="455" ury="139" alias="yes"/>
+      <channels>
+	<query>
+	  <select name="u1">Bubental.powermeter.urms_phase1</select>
+	  <select name="u1min">Bubental.powermeter.urms_phase1_min</select>
+	  <select name="u1max">Bubental.powermeter.urms_phase1_max</select>
+	  <select name="u2">Bubental.powermeter.urms_phase2</select>
+	  <select name="u2min">Bubental.powermeter.urms_phase2_min</select>
+	  <select name="u2max">Bubental.powermeter.urms_phase2_max</select>
+	  <select name="u3">Bubental.powermeter.urms_phase3</select>
+	  <select name="u3min">Bubental.powermeter.urms_phase3_min</select>
+	  <select name="u3max">Bubental.powermeter.urms_phase3_max</select>
+	  <data name="min">
+	    <min>
+	      <value name="u1min"/>
+	      <value name="u2min"/>
+	      <value name="u3min"/>
+	    </min>
+	  </data>
+	  <data name="max">
+	    <max>
+	      <value name="u1max"/>
+	      <value name="u2max"/>
+	      <value name="u3max"/>
+	    </max>
+	  </data>
+        </query>
+	<channel color="#cccccc" type="range" scale="left"
+	  namelower="min" nameupper="max"/>
+	<channel color="#cc00cc" type="curve" scale="left" name="u1"/>
+	<channel color="#6666ff" type="curve" scale="left" name="u2"/>
+	<channel color="#339966" type="curve" scale="left" name="u3"/>
+      </channels>
+    </graph>
+  </graphs>
 </meteo>

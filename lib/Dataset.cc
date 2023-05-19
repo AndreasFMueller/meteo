@@ -122,6 +122,18 @@ static const Tdata	processNode(Dataset *dset, xmlNodePtr cur) {
 			xmlFree(name);
 			return d.tan();
 		}
+		if ((!xmlStrcmp(name, (const xmlChar *)"asin"))) {
+			xmlFree(name);
+			return d.asin();
+		}
+		if ((!xmlStrcmp(name, (const xmlChar *)"acos"))) {
+			xmlFree(name);
+			return d.acos();
+		}
+		if ((!xmlStrcmp(name, (const xmlChar *)"atan"))) {
+			xmlFree(name);
+			return d.atan();
+		}
 		if ((!xmlStrcmp(name, (const xmlChar *)"timemult"))) {
 			xmlFree(name);
 			return d.timemult();
@@ -213,6 +225,38 @@ static const Tdata	processNode(Dataset *dset, xmlNodePtr cur) {
 		}
 	}
 
+	// max node: retrieve all Tdata subnodes and compute max
+	if ((!xmlStrcmp(cur->name, (const xmlChar *)"max"))) {
+		mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "max node");
+		Tdata	result;
+		bool	first = true;
+		for (cp = xmlFirstElementNode(cur->xmlChildrenNode); NULL != cp;
+			cp = xmlNextElementNode(cp)) { 
+			if (first) {
+				result = processNode(dset, cp);
+				first = false;
+			} else
+				result = max(result, processNode(dset, cp));
+		}
+		return result;
+	}
+
+	// min node: retrieve all Tdata subnodes and compute max
+	if ((!xmlStrcmp(cur->name, (const xmlChar *)"min"))) {
+		mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "min node");
+		Tdata	result;
+		bool	first = true;
+		for (cp = xmlFirstElementNode(cur->xmlChildrenNode); NULL != cp;
+			cp = xmlNextElementNode(cp)) { 
+			if (first) {
+				result = processNode(dset, cp);
+				first = false;
+			} else
+				result = min(result, processNode(dset, cp));
+		}
+		return result;
+	}
+
 	// sum node: retrieve all Tdata subnodes and compute sum
 	if ((!xmlStrcmp(cur->name, (const xmlChar *)"sum"))) {
 		mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "sum node");
@@ -226,6 +270,7 @@ static const Tdata	processNode(Dataset *dset, xmlNodePtr cur) {
 			} else
 				result = result + processNode(dset, cp);
 		}
+		return result;
 	}
 
 	// multipliation node: retrieve all Tdata subnodes and compute sum
@@ -241,6 +286,7 @@ static const Tdata	processNode(Dataset *dset, xmlNodePtr cur) {
 			} else
 				result = result * processNode(dset, cp);
 		}
+		return result;
 	}
 
 	// difference node: retrieve the two Tdata subnodes and compute diff

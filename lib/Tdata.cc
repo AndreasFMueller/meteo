@@ -252,6 +252,9 @@ static double	operatorsqrt(double a) { return ::sqrt(a); }
 static double	operatorsin(double a) { return ::sin(a); }
 static double	operatorcos(double a) { return ::cos(a); }
 static double	operatortan(double a) { return ::tan(a); }
+static double	operatorasin(double a) { return ::asin(a); }
+static double	operatoracos(double a) { return ::acos(a); }
+static double	operatoratan(double a) { return ::atan(a); }
 static double	limit;
 static double	operatorfloor(double a) { return (a < meteo::limit) ? meteo::limit : a; }
 static double	operatorceil(double a) { return (a < meteo::limit) ? a : meteo::limit; }
@@ -275,6 +278,18 @@ Tdata	Tdata::cos(void) const {
 
 Tdata	Tdata::tan(void) const {
 	return apply(operatortan);
+}
+
+Tdata	Tdata::asin(void) const {
+	return apply(operatorasin);
+}
+
+Tdata	Tdata::acos(void) const {
+	return apply(operatoracos);
+}
+
+Tdata	Tdata::atan(void) const {
+	return apply(operatoratan);
 }
 
 Tdata	Tdata::floor(double l) const {

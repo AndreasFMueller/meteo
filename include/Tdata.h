@@ -73,6 +73,9 @@ public:
 	Tdata	sin(void) const;
 	Tdata	cos(void) const;
 	Tdata	tan(void) const;
+	Tdata	asin(void) const;
+	Tdata	acos(void) const;
+	Tdata	atan(void) const;
 	Tdata	ceil(double limit) const;
 	Tdata	floor(double limit) const;
 	Tdata	limit(double l) const;

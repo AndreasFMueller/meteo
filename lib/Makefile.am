@@ -31,6 +31,8 @@ libmeteo_la_SOURCES =							\
 	Configuration.cc						\
 	Converter.cc							\
 	ConverterFactory.cc						\
+	CurrentValue.cc							\
+	CurrentConverter.cc						\
 	Daemon.cc							\
 	DataRecorder.cc							\
 	Datarecord.cc							\
@@ -153,7 +155,6 @@ libmeteo_la_SOURCES =							\
 	VoltageReader.cc						\
 	VoltageRecorder.cc						\
 	VoltageValue.cc							\
-	CurrentValue.cc							\
 	WMII.cc								\
 	WMIIWindReader.cc						\
 	Wind.cc								\

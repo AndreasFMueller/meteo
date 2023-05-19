@@ -194,6 +194,7 @@ Graphics::Graphics(int interval, time_t end, bool aligncenter,
 	// retrieve GraphWindow parameters and create graphwindow
 	Rectangle	r(basepath + "/graphwindow");
 	gw = new GraphWindow(*f, r, offset, interval);
+	gw->setAntialias(conf.getBool(basepath + "/graphwindow/@alias", false));
 	if (aligncenter)
 		gw->setEndTime(end + interval * (r.getWidth() / 2));
 	else

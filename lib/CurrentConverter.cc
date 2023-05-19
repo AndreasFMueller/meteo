@@ -14,6 +14,9 @@
 
 namespace meteo {
 
+CurrentConverter::~CurrentConverter() {
+}
+
 double	CurrentConverter::operator()(const double value, const std::string& from) const {
 	if (from == getUnit())
 		return value;

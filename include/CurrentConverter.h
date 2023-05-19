@@ -16,7 +16,7 @@ class	CurrentConverter : public BasicConverter {
 public:
 	CurrentConverter(void) : BasicConverter("A") { }
 	CurrentConverter(const std::string& unit) : BasicConverter(unit) { }
-	virtual ~CurrentConverter(void) { }
+	virtual ~CurrentConverter(void);
 	virtual double	operator()(const double value, const std::string& from) const;
 };
 
