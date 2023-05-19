@@ -175,3 +175,16 @@ create table if not exists avg (
 -- see the README for the reason
 create index avgx1 on avg(intval, timekey);
 
+-- some useful views
+create view vdata as
+select	s.timekey as timekey, s.sensorid as sensorid, s.fieldid as fieldid,
+	m.name as fieldname, s.value as value, m.unit as unit
+from sdata s, mfield m
+where s.fieldid = m.id;
+
+create view vavg as
+select	a.timekey as timekey, a.intval as intval, a.sensorid as sensorid,
+	a.fieldid as fieldid, m.name as fieldname, a.value as value,
+	m.unit as unit
+from avg a, mfield m
+where a.fieldid = m.id;
