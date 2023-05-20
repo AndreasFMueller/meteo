@@ -8,9 +8,9 @@
   -->
 <meteo>
   <database>
-    <hostname>antonius</hostname>
+    <hostname>ferdinand</hostname>
     <port>3307</port>
-    <dbname>meteo</dbname>
+    <dbname>powermeter</dbname>
     <user>powermaster</user>
     <password>tom,ri5tentR</password>
     <writer>powermaster</writer>

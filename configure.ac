@@ -40,7 +40,7 @@ dnl it does not find them
 
 dnl check for the right mysql flags, this should be done with the mysql_config
 dnl script
-MYSQL_CONFIG=mariadb-config
+MYSQL_CONFIG=mariadb_config
 AC_MSG_CHECKING(looking for mysqlclient library)
 if ${MYSQL_CONFIG} --libs > /dev/null 2>&1
 then

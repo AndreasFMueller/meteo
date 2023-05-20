@@ -29,12 +29,9 @@ station).
     src="http://cesario.othello.ch/meteo/Altendorf2.temperature-week.png" /></a>
   </td>
   <td>
-    <!--
-    <a href="http://meteo.othello.ch/meteo/meteobrowser.php"><img border="0"
-    src="http://meteo.othello.ch/altendorf/Altendorf.temperature-year.png"
+    <a href="http://cesario.othello.ch/meteo/browser/meteobrowser.php"><img border="0"
+    src="http://cesario.othello.ch/meteo/Altendorf.temperature-year.png"
     width="250" height="72" /></a>
-    -->
-    currently not available
   </td>
 </tr>
 <!--
