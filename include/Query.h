@@ -57,7 +57,7 @@ public:
 	void	setEnd(time_t e) { end = e; }
 	time_t	getEnd(void) const { return end; }
 	void	setOffset(int off) { offset = off; }
-	int	getOffset(void) { return offset; }
+	int	getOffset(void) const { return offset; }
 	void	addSelect(const std::string& n, const std::string& fqfieldname);
 	int	getSelectCount(void) const { return select.size(); }
 	std::string	getNameById(const fieldid& id) const;

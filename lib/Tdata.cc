@@ -35,6 +35,7 @@ void	Tdata::addData(const tdata_t& input) {
 	// add all pairs in input if they are between start and end and 
 	// have a key that is a multiple of the interval
 	tdata_t::const_iterator	i;
+	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "adding between %d and %d", start, finish);
 	for (time_t t = start; t <= finish; t += interval) {
 		i = input.find(t);
 		if (i != input.end())
@@ -55,6 +56,7 @@ double	Tdata::operator()(time_t t) const {
 }
 
 Tdata	Tdata::apply(double (*func)(double)) const {
+	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "result between %d and %d", start, finish);
 	Tdata	result(interval, start, finish);
 	tdata_t::const_iterator	i;
 	for (i = data.begin(); i != data.end(); i++) {
@@ -116,6 +118,8 @@ Tdata	apply2(double (*func)(double, double), const Tdata& a, const Tdata& b) {
 	}
 
 	// compute the intersection of the 
+	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "a.interval: %d - %d, b.interval: %d - %d",
+		a.getStart(), a.getFinish(), b.getStart(), b.getFinish());
 	time_t	commonstart, commonfinish;
 	commonstart = (a.getStart() < b.getStart())	? a.getStart()
 							: b.getStart();
@@ -128,13 +132,15 @@ Tdata	apply2(double (*func)(double, double), const Tdata& a, const Tdata& b) {
 		func, a.data.size(), b.data.size());
 	// go through the first array
 	for (i = a.data.begin(); i != a.data.end(); i++) {
-		// look for the same key in the second arary
+		// look for the same key in the second array
 		if (b.data.end() != b.data.find(i->first)) {
 			// we have found a common time index, so make sure
 			// it is in the common range
 			if ((i->first < commonstart)
-				|| (i->first > commonfinish))
+				|| (i->first > commonfinish)) {
+				mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "%d outside range", i->first);
 				continue;
+			}
 			try {
 				// apply the function to the 
 				result.data[i->first] = func(i->second,

@@ -28,7 +28,7 @@ public:
 	Tdata(double v) { value = v; constant = true; }
 	Tdata(int i, time_t s, time_t e) {
 		interval = i;
-		start = s - (s % interval); finish = e - (e % interval);
+		start = s - (s % interval); finish = e - (e % interval) + interval;
 		constant = false;
 	}
 	~Tdata(void) { }

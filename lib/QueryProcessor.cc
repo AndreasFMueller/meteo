@@ -145,7 +145,7 @@ void	QueryProcessor_internal::perform(const Query& query,
 
 		// add a new Tdata element to the result (a QueryResult object)
 		Tdata	v(query.getInterval(),
-			query.getStart(), query.getEnd());
+			query.getStart(), query.getEnd() + query.getOffset());
 		result.data.insert(dmap_t::value_type(qi->first, v));
 		// so far, the new Tdata stuff is completely empty
 	}
