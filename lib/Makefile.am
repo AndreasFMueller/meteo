@@ -43,6 +43,8 @@ libmeteo_la_SOURCES =							\
 	Dewpoint.cc							\
 	Dimension.cc							\
 	Energy.cc							\
+	EnergyConverter.cc						\
+	EnergyValue.cc							\
 	ExtraTemperatureReader.cc					\
 	FQField.cc							\
 	FQField_internals.cc						\

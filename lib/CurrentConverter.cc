@@ -21,9 +21,9 @@ double	CurrentConverter::operator()(const double value, const std::string& from)
 	if (from == getUnit())
 		return value;
 
-	if (from != "V")
+	if (from != "A")
 		throw MeteoException("unknown Current unit `from'", from);
-	if (getUnit() != "V")
+	if (getUnit() != "A")
 		throw MeteoException("unknown Current unit `to'", getUnit());
 	return value;
 }

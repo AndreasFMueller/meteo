@@ -37,8 +37,8 @@ insert into mfield(name, id, unit, class)
 insert into mfield(name, id, unit)
 	values('frequency', 49, 'Hz');
 
-insert into mfield(name, id, unit, class)
-	values('feedtime', 50, 's', 'TimeValue');
+insert into mfield(name, id, unit)
+	values('feedtime', 50, 's');
 insert into mfield(name, id, unit)
 	values('energy', 51, 'J', 'EnergyValue');
 insert into mfield(name, id, unit)

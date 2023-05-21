@@ -33,6 +33,8 @@ noinst_HEADERS =							\
 	Dewpoint.h							\
 	Dimension.h							\
 	Energy.h							\
+	EnergyConverter.h						\
+	EnergyValue.h							\
 	ExtraTemperatureReader.h					\
 	FQField.h							\
 	FQField_internals.h						\

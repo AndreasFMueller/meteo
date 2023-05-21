@@ -16,7 +16,7 @@ double	PowerConverter::operator()(const double value, const std::string& from) c
 	if (from == getUnit())
 		return value;
 
-	if (from != "V")
+	if (from != "W")
 		throw MeteoException("unknown Power unit `from'", from);
 	if (getUnit() != "W")
 		throw MeteoException("unknown Power unit `to'", getUnit());
