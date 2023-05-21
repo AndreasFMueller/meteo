@@ -39,13 +39,13 @@ insert into mfield(name, id, unit)
 
 insert into mfield(name, id, unit)
 	values('feedtime', 50, 's');
-insert into mfield(name, id, unit)
+insert into mfield(name, id, unit, class)
 	values('energy', 51, 'J', 'EnergyValue');
-insert into mfield(name, id, unit)
+insert into mfield(name, id, unit, class)
 	values('temperature', 52, 'C', 'TemperatureValue');
-insert into mfield(name, id, unit)
+insert into mfield(name, id, unit, class)
 	values('temperature_min', 53, 'C', 'TemperatureValue');
-insert into mfield(name, id, unit)
+insert into mfield(name, id, unit, class)
 	values('temperature_max', 54, 'C', 'TemperatureValue');
 
 --
@@ -108,6 +108,7 @@ insert into mfield(name, id, unit)
 -- Solivia.inverter.power              6.17.46
 -- Solivia.inverter.power_min          6.17.47
 -- Solivia.inverter.power_max          6.17.48
+-- Solivia.inverter.feedtime           6.17.50
 -- Solivia.inverter.energy             6.17.51
 -- Solivia.inverter.temperature        6.17.52
 -- Solivia.inverter.temperature_min    6.17.53

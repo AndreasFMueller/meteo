@@ -50,6 +50,7 @@
       <sensor name="inverter">
         <field>power</field>
         <field>energy</field>
+        <field>feedtime</field>
         <field>temperature</field>
       </sensor>
     </sensors>
@@ -115,8 +116,9 @@
       <sensor name="inverter">
 	<average name="power"           base="power"       operator="avg"/>
 	<average name="power_min"       base="power"       operator="min"/>
-	<average name="power_max"       base="power"       operator="aax"/>
-	<average name="energy"          base="energy"      operator="avg"/>
+	<average name="power_max"       base="power"       operator="max"/>
+	<average name="energy"          base="energy"      operator="max"/>
+	<average name="feedtime"        base="feedtime"    operator="max"/>
 	<average name="temperature"     base="temperature" operator="avg"/>
 	<average name="temperature_min" base="temperature" operator="min"/>
 	<average name="temperature_max" base="temperature" operator="aax"/>
