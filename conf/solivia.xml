@@ -271,6 +271,7 @@
 	  nameupper="s12kW" namelower="s1kW"/>
 	<channel color="#66cc00" type="histogram" scale="left" name="s1kW"/>
 	<channel color="#000000" type="histogram" scale="left" name="lkW"/>
+	<channel color="#ff0000" type="sun" station="Solivia"/>
       </channels>
     </graph>
     <graph name="Solivia.loss" offset="3600"

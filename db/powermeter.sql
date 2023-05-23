@@ -4,7 +4,7 @@
 -- (c) 2023 Prof Dr Andreas Müller
 --
 insert into station(name, id, timezone, offset, longitude, latitude, altitude)
-	values('Bubental', 5, 'MET', 3600, 47.18, 8.81, 610);
+	values('Bubental', 5, 'MET', 3600, 8.81, 47.18, 610);
 
 insert into sensor (name, id, stationid) values ('powermeter', 11, 5);
 

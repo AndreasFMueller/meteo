@@ -4,7 +4,7 @@
 -- (c) 2023 Prof Dr Andreas Müller
 --
 insert into station(name, id, timezone, offset, longitude, latitude, altitude)
-	values('Solivia', 6, 'MET', 3600, 47.18, 8.81, 610);
+	values('Solivia', 6, 'MET', 3600, 8.81, 47.18, 610);
 
 insert into sensor (name, id, stationid) values ('phase1', 12, 6);
 insert into sensor (name, id, stationid) values ('phase2', 13, 6);
