@@ -201,6 +201,7 @@
 	<channel color="#99ccff" type="histogram" scale="left" name="p1kW"/>
 	<channel color="#990000" type="curve" scale="left" name="tkW"/>
 	<channel color="#009900" type="curve" scale="right" name="energy"/>
+	<channel color="#ff0000" type="sun" station="Solivia"/>
       </channels>
     </graph>
     <graph name="Solivia.solar" offset="3600"
@@ -335,6 +336,7 @@
 	</query>
 	<channel color="#ff9900" type="histogram" scale="left" name="lkW"/>
 	<channel color="#990000" type="curve" scale="right" name="efficiency"/>
+	<channel color="#ff0000" type="sun" station="Solivia"/>
       </channels>
     </graph>
     <graph name="Solivia.voltage" offset="3600"
@@ -379,6 +381,7 @@
 	<channel color="#6666ff" type="curve" scale="left" name="u2"/>
 	<channel color="#339966" type="curve" scale="left" name="u3"/>
 	<channel color="#663300" type="curve" scale="right" name="temperature"/>
+	<channel color="#ff0000" type="sun" station="Solivia"/>
       </channels>
     </graph>
   </graphs>
