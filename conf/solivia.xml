@@ -333,16 +333,16 @@
 	  </data>
 	</query>
 	<channel color="#ff9900" type="histogram" scale="left" name="lkW"/>
-	<channel color="#009900" type="curve" scale="right" name="efficiency"/>
+	<channel color="#990000" type="curve" scale="right" name="efficiency"/>
       </channels>
     </graph>
     <graph name="Solivia.voltage" offset="3600"
         height="144" width="500" bgcolor="#ffffff" fgcolor="#000000">
       <leftlabel align="center">Voltage (V)</leftlabel>
-      <leftaxis type="static" min="400" max="430" first="400" last="430"
+      <leftaxis type="static" min="390" max="430" first="390" last="430"
 	step="10" format="%.0f" gridlines="yes" ticks="yes"/>
       <rightlabel align="center">Temperature (C)</rightlabel>
-      <rightaxis type="static" min="10" max="50" first="10" last="50"
+      <rightaxis type="static" min="20" max="60" first="20" last="60"
 	step="10" format="%.0f" gridlines="no" ticks="yes"/>
       <graphwindow llx="55" lly="19" urx="455" ury="139" alias="yes"/>
       <channels>
