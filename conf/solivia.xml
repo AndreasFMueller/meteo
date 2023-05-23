@@ -131,6 +131,18 @@
       <leftlabel align="center">Power (kW)</leftlabel>
       <leftaxis type="static" min="0" max="6" first="0" last="6"
 	step="1" format="%.1f" gridlines="yes" ticks="yes"/>
+      <rightlabel align="center">Energy (kWh)</rightlabel>
+      <rightaxis type="static" min="0" max="60" first="0" last="60"
+	step="10" format="%2.0f" gridlines="no" ticks="yes"/>
+      <rightaxis type="static" min="0" max="300" first="0" last="300"
+	step="50" format="%4.0f" gridlines="no" ticks="yes"
+	interval="1800"/>
+      <rightaxis type="static" min="0" max="600" first="0" last="600"
+	step="100" format="%4.0f" gridlines="no" ticks="yes"
+	interval="7200"/>
+      <rightaxis type="static" min="0" max="6000" first="0" last="6000"
+	step="1000" format="%4.0f" gridlines="no" ticks="yes"
+	interval="86400"/>
       <graphwindow llx="55" lly="19" urx="455" ury="139"/>
       <channels>
 	<query>
@@ -146,6 +158,14 @@
 	        <value name="p2"/>
 	        <value name="p3"/>
 	      </sum>
+	    </mult>
+	  </data>
+	  <data name="energy">
+	    <mult>
+	      <constant value="0.00027777"/>
+	      <function name="integrate">
+	        <value name="p123kW"/>
+	      </function>
 	    </mult>
 	  </data>
 	  <data name="p12kW">
@@ -176,6 +196,7 @@
 	  nameupper="p12kW" namelower="p1kW"/>
 	<channel color="#99ccff" type="histogram" scale="left" name="p1kW"/>
 	<channel color="#990000" type="curve" scale="left" name="tkW"/>
+	<channel color="#009900" type="curve" scale="right" name="energy"/>
       </channels>
     </graph>
     <graph name="Solivia.solar" offset="3600"
@@ -313,9 +334,12 @@
     </graph>
     <graph name="Solivia.voltage" offset="3600"
         height="144" width="500" bgcolor="#ffffff" fgcolor="#000000">
-      <leftlabel align="center">Voltage</leftlabel>
+      <leftlabel align="center">Voltage (V)</leftlabel>
       <leftaxis type="static" min="400" max="430" first="400" last="430"
 	step="10" format="%.0f" gridlines="yes" ticks="yes"/>
+      <rightlabel align="center">Temperature (C)</rightlabel>
+      <rightaxis type="static" min="10" max="50" first="10" last="50"
+	step="10" format="%.0f" gridlines="no" ticks="yes"/>
       <graphwindow llx="55" lly="19" urx="455" ury="139" alias="yes"/>
       <channels>
 	<query>
@@ -328,6 +352,7 @@
 	  <select name="u3">Solivia.phase3.voltage</select>
 	  <select name="u3min">Solivia.phase3.voltage_min</select>
 	  <select name="u3max">Solivia.phase3.voltage_max</select>
+	  <select name="temperature">Solivia.inverter.temperature</select>
 	  <data name="min">
 	    <min>
 	      <value name="u1min"/>
@@ -348,6 +373,7 @@
 	<channel color="#cc00cc" type="curve" scale="left" name="u1"/>
 	<channel color="#6666ff" type="curve" scale="left" name="u2"/>
 	<channel color="#339966" type="curve" scale="left" name="u3"/>
+	<channel color="#ff9900" type="curve" scale="right" name="temperature"/>
       </channels>
     </graph>
   </graphs>
