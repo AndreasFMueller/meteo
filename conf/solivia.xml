@@ -132,8 +132,12 @@
       <leftaxis type="static" min="0" max="6" first="0" last="6"
 	step="1" format="%.1f" gridlines="yes" ticks="yes"/>
       <rightlabel align="center">Energy (kWh)</rightlabel>
+      <rightaxis type="static" min="0" max="30" first="0" last="30"
+	step="5" format="%2.0f" gridlines="no" ticks="yes"
+	interval="60"/>
       <rightaxis type="static" min="0" max="60" first="0" last="60"
-	step="10" format="%2.0f" gridlines="no" ticks="yes"/>
+	step="10" format="%2.0f" gridlines="no" ticks="yes"
+	interval="300"/>
       <rightaxis type="static" min="0" max="300" first="0" last="300"
 	step="50" format="%4.0f" gridlines="no" ticks="yes"
 	interval="1800"/>
