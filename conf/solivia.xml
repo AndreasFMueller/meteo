@@ -129,8 +129,8 @@
     <graph name="Solivia.power" offset="3600"
         height="144" width="500" bgcolor="#ffffff" fgcolor="#000000">
       <leftlabel align="center">Power (kW)</leftlabel>
-      <leftaxis type="static" min="0" max="2" first="0" last="2"
-	step="0.5" format="%.1f" gridlines="yes" ticks="yes"/>
+      <leftaxis type="static" min="0" max="6" first="0" last="6"
+	step="1" format="%.1f" gridlines="yes" ticks="yes"/>
       <graphwindow llx="55" lly="19" urx="455" ury="139"/>
       <channels>
 	<query>
@@ -178,10 +178,143 @@
 	<channel color="#990000" type="curve" scale="left" name="tkW"/>
       </channels>
     </graph>
+    <graph name="Solivia.solar" offset="3600"
+        height="144" width="500" bgcolor="#ffffff" fgcolor="#000000">
+      <leftlabel align="center">Power (kW)</leftlabel>
+      <leftaxis type="static" min="0" max="6" first="0" last="6"
+	step="1" format="%.1f" gridlines="yes" ticks="yes"/>
+      <graphwindow llx="55" lly="19" urx="455" ury="139"/>
+      <channels>
+	<query>
+	  <select name="p1">Solivia.phase1.power</select>
+	  <select name="p2">Solivia.phase2.power</select>
+	  <select name="p3">Solivia.phase3.power</select>
+	  <select name="s1">Solivia.string1.power</select>
+	  <select name="s2">Solivia.string2.power</select>
+	  <select name="t">Solivia.inverter.power</select>
+	  <data name="p123kW">
+	    <mult>
+	      <constant value="0.001"/>
+	      <sum>
+	        <value name="p1"/>
+	        <value name="p2"/>
+	        <value name="p3"/>
+	      </sum>
+	    </mult>
+	  </data>
+	  <data name="p12kW">
+	    <mult>
+	      <constant value="0.001"/>
+	      <sum>
+	        <value name="p1"/>
+	        <value name="p2"/>
+	      </sum>
+	    </mult>
+	  </data>
+	  <data name="p1kW">
+	    <mult>
+	      <constant value="0.001"/>
+	      <value name="p1"/>
+	    </mult>
+	  </data>
+	  <data name="s12kW">
+	    <mult>
+	      <constant value="0.001"/>
+	      <sum>
+	        <value name="s1"/>
+	        <value name="s2"/>
+	      </sum>
+	    </mult>
+	  </data>
+	  <data name="s1kW">
+	    <mult>
+	      <constant value="0.001"/>
+	      <value name="s1"/>
+	    </mult>
+	  </data>
+	  <data name="lkW">
+	    <mult>
+	      <constant value="0.001"/>
+	      <diff>
+		<value name="s12kW"/>
+		<value name="p123kW"/>
+	      </diff>
+	    </mult>
+	  </data>
+	</query>
+	<channel color="#339900" type="range" scale="left"
+	  nameupper="s12kW" namelower="s1kW"/>
+	<channel color="#66cc00" type="histogram" scale="left" name="s1kW"/>
+	<channel color="#000000" type="histogram" scale="left" name="lkW"/>
+      </channels>
+    </graph>
+    <graph name="Solivia.loss" offset="3600"
+        height="144" width="500" bgcolor="#ffffff" fgcolor="#000000">
+      <leftlabel align="center">Losses (W)</leftlabel>
+      <leftaxis type="static" min="0" max="250" first="0" last="250"
+	step="50" format="%.0f" gridlines="yes" ticks="yes"/>
+      <rightlabel align="center">Efficiency (%)</rightlabel>
+      <rightaxis type="static" min="0" max="100" first="0" last="100"
+	step="20" format="%3.0f" gridlines="no" ticks="yes"/>
+      <graphwindow llx="55" lly="19" urx="455" ury="139"/>
+      <channels>
+	<query>
+	  <select name="p1">Solivia.phase1.power</select>
+	  <select name="p2">Solivia.phase2.power</select>
+	  <select name="p3">Solivia.phase3.power</select>
+	  <select name="s1">Solivia.string1.power</select>
+	  <select name="s2">Solivia.string2.power</select>
+	  <data name="p123kW">
+	    <mult>
+	      <constant value="0.001"/>
+	      <sum>
+	        <value name="p1"/>
+	        <value name="p2"/>
+	        <value name="p3"/>
+	      </sum>
+	    </mult>
+	  </data>
+	  <data name="ienergy">
+	    <function name="integrate">
+	      <value name="p123kW"/>
+	    </function>
+	  </data>
+	  <data name="s12kW">
+	    <mult>
+	      <constant value="0.001"/>
+	      <sum>
+	        <value name="s1"/>
+	        <value name="s2"/>
+	      </sum>
+	    </mult>
+	  </data>
+	  <data name="lkW">
+	    <mult>
+	      <constant value="1000"/>
+	      <diff>
+		<value name="s12kW"/>
+		<value name="p123kW"/>
+	      </diff>
+	    </mult>
+	  </data>
+	  <data name="efficiency">
+	    <mult>
+	      <constant value="100"/>
+	      <quot>
+	        <value name="p123kW"/>
+	        <value name="s12kW"/>
+	      </quot>
+	    </mult>
+	  </data>
+	</query>
+	<channel color="#ff9900" type="histogram" scale="left" name="lkW"/>
+	<channel color="#009900" type="curve" scale="right" name="efficiency"/>
+      </channels>
+    </graph>
     <graph name="Solivia.voltage" offset="3600"
         height="144" width="500" bgcolor="#ffffff" fgcolor="#000000">
       <leftlabel align="center">Voltage</leftlabel>
-      <leftaxis type="static" min="220" max="250" first="220" last="250"
+      <leftaxis type="static" min="400" max="430" first="400" last="430"
 	step="10" format="%.0f" gridlines="yes" ticks="yes"/>
       <graphwindow llx="55" lly="19" urx="455" ury="139" alias="yes"/>
       <channels>

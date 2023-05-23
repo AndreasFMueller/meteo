@@ -122,7 +122,7 @@ static void	readintervals(int argc, char *argv[],
 // help option is invoked
 static void	usage(void) {
 	printf(
-"usage: meteodraw [ -dtVmIx ] [ -l logurl ] [ -c dir ] [ -G graph ] \n"
+"usage: meteodraw [ -dtVmIx ] [ -l logurl ] [ -c dir ] \n"
 "    [ -s station ] [ -p prefix ] [ -g graph ] [ -f config ] [ -u url ] \n"
 "    [ -e endtime ] [ -L label ] [ interval ... ]\n"
 "   -d,--debug                  increase debug level\n"
