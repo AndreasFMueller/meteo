@@ -58,60 +58,60 @@
       <sensor name="phase1">
 	<average name="voltage"         base="voltage"     operator="avg"/>
 	<average name="voltage_min"     base="voltage"     operator="min"/>
-	<average name="voltage_max"     base="voltage"     operator="aax"/>
+	<average name="voltage_max"     base="voltage"     operator="max"/>
 	<average name="current"         base="current"     operator="avg"/>
 	<average name="current_min"     base="current"     operator="min"/>
-	<average name="current_max"     base="current"     operator="aax"/>
+	<average name="current_max"     base="current"     operator="max"/>
 	<average name="power"           base="power"       operator="avg"/>
 	<average name="power_min"       base="power"       operator="min"/>
-	<average name="power_max"       base="power"       operator="aax"/>
+	<average name="power_max"       base="power"       operator="max"/>
 	<average name="frequency"       base="frequency"   operator="avg"/>
       </sensor>
       <sensor name="phase2">
 	<average name="voltage"         base="voltage"     operator="avg"/>
 	<average name="voltage_min"     base="voltage"     operator="min"/>
-	<average name="voltage_max"     base="voltage"     operator="aax"/>
+	<average name="voltage_max"     base="voltage"     operator="max"/>
 	<average name="current"         base="current"     operator="avg"/>
 	<average name="current_min"     base="current"     operator="min"/>
-	<average name="current_max"     base="current"     operator="aax"/>
+	<average name="current_max"     base="current"     operator="max"/>
 	<average name="power"           base="power"       operator="avg"/>
 	<average name="power_min"       base="power"       operator="min"/>
-	<average name="power_max"       base="power"       operator="aax"/>
+	<average name="power_max"       base="power"       operator="max"/>
 	<average name="frequency"       base="frequency"   operator="avg"/>
       </sensor>
       <sensor name="phase3">
 	<average name="voltage"         base="voltage"     operator="avg"/>
 	<average name="voltage_min"     base="voltage"     operator="min"/>
-	<average name="voltage_max"     base="voltage"     operator="aax"/>
+	<average name="voltage_max"     base="voltage"     operator="max"/>
 	<average name="current"         base="current"     operator="avg"/>
 	<average name="current_min"     base="current"     operator="min"/>
-	<average name="current_max"     base="current"     operator="aax"/>
+	<average name="current_max"     base="current"     operator="max"/>
 	<average name="power"           base="power"       operator="avg"/>
 	<average name="power_min"       base="power"       operator="min"/>
-	<average name="power_max"       base="power"       operator="aax"/>
+	<average name="power_max"       base="power"       operator="max"/>
 	<average name="frequency"       base="frequency"   operator="avg"/>
       </sensor>
       <sensor name="string1">
 	<average name="voltage"         base="voltage"     operator="avg"/>
 	<average name="voltage_min"     base="voltage"     operator="min"/>
-	<average name="voltage_max"     base="voltage"     operator="aax"/>
+	<average name="voltage_max"     base="voltage"     operator="max"/>
 	<average name="current"         base="current"     operator="avg"/>
 	<average name="current_min"     base="current"     operator="min"/>
-	<average name="current_max"     base="current"     operator="aax"/>
+	<average name="current_max"     base="current"     operator="max"/>
 	<average name="power"           base="power"       operator="avg"/>
 	<average name="power_min"       base="power"       operator="min"/>
-	<average name="power_max"       base="power"       operator="aax"/>
+	<average name="power_max"       base="power"       operator="max"/>
       </sensor>
       <sensor name="string2">
 	<average name="voltage"         base="voltage"     operator="avg"/>
 	<average name="voltage_min"     base="voltage"     operator="min"/>
-	<average name="voltage_max"     base="voltage"     operator="aax"/>
+	<average name="voltage_max"     base="voltage"     operator="max"/>
 	<average name="current"         base="current"     operator="avg"/>
 	<average name="current_min"     base="current"     operator="min"/>
-	<average name="current_max"     base="current"     operator="aax"/>
+	<average name="current_max"     base="current"     operator="max"/>
 	<average name="power"           base="power"       operator="avg"/>
 	<average name="power_min"       base="power"       operator="min"/>
-	<average name="power_max"       base="power"       operator="aax"/>
+	<average name="power_max"       base="power"       operator="max"/>
       </sensor>
       <sensor name="inverter">
 	<average name="power"           base="power"       operator="avg"/>
@@ -121,7 +121,7 @@
 	<average name="feedtime"        base="feedtime"    operator="max"/>
 	<average name="temperature"     base="temperature" operator="avg"/>
 	<average name="temperature_min" base="temperature" operator="min"/>
-	<average name="temperature_max" base="temperature" operator="aax"/>
+	<average name="temperature_max" base="temperature" operator="max"/>
       </sensor>
     </averages>
   </station>
