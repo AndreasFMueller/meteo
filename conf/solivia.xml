@@ -377,7 +377,7 @@
 	<channel color="#cc00cc" type="curve" scale="left" name="u1"/>
 	<channel color="#6666ff" type="curve" scale="left" name="u2"/>
 	<channel color="#339966" type="curve" scale="left" name="u3"/>
-	<channel color="#ff9900" type="curve" scale="right" name="temperature"/>
+	<channel color="#663300" type="curve" scale="right" name="temperature"/>
       </channels>
     </graph>
   </graphs>
