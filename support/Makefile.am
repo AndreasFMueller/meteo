@@ -18,7 +18,7 @@ install-exec-local:
 bin_PROGRAMS = meteofixtimestamps meteodbmigrate
 
 meteofixtimestamps_SOURCES = meteofixtimestamps.c
-meteodbmigrate_SOURCES = meteodbmigrate.cc
+meteodbmigrate_SOURCES = meteodbmigrate.cpp
 
 testmig:	meteodbmigrate
 	./meteodbmigrate -o -10800 -b meteo -u meteoupdate -p m57cwrt \

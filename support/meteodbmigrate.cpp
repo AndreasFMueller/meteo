@@ -1,8 +1,8 @@
 /*
- * meteodbmigrate.cc -- read the database using the same sophisticated technique
- *                      as in meteodbdump and write the information to the
- *                      new database structure. Do not modify the existing
- *                      tables in any way
+ * meteodbmigrate.cpp -- read the database using the same sophisticated
+ *                      technique as in meteodbdump and write the information
+ *                      to the new database structure. Do not modify the
+ *                      existing tables in any way
  *
  * In most cases, the fields can just be copied over from the old database
  * to the new one. However, for wind, there is a change in interpretation
