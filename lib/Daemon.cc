@@ -12,7 +12,7 @@
 #include <string.h>
 #endif /* HAVE_STRING_H */
 #ifdef HAVE_STDLIB_H
-#include <stdlib.h> /* some systems have alloca defined in stdlib.h */
+#include <stdlib.h>
 #endif /* HAVE_STDLIB_H */
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
@@ -26,9 +26,6 @@
 #ifdef HAVE_ERRNO_H
 #include <errno.h>
 #endif /* HAVE_ERRNO_H */
-#ifdef HAVE_ALLOCA_H
-#include <alloca.h>
-#endif /* HAVE_ALLOCA_H */
 #include <mdebug.h>
 #include <MeteoException.h>
 #include <Daemon.h>

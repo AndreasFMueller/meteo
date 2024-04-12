@@ -2,7 +2,7 @@ AC_PREREQ([2.69])dnl
 AC_REVISION([1.0])dnl
 
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT([meteo],[0.9.23],[andreas.mueller@othello.ch])
+AC_INIT([meteo],[0.9.24],[andreas.mueller@othello.ch])
 m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
 LT_INIT
 AC_CONFIG_SRCDIR([include/crc.h])
@@ -84,7 +84,7 @@ AC_HEADER_SYS_WAIT
 AC_CHECK_HEADERS([argz.h arpa/inet.h fcntl.h malloc.h memory.h netdb.h \
 netinet/in.h stdio.h stdlib.h string.h strings.h sys/socket.h sys/time.h \
 syslog.h signal.h termios.h unistd.h sys/msg.h sys/ipc.h sys/sem.h \
-alloca.h errno.h math.h getopt.h])
+errno.h math.h getopt.h])
 AC_CHECK_TYPES([semun])
 if test "$ac_cv_type_semun" = "no"; then
   AC_MSG_CHECKING(if sem.h defines semun)

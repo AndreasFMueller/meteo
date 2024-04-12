@@ -15,9 +15,6 @@
 #include <MeteoException.h>
 #include <StationInfo.h>
 #include <ValueFactory.h>
-#ifdef HAVE_ALLOCA_H
-#include <alloca.h>
-#endif /* HAVE_ALLOCA_H */
 #include <cstdlib>
 
 namespace meteo {

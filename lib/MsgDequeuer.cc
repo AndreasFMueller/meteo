@@ -39,6 +39,7 @@
 #ifdef HAVE_STRING_H
 #include <string.h>
 #endif /* HAVE_STRING_H */
+#include <ctime>
 #include <MsgDequeuer.h>
 #include <MeteoException.h>
 

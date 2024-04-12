@@ -23,9 +23,6 @@
 #ifdef HAVE_STRING_H
 #include <string.h>
 #endif /* HAVE_STRING_H */
-#ifdef HAVE_ALLOCA_H
-#include <alloca.h>
-#endif /* HAVE_ALLOCA_H */
 
 namespace meteo {
 
@@ -37,7 +34,6 @@ namespace meteo {
  * compute actual time_t values.
  */
 static int	breakup_time(struct tm *tp, const char *ts) {
-	char	*wc;
 	int	l;
 
 	/* timestamp must be complete					*/
@@ -45,7 +41,7 @@ static int	breakup_time(struct tm *tp, const char *ts) {
 		return -1;
 
 	/* create a local working copy					*/
-	wc = (char *)alloca(l + 1);
+	char	wc[l + 1];
 	memcpy(wc, ts, l + 1);
 
 	tp->tm_sec = 0; wc[12] = '\0';

@@ -12,6 +12,7 @@
 #ifdef HAVE_TIME_H
 #include <time.h>
 #endif /* HAVE_TIME_H */
+#include <ctime>
 
 namespace meteo {
 

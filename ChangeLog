@@ -1,3 +1,7 @@
+Release 0.9.24:
+	* remove alloca
+	* portability issues with ctime header
+
 Release 0.9.23:
 	* add power meter monitoring classes
 	* add value classes for current and power

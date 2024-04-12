@@ -12,9 +12,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <mdebug.h>
-#ifdef HAVE_ALLOCA_H
-#include <alloca.h>
-#endif  /* HAVE_ALLOCA_H */
 
 namespace meteo {
 
@@ -24,15 +21,17 @@ namespace meteo {
 //
 #define	BUFFERSIZE	1024
 std::string stringvprintf(const char *format, va_list ap) {
-	char *buffer;		// should be sufficient in this application
+	//char *buffer;		// should be sufficient in this application
 	int bytes;
-	buffer = (char *)alloca(BUFFERSIZE);	// very small buffer
+	char	buffer[BUFFERSIZE];
 	bytes = vsnprintf(buffer, BUFFERSIZE, format, ap);
 	if (bytes >= BUFFERSIZE) {
 		// truncated, try again with the recommended buffer size
-		mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "too small, bytes needed: %d", bytes);
-		buffer = (char *) alloca(bytes + 1);
-		vsnprintf(buffer, bytes + 1, format, ap);
+		mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "too small, bytes needed: %d",
+			bytes);
+		char	buffer2[bytes + 1];
+		vsnprintf(buffer2, bytes + 1, format, ap);
+		return std::string(buffer2);
 	}
 	return std::string(buffer);
 }

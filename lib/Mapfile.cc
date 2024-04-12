@@ -27,9 +27,6 @@
 #endif /* HAVE_ERRNO_H */
 #include <Format.h>
 #include <Timestamp.h>
-#ifdef HAVE_ALLOCA_H
-#include <alloca.h>
-#endif /* HAVE_ALLOCA_H */
 
 namespace meteo {
 
@@ -83,7 +80,7 @@ void	Mapfile::publish(void) {
 	}
 
 	// fill a buffer with the data from the string plus spaces
-	char	*buffer = (char *)alloca(mapsize);
+	char	buffer[mapsize];
 	memset(buffer, ' ', mapsize);
 	buffer[mapsize - 1] = '\n';
 	memcpy(buffer, result.data(), result.length());
@@ -99,7 +96,7 @@ void	Mapfile::publish(void) {
 
 // read the data from the map file
 std::string	Mapfile::read(void) {
-	char	*buffer = (char *)alloca(mapsize);
+	char	buffer[mapsize];
 	int	bytes = ::read(mapfile, buffer, mapsize);
 	if (mapsize != bytes) {
 		// this really shouldn't happen
