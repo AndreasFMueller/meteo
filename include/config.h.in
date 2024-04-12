@@ -3,17 +3,8 @@
 /* Define to 1 if the `closedir' function returns void instead of int. */
 #undef CLOSEDIR_VOID
 
-/* Define to 1 if using 'alloca.c'. */
-#undef C_ALLOCA
-
 /* Define to 1 if you have the `alarm' function. */
 #undef HAVE_ALARM
-
-/* Define to 1 if you have 'alloca', as a function or macro. */
-#undef HAVE_ALLOCA
-
-/* Define to 1 if <alloca.h> works. */
-#undef HAVE_ALLOCA_H
 
 /* Define to 1 if you have the <argz.h> header file. */
 #undef HAVE_ARGZ_H
@@ -244,14 +235,6 @@
 
 /* Define to the type of arg 5 for `select'. */
 #undef SELECT_TYPE_ARG5
-
-/* If using the C implementation of alloca, define if you know the
-   direction of stack growth for your system; otherwise it will be
-   automatically deduced at runtime.
-	STACK_DIRECTION > 0 => grows toward higher addresses
-	STACK_DIRECTION < 0 => grows toward lower addresses
-	STACK_DIRECTION = 0 => direction of growth unknown */
-#undef STACK_DIRECTION
 
 /* Define to 1 if all of the C90 standard headers exist (not just the ones
    required in a freestanding environment). This macro is provided for

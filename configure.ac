@@ -77,7 +77,6 @@ LIBS="${GDLIB_LIBS} ${LIBS}"
 
 
 dnl Checks for header files.
-AC_FUNC_ALLOCA
 AC_HEADER_DIRENT
 AC_HEADER_SYS_WAIT
 
