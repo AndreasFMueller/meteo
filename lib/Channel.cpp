@@ -38,9 +38,6 @@
 #ifdef HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif /* HAVE_SYS_TYPES_H */
-#ifdef HAVE_ALLOCA_H
-#include <alloca.h>
-#endif /* HAVE_ALLOCA_H */
 #include <Timeval.h>
 #include <mdebug.h>
 
@@ -111,8 +108,7 @@ char	Channel::recvChar(void) {
 std::string	Channel::recvString(int len) {
 	mdebug(LOG_DEBUG, MDEBUG_LOG, 0, "request for %d bytes", len);
 	// add timed read functionality
-	char	*b;
-	b = (char *)alloca(len);
+	char	b[len];
 	for (int i = 0; i < len; i++) {
 		b[i] = recvChar();
 	}

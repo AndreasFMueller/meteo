@@ -12,9 +12,6 @@
 #include <mdebug.h>
 #include <MeteoException.h>
 #include <Field.h>
-#ifdef HAVE_ALLOCA_H
-#include <alloca.h>
-#endif /* HAVE_ALLOCA_H */
 
 namespace meteo {
 

@@ -35,9 +35,6 @@
 #ifdef HAVE_SYS_STAT_H
 #include <sys/stat.h>
 #endif /* HAVE_SYS_STAT_H */
-#ifdef HAVE_ALLOCA_H
-#include <alloca.h>
-#endif /* HAVE_ALLOCA_H */
 
 #ifdef HAVE_SYS_SEM_H
 #ifdef HAVE_SEMUN
@@ -196,7 +193,8 @@ bool	Lock::enter(bool block) {
 
 	/* retrieve the values for the two semaphores			*/
 	union semun	s;
-	s.array = (unsigned short *)alloca(2 * sizeof(unsigned short));
+	unsigned short	us[2];
+	s.array = us;
 	if (semctl(id, 2, GETALL, s) < 0) {
 		mdebug(LOG_ERR, MDEBUG_LOG, 0, "cannot get semaphore "
 			"values: %s (%d)", strerror(errno), errno);

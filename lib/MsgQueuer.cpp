@@ -41,9 +41,7 @@
 #ifdef HAVE_STRING_H
 #include <string.h>
 #endif /* HAVE_STRING_H */
-#ifdef HAVE_ALLOCA_H
-#include <alloca.h>
-#endif /* HAVE_ALLOCA_H */
+#include <ctime>
 
 #define QUERYMSG_SIZE	4096
 
@@ -67,7 +65,6 @@ typedef struct querymsg {
 
 void	MsgQueuer::operator()(const std::string& query) {
 	int		s;
-	querymsg_t	*qm = NULL;
 
 	int	size = query.size();
 	mdebug(LOG_DEBUG, MDEBUG_LOG, 0,
@@ -75,17 +72,17 @@ void	MsgQueuer::operator()(const std::string& query) {
 
 	// create a data structure for the message
 	s = sizeof(long) + size;
-	qm = (querymsg_t *)alloca(sizeof(querymsg_t));
-	time(&qm->mtype);
+	querymsg_t	qm;
+	time(&qm.mtype);
 
 	// copy the data to the message structure
-	memcpy(qm->mtext, query.c_str(), size);
+	memcpy(qm.mtext, query.c_str(), size);
 	mdebug(LOG_DEBUG, MDEBUG_LOG, 0,
 		"message packet of size %d ready", s);
 
 #ifdef HAVE_SYS_MSG_H
 	// send the message to the queue
-	if (msgsnd(id, qm, s, IPC_NOWAIT) < 0)
+	if (msgsnd(id, &qm, s, IPC_NOWAIT) < 0)
 		mdebug(LOG_ERR, MDEBUG_LOG, MDEBUG_ERRNO,
 			"sending message failed");
 #else
@@ -95,7 +92,7 @@ void	MsgQueuer::operator()(const std::string& query) {
 	strncpy(sau.sun_path, queuename.c_str(), sizeof(sau.sun_path));
 	sau.sun_len = queuename.size() + 1;
 
-	if (s != sendto(id, qm, s, 0, (struct sockaddr *)&sau,
+	if (s != sendto(id, &qm, s, 0, (struct sockaddr *)&sau,
 		sizeof(sau))) {
 		mdebug(LOG_ERR, MDEBUG_LOG, MDEBUG_ERRNO,
 			"could not send to socket");

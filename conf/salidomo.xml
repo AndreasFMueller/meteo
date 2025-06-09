@@ -1,0 +1,253 @@
+<?xml version="1.0"?>
+<!--
+  solivia.xml
+
+  configuration for the Salidomo battery
+
+  (c) 2023 Prof Dr Andreas Müller
+  -->
+<meteo>
+  <database>
+    <hostname>ferdinand</hostname>
+    <port>3307</port>
+    <dbname>powermeter</dbname>
+    <user>powermaster</user>
+    <password>tom,ri5tentR</password>
+    <writer>powermaster</writer>
+    <writerpassword>tom,ri5tentR</writerpassword>
+    <prefix>power</prefix>
+  </database>
+  <station name="Salidomo">
+    <sensors>
+      <sensor name="pv">
+        <field>prms_phase1</field>
+        <field>prms_phase2</field>
+        <field>prms_phase3</field>
+      </sensor>
+      <sensor name="consumption">
+        <field>prms_phase1</field>
+        <field>prms_phase2</field>
+        <field>prms_phase3</field>
+      </sensor>
+      <sensor name="grid">
+        <field>prms_phase1</field>
+        <field>prms_phase2</field>
+        <field>prms_phase3</field>
+      </sensor>
+      <sensor name="battery">
+        <field>power</field>
+        <field>charge</field>
+      </sensor>
+    </sensors>
+    <averages>
+      <sensor name="pv">
+	<average name="prms_phase1"     base="prms_phase1"   operator="avg"/>
+	<average name="prms_phase1_min" base="prms_phase1"   operator="min"/>
+	<average name="prms_phase1_max" base="prms_phase1"   operator="max"/>
+	<average name="prms_phase2"     base="prms_phase2"   operator="avg"/>
+	<average name="prms_phase2_min" base="prms_phase2"   operator="min"/>
+	<average name="prms_phase2_max" base="prms_phase2"   operator="max"/>
+	<average name="prms_phase3"     base="prms_phase3"   operator="avg"/>
+	<average name="prms_phase3_min" base="prms_phase3"   operator="min"/>
+	<average name="prms_phase3_max" base="prms_phase3"   operator="max"/>
+      </sensor>
+      <sensor name="consumption">
+	<average name="prms_phase1"     base="prms_phase1"   operator="avg"/>
+	<average name="prms_phase1_min" base="prms_phase1"   operator="min"/>
+	<average name="prms_phase1_max" base="prms_phase1"   operator="max"/>
+	<average name="prms_phase2"     base="prms_phase2"   operator="avg"/>
+	<average name="prms_phase2_min" base="prms_phase2"   operator="min"/>
+	<average name="prms_phase2_max" base="prms_phase2"   operator="max"/>
+	<average name="prms_phase3"     base="prms_phase3"   operator="avg"/>
+	<average name="prms_phase3_min" base="prms_phase3"   operator="min"/>
+	<average name="prms_phase3_max" base="prms_phase3"   operator="max"/>
+      </sensor>
+      <sensor name="grid">
+	<average name="prms_phase1"     base="prms_phase1"   operator="avg"/>
+	<average name="prms_phase1_min" base="prms_phase1"   operator="min"/>
+	<average name="prms_phase1_max" base="prms_phase1"   operator="max"/>
+	<average name="prms_phase2"     base="prms_phase2"   operator="avg"/>
+	<average name="prms_phase2_min" base="prms_phase2"   operator="min"/>
+	<average name="prms_phase2_max" base="prms_phase2"   operator="max"/>
+	<average name="prms_phase3"     base="prms_phase3"   operator="avg"/>
+	<average name="prms_phase3_min" base="prms_phase3"   operator="min"/>
+	<average name="prms_phase3_max" base="prms_phase3"   operator="max"/>
+      </sensor>
+      <sensor name="battery">
+	<average name="power"      base="power"   operator="avg"/>
+	<average name="power_min"  base="power"   operator="min"/>
+	<average name="power_max"  base="power"   operator="max"/>
+	<average name="charge"     base="charge"  operator="avg"/>
+	<average name="charge_min" base="charge"  operator="min"/>
+	<average name="charge_max" base="charge"  operator="max"/>
+      </sensor>
+    </averages>
+  </station>
+  <graphs>
+    <graph name="Salidomo.battery" offset="3600" height="144" width="500"
+      bgcolor="#ffffff" fgcolor="#000000">
+      <leftlabel align="center">Power (kW)</leftlabel>
+      <leftaxis type="static" min="-3" max="3" first="-3" last="3"
+	step="1" format="%.0f" gridlines="yes" ticks="yes"/>
+      <rightlabel align="center">Charge (%)</rightlabel>
+      <rightaxis type="static" min="0" max="100" first="0" last="100"
+	step="20" format="%.0f" gridlines="no" ticks="yes"/>
+      <graphwindow llx="55" lly="19" urx="455" ury="139" alias="yes"/>
+      <channels>
+	<query>
+	  <select name="power">Salidomo.battery.power</select>
+	  <data name="powerkW">
+	    <mult>
+	      <value name="power"/>
+	      <constant value="0.001"/>
+	    </mult>
+	  </data>
+	  <select name="powermin">Salidomo.battery.power_min</select>
+	  <data name="powerminkW">
+	    <mult>
+	      <value name="powermin"/>
+	      <constant value="0.001"/>
+	    </mult>
+	  </data>
+	  <select name="powermax">Salidomo.battery.power_max</select>
+	  <data name="powermaxkW">
+	    <mult>
+	      <value name="powermax"/>
+	      <constant value="0.001"/>
+	    </mult>
+	  </data>
+	  <data name="powerin">
+	    <max>
+	      <value name="powerkW"/>
+	      <constant value="0"/>
+	    </max>
+	  </data>
+	  <data name="powerout">
+	    <min>
+	      <value name="powerkW"/>
+	      <constant value="0"/>
+	    </min>
+	  </data>
+	  <data name="zero">
+	    <mult>
+	      <value name="power"/>
+	      <constant value="0"/>
+	    </mult>
+ 	  </data>
+	  <select name="soc">Salidomo.battery.charge</select>
+	  <select name="soc_min">Salidomo.battery.charge_min</select>
+	  <select name="soc_max">Salidomo.battery.charge_max</select>
+	</query>
+	<channel color="#666666" type="range" scale="left"
+	  nameupper="powermaxkW" namelower="powerminkW"/>
+	<channel color="#99ccff" type="range" scale="left"
+	  namelower="zero" nameupper="powerin"/>
+	<channel color="#cc99ff" type="range" scale="left"
+	  namelower="powerout" nameupper="zero"/>
+	<channel color="#99ffcc" type="range" scale="right"
+	  namelower="soc_min" nameupper="soc_max"/>
+	<channel color="#009900" type="curve" scale="right" name="soc"/>
+	<channel color="#ff0000" type="sun" station="Salidomo"/>
+      </channels>
+    </graph>
+    <graph name="Salidomo.consumption" offset="3600" height="144" width="500"
+      bgolor="#ffffff" fgcolor="#000000">
+      <leftlabel align="center">Power (kW)</leftlabel>
+      <leftaxis type="static" min="0" max="3" first="0" last="3"
+	step="1" format="%.0f" gridlines="yes" ticks="yes" interval="60"/>
+      <leftaxis type="static" min="0" max="2" first="0" last="2"
+	step="1" format="%.0f" gridlines="yes" ticks="yes"/>
+      <graphwindow llx="55" lly="19" urx="455" ury="139" alias="yes"/>
+      <channels>
+	<query>
+	  <select name="phase1">Salidomo.consumption.prms_phase1</select>
+	  <select name="phase2">Salidomo.consumption.prms_phase2</select>
+	  <select name="phase3">Salidomo.consumption.prms_phase3</select>
+	  <data name="phase1kW">
+	    <mult>
+	      <value name="phase1"/>
+	      <constant value="0.001"/>
+	    </mult>
+	  </data>
+	  <data name="phase2kW">
+	    <mult>
+	      <value name="phase2"/>
+	      <constant value="0.001"/>
+	    </mult>
+	  </data>
+	  <data name="phase3kW">
+	    <mult>
+	      <value name="phase3"/>
+	      <constant value="0.001"/>
+	    </mult>
+	  </data>
+	  <data name="phase12">
+	    <sum>
+	      <value name="phase1kW"/>
+	      <value name="phase2kW"/>
+	    </sum>
+	  </data>
+	  <data name="phase123">
+	    <sum>
+	      <value name="phase12"/>
+	      <value name="phase3kW"/>
+	    </sum>
+	  </data>
+	</query>
+	<channel color="#990000" type="histogram" scale="left" name="phase123"/>
+	<channel color="#ff9933" type="histogram" scale="left" name="phase12"/>
+	<channel color="#cc33cc" type="histogram" scale="left" name="phase1kW"/>
+      </channels>
+    </graph>
+    <graph name="Salidomo.grid" offset="3600" height="144" width="500"
+      bgcolor="#ffffff" fgcolor="#000000">
+      <leftlabel align="center">Grid Power (kW)</leftlabel>
+      <leftaxis type="static" min="-2" max="2" first="-2" last="2"
+	step="1" format="%.0f" gridlines="yes" ticks="yes" interval="60"/>
+      <leftaxis type="static" min="-1.5" max="1.5" first="-1.5" last="1.5"
+	step="0.5" format="%.1f" gridlines="yes" ticks="yes" interval="300"/>
+      <leftaxis type="static" min="-1" max="1" first="-1" last="1"
+	step="0.5" format="%.1f" gridlines="yes" ticks="yes"/>
+      <graphwindow llx="55" lly="19" urx="455" ury="139" alias="yes"/>
+      <channels>
+	<query>
+	  <select name="phase1">Salidomo.grid.prms_phase1</select>
+	  <select name="phase2">Salidomo.grid.prms_phase2</select>
+	  <select name="phase3">Salidomo.grid.prms_phase3</select>
+	  <data name="grid">
+	    <mult>
+	      <sum>
+		<value name="phase1"/>
+		<value name="phase2"/>
+		<value name="phase3"/>
+	      </sum>
+	      <constant value="0.001"/>
+	    </mult>
+	  </data>
+	  <data name="zero">
+	    <mult>
+	      <value name="grid"/>
+	      <constant value="0"/>
+	    </mult>
+	  </data>
+	  <data name="gridin">
+	    <max>
+	      <value name="grid"/>
+	      <value name="zero"/>
+	    </max>
+	  </data>
+	  <data name="gridout">
+	    <min>
+	      <value name="grid"/>
+	      <value name="zero"/>
+	    </min>
+	  </data>
+ 	</query>
+	<channel color="#009900" type="range" scale="left"
+	  namelower="gridout" nameupper="zero"/>
+	<channel color="#990000" type="range" scale="left"
+	  namelower="zero" nameupper="gridin"/>
+      </channels>
+    </graph>
+  </graphs>
+</meteo>

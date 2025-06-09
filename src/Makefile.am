@@ -23,17 +23,17 @@ bin_PROGRAMS =								\
 	meteomap							\
 	meteopacket
  
-meteoavg_SOURCES = meteoavg.cc
-meteodequeue_SOURCES = meteodequeue.cc
-meteopoll_SOURCES = meteopoll.cc
-meteodraw_SOURCES = meteodraw.cc
-meteolabel_SOURCES = meteolabel.cc
-meteolast_SOURCES = meteolast.cc
-meteodbdump_SOURCES = meteodbdump.cc
-meteosensors_SOURCES = meteosensors.cc
-meteosunriset_SOURCES = meteosunriset.cc
-meteomap_SOURCES = meteomap.cc
-meteopacket_SOURCES = meteopacket.cc
+meteoavg_SOURCES = meteoavg.cpp
+meteodequeue_SOURCES = meteodequeue.cpp
+meteopoll_SOURCES = meteopoll.cpp
+meteodraw_SOURCES = meteodraw.cpp
+meteolabel_SOURCES = meteolabel.cpp
+meteolast_SOURCES = meteolast.cpp
+meteodbdump_SOURCES = meteodbdump.cpp
+meteosensors_SOURCES = meteosensors.cpp
+meteosunriset_SOURCES = meteosunriset.cpp
+meteomap_SOURCES = meteomap.cpp
+meteopacket_SOURCES = meteopacket.cpp
 
 test:	meteopoll
 	cp /dev/null /var/tmp/meteopoll.log
