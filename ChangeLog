@@ -1,3 +1,7 @@
+Release 0.9.25:
+	* add usage function to meteoriset
+	* allow to retrieve sunrise/sunset time for current day
+
 Release 0.9.24:
 	* rename source files from .cc to .cpp
 	* remove alloca
