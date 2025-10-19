@@ -108,8 +108,9 @@ std::vector<time_t>	SunData::computed(int interval, time_t startkey,
 	time_t endkey) {
 	std::vector<time_t>	result;
 	for (time_t tk = startkey; tk <= endkey; tk += interval) {
-		// is the sign of offset correct? trying + instead of - ...
-		time_t	t = tk + offset;
+		// is the sign of offset correct? no - is correct, but
+		// apparently time zone offsets are not taken into account
+		time_t	t = tk - offset;
 		if ((thesun.sunrise(t) <= t) && (thesun.sunset(t) >= t))
 			result.push_back(tk);
 	}
