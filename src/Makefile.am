@@ -130,7 +130,7 @@ testpacket:	meteopacket
 #
 testsunrise:	meteosunriset
 	DYLD_BIND_AT_LAUNCH=1 ./meteosunriset --debug \
-		--longitude=6.9 --latitude=47.06
-	DYLD_BIND_AT_LAUNCH=1 TZ=JST ./meteosunriset --debug \
-		--longitude=140.12 --latitude=35.74
+		--longitude=8.83 --latitude=47.19
+	DYLD_BIND_AT_LAUNCH=1 ./meteosunriset --debug \
+		--longitude=140.12 --latitude=35.74 --timezone=Japan
 	

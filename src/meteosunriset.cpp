@@ -46,6 +46,8 @@ void	usage(const char *progname) {
 		<< std::endl;
 	std::cout << " -l,--latitude=<l>   the latitude if no station given"
 		<< std::endl;
+	std::cout << " -z,--timezone=<z>   display time in timezone <z>"
+		<< std::endl;
 }
 
 static struct option	options[] = {
@@ -58,6 +60,7 @@ static struct option	options[] = {
 { "latitude",		required_argument,		NULL,		'l' },
 { "longitude",		required_argument,		NULL,		'L' },
 { "version",		no_argument,			NULL,		'V' },
+{ "timezone",		required_argument,		NULL,		'z' },
 { NULL,			0,				NULL,		 0  }
 };
 
@@ -73,6 +76,7 @@ static void	process(Sun& thesun, const time_t when) {
 	char	buffer[1024];
 	strftime(buffer, sizeof(buffer), formatstring.c_str(), tp);
 	printf("%s ", buffer);
+
 	tp = localtime(&sunset);
 	strftime(buffer, sizeof(buffer), formatstring.c_str(), tp);
 	printf("%s\n", buffer);
@@ -119,6 +123,14 @@ int	main(int argc, char *argv[]) {
 			break;
 		case 'L':
 			longitude = std::stod(optarg);
+			break;
+		case 'z':
+			{
+			char	buffer[1024];
+			snprintf(buffer, sizeof(buffer), "TZ=%s", optarg);
+			putenv(buffer);
+			tzset();
+			}
 			break;
 		}
 

@@ -3,7 +3,6 @@
 //               the sun is above the horizon
 //
 // (c) 2004 Dr. Andreas Mueller, Beratung und Entwicklung
-// $Id: SunData.cc,v 1.5 2009/01/10 19:32:20 afm Exp $
 //
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -109,7 +108,8 @@ std::vector<time_t>	SunData::computed(int interval, time_t startkey,
 	time_t endkey) {
 	std::vector<time_t>	result;
 	for (time_t tk = startkey; tk <= endkey; tk += interval) {
-		time_t	t = tk - offset;
+		// is the sign of offset correct? trying + instead of - ...
+		time_t	t = tk + offset;
 		if ((thesun.sunrise(t) <= t) && (thesun.sunset(t) >= t))
 			result.push_back(tk);
 	}
