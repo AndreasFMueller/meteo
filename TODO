@@ -3,8 +3,6 @@ TODO
 
 Wishes
 
-* Integrated startup files for Mac OS X SystemStarter into the distribution
-
 * add timezone flag to meteodraw program, since some platforms ignore the
   timezone environment variable, notably Mac OS X
 
@@ -22,6 +20,8 @@ Wishes
 * update NEWS file
 
 Bugs
+
+* computed sun channel apparently does not take time zone into account
 
 * check 60 seconds graphs, there seem to be some problems with computed
   channels
